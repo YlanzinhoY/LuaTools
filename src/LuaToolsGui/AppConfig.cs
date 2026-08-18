@@ -48,6 +48,10 @@ public static class AppConfig
     // CloudRedirect (Selectively11): the Mode page "Manage" button downloads the latest CloudRedirect.exe
     // GUI manager from here and launches it. (Separate from the CLI fixer used by the mode install flow.)
     public const string CloudRedirectRepo = "Selectively11/CloudRedirect";
+
+    // Temporary LuaTools integration fork. Only the game-save CLI is downloaded from this repository;
+    // the standard CloudRedirect GUI and add-on DLL continue to use the official repository above.
+    public const string CloudRedirectSaveCliRepo = "YlanzinhoY/CloudRedirect";
     public const string ManifestBackendUrl = "http://167.235.229.108";
     public const string ManifestBackendUserAgent = "secretgoonpoon";
 

@@ -214,8 +214,8 @@ public class CloudRedirectService(GithubProxy gh)
             : $"CloudRedirect CLI exited with code {exitCode}.";
     }
 
-    /// <summary>Use an already-installed save CLI or download it when a future official release
-    /// publishes the asset. Current releases are handled honestly: absence is returned to the UI.</summary>
+    /// <summary>Use an already-installed save CLI or download it from the temporary LuaTools integration
+    /// fork. Releases without the required assets are handled honestly: absence is returned to the UI.</summary>
     private async Task<string?> EnsureSaveCliAsync(IProgress<double?>? progress, CancellationToken ct)
     {
         if (File.Exists(SaveCliPath) && File.Exists(SaveDllPath)) return SaveCliPath;
@@ -231,7 +231,7 @@ public class CloudRedirectService(GithubProxy gh)
             extracted = FindExtractedSaveCli();
             if (extracted is not null) return extracted;
 
-            string url = $"https://api.github.com/repos/{AppConfig.CloudRedirectRepo}/releases/latest";
+            string url = $"https://api.github.com/repos/{AppConfig.CloudRedirectSaveCliRepo}/releases/latest";
             using var res = await gh.SendAsync(url, ct);
             if (res is null || !res.IsSuccessStatusCode) return null;
 
