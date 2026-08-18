@@ -369,6 +369,9 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
     /// <summary>Set by App. Opens the launch-option editor for a game (appid, name).</summary>
     public Action<long, string>? OpenLaunchOptions { get; set; }
 
+    /// <summary>Set by App. Opens the modal selector when a game has multiple save layouts.</summary>
+    public Func<GameSaveDefinition, GameSaveVariant?>? SelectSaveVariant { get; set; }
+
     /// <summary>Edit this game's Steam launch options (the entries behind the Play button).</summary>
     [RelayCommand]
     private void EditLaunchOptions(LuaTileViewModel tile) => OpenLaunchOptions?.Invoke(tile.AppId, tile.Name);
@@ -408,18 +411,28 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
     private async Task BackupCloudSave(LuaTileViewModel? tile)
     {
         if (tile is null || IsBusy || CloudRedirectGame?.Game is not { } game) return;
-        if (game.SaveLocations.Count == 0)
+        if (!game.HasConfiguredSaveLocations)
         {
             _toast.Show(Resources.Strings.CloudFix_Title, Resources.Strings.CloudFix_PathsNotConfigured, error: true);
             return;
         }
 
+        GameSaveDefinition backupGame = game;
+        if (game.SaveVariants.Count > 0)
+        {
+            var variant = game.SaveVariants.Count == 1
+                ? game.SaveVariants[0]
+                : SelectSaveVariant?.Invoke(game);
+            if (variant is null) return;
+            backupGame = game.ForVariant(variant);
+        }
+
         await RunCloudRedirectCommandAsync(async progress =>
         {
-            using var saveFiles = await _saveBackup.CreateSaveFilesAsync(game);
+            using var saveFiles = await _saveBackup.CreateSaveFilesAsync(backupGame);
             return saveFiles is null
                 ? CloudRedirectCommandResult.Fail(Resources.Strings.CloudFix_SaveNotFound)
-                : await _cloudRedirect.UploadSaveAsync(game, saveFiles.DirectoryPath, progress);
+                : await _cloudRedirect.UploadSaveAsync(backupGame, saveFiles.DirectoryPath, progress);
         });
     }
 
@@ -427,7 +440,7 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
     private async Task RestoreCloudSave(LuaTileViewModel? tile)
     {
         if (tile is null || IsBusy || CloudRedirectGame?.Game is not { } game) return;
-        if (game.SaveLocations.Count == 0)
+        if (!game.HasConfiguredSaveLocations)
         {
             _toast.Show(Resources.Strings.CloudFix_Title, Resources.Strings.CloudFix_PathsNotConfigured, error: true);
             return;

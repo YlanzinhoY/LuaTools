@@ -1,0 +1,72 @@
+<ui:FluentWindow
+    x:Class="LuaToolsGui.Views.SaveVariantDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:res="clr-namespace:LuaToolsGui.Resources"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="{x:Static res:Strings.CloudFix_Variant_Title}"
+    Width="480"
+    Height="285"
+    ExtendsContentIntoTitleBar="True"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    WindowBackdropType="Mica"
+    WindowCornerPreference="Round"
+    WindowStartupLocation="CenterOwner">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Title="{x:Static res:Strings.CloudFix_Variant_Title}" />
+
+        <Grid Grid.Row="1" Margin="24,10,24,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                FontSize="17"
+                FontWeight="SemiBold"
+                Text="{x:Static res:Strings.CloudFix_Variant_Question}"
+                TextWrapping="Wrap" />
+            <TextBlock
+                Grid.Row="1"
+                Margin="0,6,0,0"
+                FontSize="12"
+                Foreground="#9ca3af"
+                Text="{Binding GameName, StringFormat={x:Static res:Strings.CloudFix_Variant_Hint}}"
+                TextWrapping="Wrap" />
+
+            <ItemsControl Grid.Row="2" Margin="0,20,0,16" ItemsSource="{Binding Variants}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="1" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ui:Button
+                            MinHeight="48"
+                            Margin="5,0"
+                            HorizontalAlignment="Stretch"
+                            Appearance="Primary"
+                            Click="SelectVariant_Click"
+                            Content="{Binding Name}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ui:Button
+                Grid.Row="3"
+                HorizontalAlignment="Right"
+                Click="Cancel_Click"
+                Content="{x:Static res:Strings.Builds_Action_Cancel}" />
+        </Grid>
+    </Grid>
+</ui:FluentWindow>

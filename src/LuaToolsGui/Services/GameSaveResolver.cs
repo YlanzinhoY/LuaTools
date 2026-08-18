@@ -6,7 +6,17 @@ namespace LuaToolsGui.Services;
 /// <summary>Resolves portable save definitions into paths on the current Windows installation.</summary>
 public sealed class GameSaveResolver
 {
-    public IReadOnlyList<string> ResolveTargets(GameSaveLocation location) => Resolve(location);
+    private readonly Func<long, string?> _steamInstallResolver;
+
+    public GameSaveResolver() : this(_ => null) { }
+
+    public GameSaveResolver(SteamLibraryService steamLibrary) : this(steamLibrary.GetInstallDir) { }
+
+    internal GameSaveResolver(Func<long, string?> steamInstallResolver) =>
+        _steamInstallResolver = steamInstallResolver;
+
+    public IReadOnlyList<string> ResolveTargets(GameSaveDefinition game, GameSaveLocation location) =>
+        Resolve(game.AppId, location);
 
     public IReadOnlyList<string> ResolveExisting(GameSaveDefinition game) =>
         ResolveExistingLocations(game).Select(r => r.RootPath).ToList();
@@ -14,7 +24,7 @@ public sealed class GameSaveResolver
     public IReadOnlyList<ResolvedGameSaveLocation> ResolveExistingLocations(GameSaveDefinition game) =>
         game.SaveLocations
             .Where(s => s.Platform.Equals("windows", StringComparison.OrdinalIgnoreCase))
-            .SelectMany(location => Resolve(location)
+            .SelectMany(location => Resolve(game.AppId, location)
                 .Where(Directory.Exists)
                 .Select(root => new ResolvedGameSaveLocation(location, root, FindFiles(location, root))))
             .Where(r => r.Files.Count > 0)
@@ -34,9 +44,9 @@ public sealed class GameSaveResolver
             .ToList();
     }
 
-    internal static IReadOnlyList<string> Resolve(GameSaveLocation location)
+    internal IReadOnlyList<string> Resolve(long appId, GameSaveLocation location)
     {
-        string? root = ResolveBase(location.Base);
+        string? root = ResolveBase(appId, location.Base);
         if (string.IsNullOrWhiteSpace(root) || string.IsNullOrWhiteSpace(location.RelativePath))
             return [];
 
@@ -67,7 +77,7 @@ public sealed class GameSaveResolver
         return candidates;
     }
 
-    private static string? ResolveBase(string value) => value.Trim().ToLowerInvariant() switch
+    private string? ResolveBase(long appId, string value) => value.Trim().ToLowerInvariant() switch
     {
         "userprofile" => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
         "localappdata" => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -76,6 +86,7 @@ public sealed class GameSaveResolver
         "programfiles" => Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
         "programfilesx86" => Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
         "commonappdata" => Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+        "steaminstall" or "gameinstall" => _steamInstallResolver(appId),
         _ => null,
     };
 }

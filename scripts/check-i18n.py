@@ -37,6 +37,9 @@ PENDING_TRANSLATION: set[str] = {
     "CloudFix_SaveNotFound",
     "CloudFix_Completed",
     "CloudFix_Failed",
+    "CloudFix_Variant_Title",
+    "CloudFix_Variant_Question",
+    "CloudFix_Variant_Hint",
 }
 # Empty on purpose: every key is translated in all 29 languages, so the parity check above is
 # unconditional. Add a key here ONLY while its feature's UI is still moving, and clear it again

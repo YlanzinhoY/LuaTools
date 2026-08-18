@@ -10,13 +10,32 @@
       "appid": 3751950,
       "name": "Assassin's Creed Black Flag Resynced",
       "executables": [],
-      "saveLocations": [
+      "saveVariants": [
         {
-          "platform": "windows",
-          "base": "RoamingAppData",
-          "relativePath": "Goldberg UplayEmu Saves/66088",
-          "includePatterns": ["*.save"],
-          "recursive": false
+          "id": "voices38",
+          "name": "Voices38",
+          "saveLocations": [
+            {
+              "platform": "windows",
+              "base": "RoamingAppData",
+              "relativePath": "Goldberg UplayEmu Saves/66088",
+              "includePatterns": ["*.save"],
+              "recursive": false
+            }
+          ]
+        },
+        {
+          "id": "hv",
+          "name": "HV",
+          "saveLocations": [
+            {
+              "platform": "windows",
+              "base": "SteamInstall",
+              "relativePath": "saves/65043",
+              "includePatterns": ["*.save"],
+              "recursive": false
+            }
+          ]
         }
       ]
     }

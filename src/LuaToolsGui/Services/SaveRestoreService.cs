@@ -41,7 +41,7 @@ public sealed class SaveRestoreService(GameSaveResolver resolver)
             {
                 ct.ThrowIfCancellationRequested();
                 var saved = metadata.SaveLocations[index];
-                var definition = game.SaveLocations.FirstOrDefault(location =>
+                var definition = game.AllSaveLocations.FirstOrDefault(location =>
                     location.Base.Equals(saved.Base, StringComparison.OrdinalIgnoreCase) &&
                     NormalizeRelative(location.RelativePath).Equals(
                         NormalizeRelative(saved.RelativePath), StringComparison.OrdinalIgnoreCase));
@@ -55,7 +55,7 @@ public sealed class SaveRestoreService(GameSaveResolver resolver)
                 if (sourceFiles.Count == 0)
                     throw new InvalidDataException("Cloud save location contains no files.");
 
-                var targets = resolver.ResolveTargets(definition);
+                var targets = resolver.ResolveTargets(game, definition);
                 if (targets.Count != 1)
                     throw new InvalidDataException("The save target could not be resolved safely.");
                 string target = targets[0];

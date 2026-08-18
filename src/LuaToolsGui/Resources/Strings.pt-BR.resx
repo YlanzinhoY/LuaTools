@@ -536,4 +536,7 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Nenhuma pasta de save foi encontrada nos locais configurados.</value></data>
   <data name="CloudFix_Completed" xml:space="preserve"><value>O CloudRedirect concluiu a operação.</value></data>
   <data name="CloudFix_Failed" xml:space="preserve"><value>O CloudRedirect não conseguiu concluir a operação.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Escolher versão do save</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Qual versão do jogo você está usando?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>O LuaTools usará o local de save correspondente para {0}.</value></data>
 </root>

@@ -62,25 +62,31 @@ public sealed class GamesWithoutSteamCloudTests : IDisposable
         Directory.CreateDirectory(root);
         string save = Path.Combine(root, "slot.save");
         await File.WriteAllTextAsync(save, "known-good");
+        var location = new GameSaveLocation
+        {
+            Base = "RoamingAppData",
+            RelativePath = relative,
+            IncludePatterns = ["*.save"],
+            Recursive = false,
+        };
         var game = new GameSaveDefinition
         {
             AppId = 3751950,
             Name = "Black Flag Resynced",
-            SaveLocations =
+            SaveVariants =
             [
-                new GameSaveLocation
+                new GameSaveVariant
                 {
-                    Base = "RoamingAppData",
-                    RelativePath = relative,
-                    IncludePatterns = ["*.save"],
-                    Recursive = false,
+                    Id = "voices38",
+                    Name = "voices38",
+                    SaveLocations = [location],
                 }
             ],
         };
         var resolver = new GameSaveResolver();
         var backup = new SaveBackupService(resolver);
         var restore = new SaveRestoreService(resolver);
-        using var saveFiles = await backup.CreateSaveFilesAsync(game);
+        using var saveFiles = await backup.CreateSaveFilesAsync(game.ForVariant(game.SaveVariants[0]));
         Assert.NotNull(saveFiles);
 
         await File.WriteAllTextAsync(save, "corrupted");
@@ -99,11 +105,68 @@ public sealed class GamesWithoutSteamCloudTests : IDisposable
         Assert.NotNull(match);
         Assert.Equal("assassins-creed", match.Module.Id);
         Assert.Equal("Assassin's Creed Black Flag Resynced", match.Game!.Name);
-        var location = Assert.Single(match.Game.SaveLocations);
-        Assert.Equal("RoamingAppData", location.Base);
-        Assert.Equal("Goldberg UplayEmu Saves/66088", location.RelativePath);
-        Assert.Equal(["*.save"], location.IncludePatterns);
-        Assert.False(location.Recursive);
+        Assert.Empty(match.Game.SaveLocations);
+        Assert.Collection(match.Game.SaveVariants,
+            voices38 =>
+            {
+                Assert.Equal("voices38", voices38.Id);
+                Assert.Equal("Voices38", voices38.Name);
+                var location = Assert.Single(voices38.SaveLocations);
+                Assert.Equal("RoamingAppData", location.Base);
+                Assert.Equal("Goldberg UplayEmu Saves/66088", location.RelativePath);
+                Assert.Equal(["*.save"], location.IncludePatterns);
+                Assert.False(location.Recursive);
+            },
+            hv =>
+            {
+                Assert.Equal("hv", hv.Id);
+                Assert.Equal("HV", hv.Name);
+                var location = Assert.Single(hv.SaveLocations);
+                Assert.Equal("SteamInstall", location.Base);
+                Assert.Equal("saves/65043", location.RelativePath);
+                Assert.Equal(["*.save"], location.IncludePatterns);
+                Assert.False(location.Recursive);
+            });
+    }
+
+    [Fact]
+    public async Task HvVariantResolvesSavesRelativeToTheSteamInstallDirectory()
+    {
+        string saveRoot = Path.Combine(_dir, "saves", "65043");
+        Directory.CreateDirectory(saveRoot);
+        await File.WriteAllTextAsync(Path.Combine(saveRoot, "slot.save"), "hv-save");
+        await File.WriteAllTextAsync(Path.Combine(saveRoot, "info.txt"), "ignore");
+        var variant = new GameSaveVariant
+        {
+            Id = "hv",
+            Name = "HV",
+            SaveLocations =
+            [
+                new GameSaveLocation
+                {
+                    Base = "SteamInstall",
+                    RelativePath = "saves/65043",
+                    IncludePatterns = ["*.save"],
+                    Recursive = false,
+                }
+            ],
+        };
+        var game = new GameSaveDefinition
+        {
+            AppId = 3751950,
+            Name = "Assassin's Creed Black Flag Resynced",
+            SaveVariants = [variant],
+        };
+        var resolver = new GameSaveResolver(appId => appId == game.AppId ? _dir : null);
+        var resolved = Assert.Single(resolver.ResolveExistingLocations(game.ForVariant(variant)));
+
+        Assert.Equal(saveRoot, resolved.RootPath);
+        Assert.Equal([Path.Combine(saveRoot, "slot.save")], resolved.Files);
+
+        using var saveFiles = await new SaveBackupService(resolver).CreateSaveFilesAsync(game.ForVariant(variant));
+        Assert.NotNull(saveFiles);
+        Assert.True(File.Exists(Path.Combine(saveFiles.DirectoryPath, "saves", "slot.save")));
+        Assert.False(File.Exists(Path.Combine(saveFiles.DirectoryPath, "saves", "info.txt")));
     }
 
     [Fact]

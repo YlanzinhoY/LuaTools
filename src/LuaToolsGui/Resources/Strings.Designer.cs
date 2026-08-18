@@ -488,6 +488,9 @@ public static class Strings
     public static string CloudFix_SaveNotFound => Get(nameof(CloudFix_SaveNotFound));
     public static string CloudFix_Completed => Get(nameof(CloudFix_Completed));
     public static string CloudFix_Failed => Get(nameof(CloudFix_Failed));
+    public static string CloudFix_Variant_Title => Get(nameof(CloudFix_Variant_Title));
+    public static string CloudFix_Variant_Question => Get(nameof(CloudFix_Variant_Question));
+    public static string CloudFix_Variant_Hint => Get(nameof(CloudFix_Variant_Hint));
 
     // Service error messages, surfaced to the user via toasts / MessageBox.
     public static string Err_SteamNotFound => Get(nameof(Err_SteamNotFound));

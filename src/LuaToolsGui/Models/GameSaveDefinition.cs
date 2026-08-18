@@ -22,6 +22,31 @@ public sealed class GameSaveDefinition
     [JsonPropertyName("name")] public string Name { get; set; } = "";
     [JsonPropertyName("executables")] public List<string> Executables { get; set; } = [];
     [JsonPropertyName("saveLocations")] public List<GameSaveLocation> SaveLocations { get; set; } = [];
+    [JsonPropertyName("saveVariants")] public List<GameSaveVariant> SaveVariants { get; set; } = [];
+
+    [JsonIgnore]
+    public bool HasConfiguredSaveLocations =>
+        SaveLocations.Count > 0 || SaveVariants.Any(variant => variant.SaveLocations.Count > 0);
+
+    [JsonIgnore]
+    public IEnumerable<GameSaveLocation> AllSaveLocations =>
+        SaveLocations.Concat(SaveVariants.SelectMany(variant => variant.SaveLocations));
+
+    public GameSaveDefinition ForVariant(GameSaveVariant variant) => new()
+    {
+        AppId = AppId,
+        Name = Name,
+        Executables = Executables,
+        SaveLocations = variant.SaveLocations,
+    };
+}
+
+/// <summary>A selectable release/mod whose saves live in different locations.</summary>
+public sealed class GameSaveVariant
+{
+    [JsonPropertyName("id")] public string Id { get; set; } = "";
+    [JsonPropertyName("name")] public string Name { get; set; } = "";
+    [JsonPropertyName("saveLocations")] public List<GameSaveLocation> SaveLocations { get; set; } = [];
 }
 
 /// <summary>

@@ -339,6 +339,13 @@ public partial class App : Application
             dialog.ShowDialog();
         });
 
+        // Games whose releases/mods save in different places ask which layout to back up.
+        manage.SelectSaveVariant = game => Dispatcher.Invoke(() =>
+        {
+            var dialog = new SaveVariantDialog(game) { Owner = window };
+            return dialog.ShowDialog() == true ? dialog.SelectedVariant : null;
+        });
+
         // Steam regenerates appinfo.vdf from PICS, wiping launch edits. Check once at startup and
         // OFFER to re-apply, never silently, since applying closes Steam.
         _ = CheckLaunchOptionDriftAsync();

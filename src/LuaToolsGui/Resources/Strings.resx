@@ -542,6 +542,9 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>No save folder was found in the configured locations.</value></data>
   <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect completed the operation.</value></data>
   <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect could not complete the operation.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Choose save version</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Which version of the game are you using?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools will use the matching save location for {0}.</value></data>
 
   <!-- ── Service error messages (surfaced to the user via toasts / MessageBox) ── -->
   <data name="Err_SteamNotFound" xml:space="preserve"><value>Steam location not found. Set it in Settings.</value></data>

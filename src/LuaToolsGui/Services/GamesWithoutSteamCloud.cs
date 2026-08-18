@@ -102,6 +102,17 @@ public sealed class GamesWithoutSteamCloud
                     $"Game definition {game.AppId} in module '{module.Id}' is missing from appIds.");
             if (string.IsNullOrWhiteSpace(game.Name))
                 throw new InvalidDataException($"Game definition {game.AppId} needs a name.");
+            if (game.SaveVariants.Select(variant => variant.Id).Distinct(StringComparer.OrdinalIgnoreCase).Count()
+                != game.SaveVariants.Count)
+                throw new InvalidDataException($"Game definition {game.AppId} contains duplicate save variant IDs.");
+            foreach (var variant in game.SaveVariants)
+            {
+                if (string.IsNullOrWhiteSpace(variant.Id) || string.IsNullOrWhiteSpace(variant.Name))
+                    throw new InvalidDataException($"Game definition {game.AppId} contains an unnamed save variant.");
+                if (variant.SaveLocations.Count == 0)
+                    throw new InvalidDataException(
+                        $"Save variant '{variant.Id}' for game {game.AppId} needs at least one save location.");
+            }
         }
     }
 }
