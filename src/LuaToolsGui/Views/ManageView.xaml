@@ -717,6 +717,48 @@
                             Value="{Binding DataContext.Progress, ElementName=Root}"
                             Visibility="{Binding DataContext.IsBusy, ElementName=Root, Converter={StaticResource BoolToVis}}" />
 
+                        <!-- Only games declared in Data/GamesWithoutSteamCloud get this panel. -->
+                        <Border
+                            Margin="0,0,0,10"
+                            Padding="12"
+                            Background="#162a2440"
+                            BorderBrush="#554f46e5"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Visibility="{Binding DataContext.HasCloudRedirectFix, ElementName=Root, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="SemiBold"
+                                    Foreground="#c4b5fd"
+                                    Text="{x:Static res:Strings.CloudFix_Title}" />
+                                <TextBlock
+                                    Margin="0,4,0,10"
+                                    FontSize="11.5"
+                                    Foreground="#9ca3af"
+                                    Text="{x:Static res:Strings.CloudFix_Description}"
+                                    TextWrapping="Wrap" />
+                                <UniformGrid Columns="2" Rows="1">
+                                    <ui:Button
+                                        Margin="0,0,4,0"
+                                        HorizontalAlignment="Stretch"
+                                        Command="{Binding DataContext.BackupCloudSaveCommand, ElementName=Root}"
+                                        CommandParameter="{Binding}"
+                                        Content="{x:Static res:Strings.CloudFix_BackupNow}"
+                                        Icon="{ui:SymbolIcon ArrowUpload24}"
+                                        IsEnabled="{Binding DataContext.CanUseCloudRedirectFix, ElementName=Root}" />
+                                    <ui:Button
+                                        Margin="4,0,0,0"
+                                        HorizontalAlignment="Stretch"
+                                        Command="{Binding DataContext.RestoreCloudSaveCommand, ElementName=Root}"
+                                        CommandParameter="{Binding}"
+                                        Content="{x:Static res:Strings.CloudFix_Restore}"
+                                        Icon="{ui:SymbolIcon ArrowDownload24}"
+                                        IsEnabled="{Binding DataContext.CanUseCloudRedirectFix, ElementName=Root}" />
+                                </UniformGrid>
+                            </StackPanel>
+                        </Border>
+
                         <ui:Button
                             HorizontalAlignment="Stretch"
                             Appearance="Primary"

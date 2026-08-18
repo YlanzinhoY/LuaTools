@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LuaToolsGui.Models;
 using LuaToolsGui.Services;
 
 namespace LuaToolsGui.ViewModels;
@@ -184,6 +185,10 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
     private readonly ToastService _toast;
     private readonly SettingsService _settings;
     private readonly SteamlessService _steamless;
+    private readonly GamesWithoutSteamCloud _gamesWithoutSteamCloud;
+    private readonly SaveBackupService _saveBackup;
+    private readonly SaveRestoreService _saveRestore;
+    private readonly CloudRedirectService _cloudRedirect;
 
     private List<LuaTileViewModel> _all = [];
     private CancellationTokenSource? _prefetchCts;
@@ -264,6 +269,14 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
 
     public bool IsDetailOpen => SelectedTile is not null;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasCloudRedirectFix))]
+    [NotifyPropertyChangedFor(nameof(CanUseCloudRedirectFix))]
+    private GamesWithoutSteamCloudMatch? _cloudRedirectGame;
+
+    public bool HasCloudRedirectFix => CloudRedirectGame is not null;
+    public bool CanUseCloudRedirectFix => HasCloudRedirectFix && !IsBusy;
+
     // ── Multi-select ────────────────────────────────────────────────
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsSelecting))]
@@ -275,7 +288,8 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
 
     public ManageViewModel(SteamService steam, SteamAppListCache appList, SteamAppInfoCache appInfo,
         CoverCache covers, ToastService toast, SettingsService settings,
-        SteamlessService steamless)
+        SteamlessService steamless, GamesWithoutSteamCloud gamesWithoutSteamCloud,
+        SaveBackupService saveBackup, SaveRestoreService saveRestore, CloudRedirectService cloudRedirect)
     {
         _steam = steam;
         _appList = appList;
@@ -284,6 +298,10 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
         _toast = toast;
         _settings = settings;
         _steamless = steamless;
+        _gamesWithoutSteamCloud = gamesWithoutSteamCloud;
+        _saveBackup = saveBackup;
+        _saveRestore = saveRestore;
+        _cloudRedirect = cloudRedirect;
         InitPageSize(settings.ManagePageSize);
     }
 
@@ -321,6 +339,7 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
     private async Task OpenDetailAsync(LuaTileViewModel tile)
     {
         SelectedTile = tile;
+        CloudRedirectGame = _gamesWithoutSteamCloud.Find(tile.AppId);
         Overview = _appInfo.GetOverview(tile.AppId); // instant when the blob is already on disk
 
         // The flyout binds its cover to SelectedTile.Cover. When opened from outside Manage
@@ -339,6 +358,7 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
     private void CloseDetail()
     {
         SelectedTile = null;
+        CloudRedirectGame = null;
         Overview = null;
     }
 
@@ -375,11 +395,85 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
     // ── Steamless: remove SteamStub DRM ──────────────────────────────
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(NotBusy))]
+    [NotifyPropertyChangedFor(nameof(CanUseCloudRedirectFix))]
     private bool _isBusy;
     public bool NotBusy => !IsBusy;
 
     [ObservableProperty] private double _progress;
     [ObservableProperty] private bool _isProgressIndeterminate;
+
+    // ── Cloud Redirect Fix ──────────────────────────────────────────
+
+    [RelayCommand]
+    private async Task BackupCloudSave(LuaTileViewModel? tile)
+    {
+        if (tile is null || IsBusy || CloudRedirectGame?.Game is not { } game) return;
+        if (game.SaveLocations.Count == 0)
+        {
+            _toast.Show(Resources.Strings.CloudFix_Title, Resources.Strings.CloudFix_PathsNotConfigured, error: true);
+            return;
+        }
+
+        await RunCloudRedirectCommandAsync(async progress =>
+        {
+            using var saveFiles = await _saveBackup.CreateSaveFilesAsync(game);
+            return saveFiles is null
+                ? CloudRedirectCommandResult.Fail(Resources.Strings.CloudFix_SaveNotFound)
+                : await _cloudRedirect.UploadSaveAsync(game, saveFiles.DirectoryPath, progress);
+        });
+    }
+
+    [RelayCommand]
+    private async Task RestoreCloudSave(LuaTileViewModel? tile)
+    {
+        if (tile is null || IsBusy || CloudRedirectGame?.Game is not { } game) return;
+        if (game.SaveLocations.Count == 0)
+        {
+            _toast.Show(Resources.Strings.CloudFix_Title, Resources.Strings.CloudFix_PathsNotConfigured, error: true);
+            return;
+        }
+
+        await RunCloudRedirectCommandAsync(async progress =>
+        {
+            var download = await _cloudRedirect.DownloadSaveAsync(game, progress);
+            if (!download.Success || download.FilePath is null) return download;
+
+            var restore = await _saveRestore.RestoreAsync(game, download.FilePath);
+            return restore.Success
+                ? CloudRedirectCommandResult.Ok($"Restored {restore.RestoredFiles} save files.")
+                : CloudRedirectCommandResult.Fail(restore.Error ?? Resources.Strings.CloudFix_Failed);
+        });
+    }
+
+    private async Task RunCloudRedirectCommandAsync(
+        Func<IProgress<double?>, Task<CloudRedirectCommandResult>> command)
+    {
+        IsBusy = true;
+        IsProgressIndeterminate = true;
+        Progress = 0;
+        var progress = new Progress<double?>(p =>
+        {
+            IsProgressIndeterminate = p is null;
+            if (p is not null) Progress = p.Value * 100;
+        });
+
+        try
+        {
+            var result = await command(progress);
+            _toast.Show(Resources.Strings.CloudFix_Title,
+                result.Success ? Resources.Strings.CloudFix_Completed : result.Error ?? Resources.Strings.CloudFix_Failed,
+                error: !result.Success);
+        }
+        catch (OperationCanceledException)
+        {
+            _toast.Show(Resources.Strings.CloudFix_Title, Resources.Strings.Err_Cancelled, error: true);
+        }
+        finally
+        {
+            IsBusy = false;
+            IsProgressIndeterminate = false;
+        }
+    }
 
     /// <summary>Download Steamless (once) and strip SteamStub DRM from this game's executable(s).</summary>
     [RelayCommand]

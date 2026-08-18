@@ -21,4 +21,11 @@
     <ProjectReference Include="..\..\src\LuaToolsGui\LuaToolsGui.csproj" />
   </ItemGroup>
 
+  <!-- Validate the same community catalog files that are shipped by the application. -->
+  <ItemGroup>
+    <Content Include="..\..\src\LuaToolsGui\Data\GamesWithoutSteamCloud\*.json"
+             Link="Data\GamesWithoutSteamCloud\%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

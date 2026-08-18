@@ -28,7 +28,16 @@ PLACEHOLDER_RE = re.compile(r'\{(\d+)\}')
 # This list IS the handoff to the translation pass. When a feature's UI is final: translate its keys
 # across every Strings.<tag>.resx, clear them from here, and this check goes back to demanding full
 # parity. Anything left here is untranslated in all 29 languages.
-PENDING_TRANSLATION: set[str] = set()
+PENDING_TRANSLATION: set[str] = {
+    "CloudFix_Title",
+    "CloudFix_Description",
+    "CloudFix_BackupNow",
+    "CloudFix_Restore",
+    "CloudFix_PathsNotConfigured",
+    "CloudFix_SaveNotFound",
+    "CloudFix_Completed",
+    "CloudFix_Failed",
+}
 # Empty on purpose: every key is translated in all 29 languages, so the parity check above is
 # unconditional. Add a key here ONLY while its feature's UI is still moving, and clear it again
 # as soon as the translations land. Anything listed is English-only for every user.

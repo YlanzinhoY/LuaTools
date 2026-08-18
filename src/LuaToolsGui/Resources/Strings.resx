@@ -533,6 +533,16 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="Launch_Drift_Body" xml:space="preserve"><value>Steam has overwritten your launch options for {0} game(s). Re-applying closes and reopens Steam.</value></data>
   <data name="Launch_Drift_Action" xml:space="preserve"><value>Re-apply</value></data>
 
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>This game has no usable Steam Cloud. Back up or restore its saves through CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Backup now</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Restore save</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>The save locations for this game have not been configured yet.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>No save folder was found in the configured locations.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect completed the operation.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect could not complete the operation.</value></data>
+
   <!-- ── Service error messages (surfaced to the user via toasts / MessageBox) ── -->
   <data name="Err_SteamNotFound" xml:space="preserve"><value>Steam location not found. Set it in Settings.</value></data>
   <data name="Err_GithubUnreachable" xml:space="preserve"><value>Couldn't reach GitHub. Check your connection and try again.</value></data>

@@ -527,4 +527,13 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Você atingiu seu limite diário do Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Nenhum manifesto do Hubcap disponível para este app.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Falha no download do Hubcap ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Este jogo não possui Steam Cloud funcional. Faça backup ou restaure seus saves pelo CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Backup agora</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Restaurar save</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Os locais de save deste jogo ainda não foram configurados.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Nenhuma pasta de save foi encontrada nos locais configurados.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>O CloudRedirect concluiu a operação.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>O CloudRedirect não conseguiu concluir a operação.</value></data>
 </root>

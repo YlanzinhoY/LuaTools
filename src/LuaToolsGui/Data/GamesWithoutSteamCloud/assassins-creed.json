@@ -1,0 +1,24 @@
+{
+  "id": "assassins-creed",
+  "name": "Assassin's Creed",
+  "launcher": "Ubisoft Connect",
+  "appIds": [
+    3751950
+  ],
+  "games": [
+    {
+      "appid": 3751950,
+      "name": "Assassin's Creed Black Flag Resynced",
+      "executables": [],
+      "saveLocations": [
+        {
+          "platform": "windows",
+          "base": "RoamingAppData",
+          "relativePath": "Goldberg UplayEmu Saves/66088",
+          "includePatterns": ["*.save"],
+          "recursive": false
+        }
+      ]
+    }
+  ]
+}

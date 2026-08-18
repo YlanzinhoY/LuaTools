@@ -479,6 +479,16 @@ public static class Strings
     public static string Launch_Drift_Body => Get(nameof(Launch_Drift_Body));
     public static string Launch_Drift_Action => Get(nameof(Launch_Drift_Action));
 
+    // ── Cloud Redirect Fix ── (English fallback; pt-BR is translated)
+    public static string CloudFix_Title => Get(nameof(CloudFix_Title));
+    public static string CloudFix_Description => Get(nameof(CloudFix_Description));
+    public static string CloudFix_BackupNow => Get(nameof(CloudFix_BackupNow));
+    public static string CloudFix_Restore => Get(nameof(CloudFix_Restore));
+    public static string CloudFix_PathsNotConfigured => Get(nameof(CloudFix_PathsNotConfigured));
+    public static string CloudFix_SaveNotFound => Get(nameof(CloudFix_SaveNotFound));
+    public static string CloudFix_Completed => Get(nameof(CloudFix_Completed));
+    public static string CloudFix_Failed => Get(nameof(CloudFix_Failed));
+
     // Service error messages, surfaced to the user via toasts / MessageBox.
     public static string Err_SteamNotFound => Get(nameof(Err_SteamNotFound));
     public static string Err_GithubUnreachable => Get(nameof(Err_GithubUnreachable));
