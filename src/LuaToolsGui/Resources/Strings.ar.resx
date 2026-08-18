@@ -553,4 +553,22 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>لقد بلغت حدّك اليومي في Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>لا يوجد بيان Hubcap متاح لهذا التطبيق.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>فشل التنزيل من Hubcap ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>لا تحتوي هذه اللعبة على Steam Cloud قابل للاستخدام. أنشئ نسخة احتياطية من ملفات الحفظ أو استعدها عبر CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>إنشاء نسخة احتياطية الآن</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>استعادة ملف الحفظ</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>لم يتم إعداد مواقع الحفظ لهذه اللعبة بعد.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>لم يتم العثور على مجلد حفظ في المواقع المُعدّة.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>أكمل CloudRedirect العملية.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>تعذر على CloudRedirect إكمال العملية.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>اختيار إصدار الحفظ</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>ما إصدار اللعبة الذي تستخدمه؟</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>سيستخدم LuaTools موقع الحفظ المطابق لـ {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>أعِدّ موفرًا سحابيًا أو موفر مجلد في CloudRedirect قبل نسخ ملفات الحفظ احتياطيًا.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>تعذر تحديد حساب Steam النشط. افتح Steam وحاول مرة أخرى.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>لا يتضمن إصدار CloudRedirect هذا أوامر رفع ملفات الحفظ وتنزيلها.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>تم إنهاء واجهة سطر أوامر CloudRedirect بالرمز {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>تعذر التحقق من ملف الحفظ السحابي أو استعادته.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>تمت استعادة {0} من ملفات الحفظ.</value></data>
 </root>

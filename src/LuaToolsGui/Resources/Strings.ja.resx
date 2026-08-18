@@ -527,4 +527,22 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Hubcap の 1 日の上限に達しました。</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>このアプリ用の Hubcap マニフェストはありません。</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap からのダウンロードに失敗しました ({0})。</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>このゲームでは Steam Cloud を利用できません。CloudRedirect を使ってセーブデータをバックアップまたは復元できます。</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>今すぐバックアップ</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>セーブデータを復元</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>このゲームのセーブ先はまだ設定されていません。</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>設定された場所にセーブフォルダーが見つかりませんでした。</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect が処理を完了しました。</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect は処理を完了できませんでした。</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>セーブバージョンを選択</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>使用しているゲームのバージョンはどれですか？</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools は {0} に対応するセーブ先を使用します。</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>セーブデータをバックアップする前に、CloudRedirect でクラウドまたはフォルダープロバイダーを設定してください。</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>使用中の Steam アカウントを特定できませんでした。Steam を開いてもう一度お試しください。</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>このバージョンの CloudRedirect には、セーブデータをアップロードおよびダウンロードするコマンドが含まれていません。</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CloudRedirect CLI はコード {0} で終了しました。</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>クラウドセーブを検証または復元できませんでした。</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>{0} 個のセーブファイルを復元しました。</value></data>
 </root>

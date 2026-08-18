@@ -527,4 +527,22 @@ Aceasta șterge fișierele .lua din Steam\config\stplug-in. Repornește Steam du
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Ai atins limita zilnică Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Nu există manifest Hubcap pentru această aplicație.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Descărcarea Hubcap a eșuat ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Acest joc nu are un Steam Cloud funcțional. Fă o copie de siguranță sau restaurează salvările prin CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Fă o copie acum</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Restaurează salvarea</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Locațiile salvărilor pentru acest joc nu au fost încă configurate.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Nu a fost găsit niciun dosar de salvări în locațiile configurate.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect a finalizat operațiunea.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect nu a putut finaliza operațiunea.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Alege versiunea salvării</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Ce versiune a jocului folosești?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools va folosi locația de salvare corespunzătoare pentru {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Configurează un furnizor cloud sau un dosar în CloudRedirect înainte de a face copii ale salvărilor.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Contul Steam activ nu a putut fi identificat. Deschide Steam și încearcă din nou.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Această versiune de CloudRedirect nu include comenzile pentru încărcarea și descărcarea salvărilor.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CLI-ul CloudRedirect s-a încheiat cu codul {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Salvarea din cloud nu a putut fi validată sau restaurată.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>Au fost restaurate {0} fișiere de salvare.</value></data>
 </root>

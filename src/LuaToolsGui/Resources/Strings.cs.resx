@@ -527,4 +527,22 @@ Tím se smažou soubory .lua ze Steam\config\stplug-in. Poté restartujte Steam,
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Dosáhl jsi denního limitu Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Pro tuto aplikaci není dostupný žádný manifest Hubcap.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Stahování z Hubcap selhalo ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Tato hra nemá použitelnou službu Steam Cloud. Zálohujte nebo obnovte její uložené pozice pomocí CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Zálohovat nyní</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Obnovit uloženou pozici</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Umístění uložených pozic pro tuto hru ještě nebyla nastavena.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>V nastavených umístěních nebyla nalezena žádná složka s uloženými pozicemi.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect dokončil operaci.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect nemohl dokončit operaci.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Vybrat verzi uložené pozice</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Kterou verzi hry používáte?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools použije odpovídající umístění uložených pozic pro {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Před zálohováním uložených pozic nastavte v CloudRedirect cloudové úložiště nebo složku.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Aktivní účet Steam se nepodařilo zjistit. Otevřete Steam a zkuste to znovu.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Tato verze CloudRedirect neobsahuje příkazy pro nahrávání a stahování uložených pozic.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CLI CloudRedirect skončilo s kódem {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Cloudovou uloženou pozici se nepodařilo ověřit nebo obnovit.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>Obnoveno souborů s uloženými pozicemi: {0}.</value></data>
 </root>

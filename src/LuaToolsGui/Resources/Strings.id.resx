@@ -527,4 +527,22 @@ Ini menghapus file .lua dari Steam\config\stplug-in. Mulai ulang Steam setelahny
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Kamu sudah mencapai batas harian Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Tidak ada manifes Hubcap untuk aplikasi ini.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Unduhan Hubcap gagal ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Game ini tidak memiliki Steam Cloud yang dapat digunakan. Cadangkan atau pulihkan file simpanannya melalui CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Cadangkan sekarang</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Pulihkan simpanan</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Lokasi penyimpanan untuk game ini belum dikonfigurasi.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Folder simpanan tidak ditemukan di lokasi yang dikonfigurasi.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect menyelesaikan operasi.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect tidak dapat menyelesaikan operasi.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Pilih versi simpanan</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Versi game mana yang Anda gunakan?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools akan menggunakan lokasi simpanan yang sesuai untuk {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Konfigurasikan penyedia cloud atau folder di CloudRedirect sebelum mencadangkan simpanan.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Akun Steam yang aktif tidak dapat diidentifikasi. Buka Steam dan coba lagi.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Versi CloudRedirect ini tidak menyertakan perintah untuk mengunggah dan mengunduh simpanan.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CLI CloudRedirect berhenti dengan kode {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Simpanan cloud tidak dapat divalidasi atau dipulihkan.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>{0} file simpanan berhasil dipulihkan.</value></data>
 </root>

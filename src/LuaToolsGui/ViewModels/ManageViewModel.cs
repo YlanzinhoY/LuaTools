@@ -449,7 +449,8 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
 
             var restore = await _saveRestore.RestoreAsync(restoreGame, download.FilePath);
             return restore.Success
-                ? CloudRedirectCommandResult.Ok($"Restored {restore.RestoredFiles} save files.")
+                ? CloudRedirectCommandResult.Ok(string.Format(
+                    Resources.Strings.CloudFix_RestoredFiles, restore.RestoredFiles))
                 : CloudRedirectCommandResult.Fail(restore.Error ?? Resources.Strings.CloudFix_Failed);
         });
     }
@@ -485,6 +486,10 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
         catch (OperationCanceledException)
         {
             _toast.Show(Resources.Strings.CloudFix_Title, Resources.Strings.Err_Cancelled, error: true);
+        }
+        catch
+        {
+            _toast.Show(Resources.Strings.CloudFix_Title, Resources.Strings.CloudFix_Failed, error: true);
         }
         finally
         {

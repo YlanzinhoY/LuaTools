@@ -539,4 +539,10 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Escolher versão do save</value></data>
   <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Qual versão do jogo você está usando?</value></data>
   <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>O LuaTools usará o local de save correspondente para {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Configure um provedor de nuvem ou pasta no CloudRedirect antes de fazer backup dos saves.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Não foi possível identificar a conta Steam ativa. Abra a Steam e tente novamente.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Esta versão do CloudRedirect não inclui os comandos para enviar e baixar saves.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>A CLI do CloudRedirect foi encerrada com o código {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Não foi possível validar ou restaurar o save da nuvem.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>{0} arquivos de save foram restaurados.</value></data>
 </root>

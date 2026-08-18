@@ -16,7 +16,7 @@ public sealed class SaveRestoreService(GameSaveResolver resolver)
         CancellationToken ct = default)
     {
         if (!Directory.Exists(downloadedDirectory))
-            return SaveRestoreResult.Fail("Downloaded save directory was not found.");
+            return SaveRestoreResult.Fail(Resources.Strings.CloudFix_InvalidSave);
 
         string rollback = Path.Combine(Path.GetTempPath(), "LuaToolsGui", "save-rollback", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(rollback);
@@ -30,21 +30,21 @@ public sealed class SaveRestoreService(GameSaveResolver resolver)
             // Keep them restorable; their save-location metadata is still validated below.
             if (!File.Exists(manifestPath) && game.SelectedSaveVariant is not null)
                 manifestPath = SafeDestination(downloadedDirectory, SaveBackupService.ManifestFileName);
-            if (!File.Exists(manifestPath)) throw new InvalidDataException("Save metadata is missing.");
+            if (!File.Exists(manifestPath)) throw InvalidSave();
             SaveFilesManifest metadata;
             await using (var stream = File.OpenRead(manifestPath))
             {
                 metadata = await JsonSerializer.DeserializeAsync<SaveFilesManifest>(stream, JsonOptions, ct)
-                    ?? throw new InvalidDataException("Save metadata is invalid.");
+                    ?? throw InvalidSave();
             }
             if (metadata.FormatVersion is not (2 or 3) || metadata.AppId != game.AppId ||
                 !metadata.Game.Equals(game.Name, StringComparison.Ordinal))
-                throw new InvalidDataException("Cloud save belongs to a different game or format.");
+                throw InvalidSave();
             if (metadata.FormatVersion == 3 &&
                 (game.SelectedSaveVariant is not { } selectedVariant ||
                  !selectedVariant.Id.Equals(metadata.SaveVariantId, StringComparison.OrdinalIgnoreCase) ||
                  !selectedVariant.CloudFolder.Equals(metadata.CloudFolder, StringComparison.OrdinalIgnoreCase)))
-                throw new InvalidDataException("Cloud save belongs to a different save variant.");
+                throw InvalidSave();
 
             int restoredFiles = 0;
             for (int index = 0; index < metadata.SaveLocations.Count; index++)
@@ -56,18 +56,18 @@ public sealed class SaveRestoreService(GameSaveResolver resolver)
                     NormalizeRelative(location.RelativePath).Equals(
                         NormalizeRelative(saved.RelativePath), StringComparison.OrdinalIgnoreCase));
                 if (definition is null)
-                    throw new InvalidDataException("Cloud save contains an unknown save location.");
+                    throw InvalidSave();
 
                 string sourceRoot = SafeDestination(downloadedDirectory, saved.Directory);
                 if (!Directory.Exists(sourceRoot))
-                    throw new InvalidDataException("Cloud save files are missing.");
+                    throw InvalidSave();
                 var sourceFiles = Directory.EnumerateFiles(sourceRoot, "*", SearchOption.AllDirectories).ToList();
                 if (sourceFiles.Count == 0)
-                    throw new InvalidDataException("Cloud save location contains no files.");
+                    throw InvalidSave();
 
                 var targets = resolver.ResolveTargets(game, definition);
                 if (targets.Count != 1)
-                    throw new InvalidDataException("The save target could not be resolved safely.");
+                    throw InvalidSave();
                 string target = targets[0];
                 touchedTargets.Add((definition, target));
 
@@ -85,7 +85,7 @@ public sealed class SaveRestoreService(GameSaveResolver resolver)
                 }
             }
 
-            if (restoredFiles == 0) throw new InvalidDataException("Cloud save contains no save files.");
+            if (restoredFiles == 0) throw InvalidSave();
             return SaveRestoreResult.Ok(restoredFiles);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
@@ -153,9 +153,12 @@ public sealed class SaveRestoreService(GameSaveResolver resolver)
         string fullRoot = Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
         string destination = Path.GetFullPath(Path.Combine(fullRoot, relative.Replace('/', Path.DirectorySeparatorChar)));
         if (!destination.StartsWith(fullRoot, PathComparison))
-            throw new InvalidDataException("Save path traversal was rejected.");
+            throw InvalidSave();
         return destination;
     }
+
+    private static InvalidDataException InvalidSave() =>
+        new(Resources.Strings.CloudFix_InvalidSave);
 
     private static string NormalizeRelative(string path) => path.Replace('\\', '/').Trim('/');
 

@@ -527,4 +527,22 @@ Detta tar bort .lua-filerna från Steam\config\stplug-in. Starta om Steam efter�
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Du har nått din dagliga Hubcap-gräns.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Det finns inget Hubcap-manifest för den här appen.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap-nedladdningen misslyckades ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Det här spelet saknar en användbar Steam Cloud. Säkerhetskopiera eller återställ sparfilerna via CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Säkerhetskopiera nu</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Återställ sparfil</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Sökvägarna till spelets sparfiler har inte konfigurerats ännu.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Ingen mapp med sparfiler hittades på de konfigurerade platserna.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect slutförde åtgärden.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect kunde inte slutföra åtgärden.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Välj sparversion</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Vilken version av spelet använder du?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools använder den matchande platsen för sparfiler för {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Konfigurera en moln- eller mappleverantör i CloudRedirect innan du säkerhetskopierar sparfiler.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Det aktiva Steam-kontot kunde inte identifieras. Öppna Steam och försök igen.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Den här versionen av CloudRedirect innehåller inte kommandona för att ladda upp och hämta sparfiler.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CloudRedirect CLI avslutades med koden {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Molnsparfilen kunde inte valideras eller återställas.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>{0} sparfiler återställdes.</value></data>
 </root>

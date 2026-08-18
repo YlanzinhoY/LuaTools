@@ -527,4 +527,22 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>일일 Hubcap 한도에 도달했습니다.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>이 앱에 사용할 수 있는 Hubcap 매니페스트가 없습니다.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap 다운로드 실패 ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>이 게임은 Steam Cloud를 사용할 수 없습니다. CloudRedirect를 통해 저장 파일을 백업하거나 복원하세요.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>지금 백업</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>저장 파일 복원</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>이 게임의 저장 위치가 아직 설정되지 않았습니다.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>설정된 위치에서 저장 폴더를 찾을 수 없습니다.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect가 작업을 완료했습니다.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect가 작업을 완료하지 못했습니다.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>저장 버전 선택</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>어떤 버전의 게임을 사용하고 있나요?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools가 {0}에 맞는 저장 위치를 사용합니다.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>저장 파일을 백업하기 전에 CloudRedirect에서 클라우드 또는 폴더 공급자를 설정하세요.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>활성 Steam 계정을 확인할 수 없습니다. Steam을 열고 다시 시도하세요.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>이 CloudRedirect 버전에는 저장 파일 업로드 및 다운로드 명령이 포함되어 있지 않습니다.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CloudRedirect CLI가 코드 {0}(으)로 종료되었습니다.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>클라우드 저장 파일을 검증하거나 복원할 수 없습니다.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>저장 파일 {0}개를 복원했습니다.</value></data>
 </root>

@@ -95,7 +95,7 @@ public sealed class SaveBackupService(GameSaveResolver resolver)
         string fullRoot = Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
         string destination = Path.GetFullPath(Path.Combine(fullRoot, relative));
         if (!destination.StartsWith(fullRoot, StringComparison.OrdinalIgnoreCase))
-            throw new InvalidDataException("Save path traversal was rejected.");
+            throw new InvalidDataException(Resources.Strings.CloudFix_InvalidSave);
         return destination;
     }
 

@@ -527,4 +527,22 @@ Tämä poistaa .lua-tiedostot sijainnista Steam\config\stplug-in. Käynnistä St
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Päivittäinen Hubcap-rajasi on täynnä.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Tälle sovellukselle ei ole Hubcap-manifestia.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap-lataus epäonnistui ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Tässä pelissä ei ole käytettävissä Steam Cloudia. Varmuuskopioi tai palauta tallennukset CloudRedirectin kautta.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Varmuuskopioi nyt</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Palauta tallennus</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Tämän pelin tallennussijainteja ei ole vielä määritetty.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Määritetyistä sijainneista ei löytynyt tallennuskansiota.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect suoritti toiminnon.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect ei voinut suorittaa toimintoa.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Valitse tallennusversio</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Mitä peliversiota käytät?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools käyttää versiota {0} vastaavaa tallennussijaintia.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Määritä CloudRedirectissa pilvi- tai kansiopalvelu ennen tallennusten varmuuskopiointia.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Aktiivista Steam-tiliä ei voitu tunnistaa. Avaa Steam ja yritä uudelleen.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Tämä CloudRedirect-versio ei sisällä tallennusten lähetys- ja latauskomentoja.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CloudRedirect CLI päättyi koodilla {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Pilvitallennusta ei voitu vahvistaa tai palauttaa.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>Palautettiin {0} tallennustiedostoa.</value></data>
 </root>

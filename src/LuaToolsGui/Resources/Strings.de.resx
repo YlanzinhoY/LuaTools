@@ -527,4 +527,22 @@ Dadurch werden die .lua-Dateien aus Steam\config\stplug-in gelöscht. Starte Ste
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Dein tägliches Hubcap-Limit ist erreicht.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Für diese App ist kein Hubcap-Manifest verfügbar.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap-Download fehlgeschlagen ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Dieses Spiel verfügt über keine nutzbare Steam Cloud. Sichere oder stelle seine Spielstände über CloudRedirect wieder her.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Jetzt sichern</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Spielstand wiederherstellen</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Die Speicherorte für dieses Spiel wurden noch nicht eingerichtet.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>An den eingerichteten Speicherorten wurde kein Spielstandsordner gefunden.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect hat den Vorgang abgeschlossen.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect konnte den Vorgang nicht abschließen.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Spielstandsversion auswählen</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Welche Version des Spiels verwendest du?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools verwendet den passenden Speicherort für {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Richte vor der Sicherung der Spielstände einen Cloud- oder Ordneranbieter in CloudRedirect ein.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Das aktive Steam-Konto konnte nicht erkannt werden. Öffne Steam und versuche es erneut.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Diese CloudRedirect-Version enthält keine Befehle zum Hoch- und Herunterladen von Spielständen.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>Die CloudRedirect-CLI wurde mit Code {0} beendet.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Der Cloud-Spielstand konnte nicht überprüft oder wiederhergestellt werden.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>{0} Spielstandsdateien wurden wiederhergestellt.</value></data>
 </root>

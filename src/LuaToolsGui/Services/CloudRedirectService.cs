@@ -86,7 +86,7 @@ public class CloudRedirectService(GithubProxy gh)
         CancellationToken ct = default)
     {
         if (!Directory.Exists(preparedDirectory))
-            return Task.FromResult(CloudRedirectCommandResult.Fail("The prepared save directory was not found."));
+            return Task.FromResult(CloudRedirectCommandResult.Fail(Resources.Strings.CloudFix_SaveNotFound));
         var context = ResolveSaveContext();
         if (context.Error is not null)
             return Task.FromResult(CloudRedirectCommandResult.Fail(context.Error));
@@ -124,10 +124,10 @@ public class CloudRedirectService(GithubProxy gh)
         }
         catch
         {
-            return (null, null, "Configure a CloudRedirect provider before backing up saves.");
+            return (null, null, Resources.Strings.CloudFix_ConfigureProvider);
         }
         if (string.IsNullOrWhiteSpace(provider) || provider.Equals("local", StringComparison.OrdinalIgnoreCase))
-            return (null, null, "Configure a CloudRedirect cloud or folder provider before backing up saves.");
+            return (null, null, Resources.Strings.CloudFix_ConfigureProvider);
 
         uint accountId = 0;
         try
@@ -138,7 +138,7 @@ public class CloudRedirectService(GithubProxy gh)
         catch { }
 
         if (accountId == 0)
-            return (null, null, "The active Steam account could not be identified. Open Steam and try again.");
+            return (null, null, Resources.Strings.CloudFix_AccountNotFound);
         return (provider, accountId.ToString(), null);
     }
 
@@ -151,8 +151,7 @@ public class CloudRedirectService(GithubProxy gh)
         string? cli = await EnsureSaveCliAsync(progress, ct);
         if (cli is null)
         {
-            return CloudRedirectCommandResult.Fail(
-                "The installed CloudRedirect release does not provide cloud_redirect_cli.exe with save upload/download commands yet.");
+            return CloudRedirectCommandResult.Fail(Resources.Strings.CloudFix_CliUnavailable);
         }
 
         try
@@ -168,7 +167,7 @@ public class CloudRedirectService(GithubProxy gh)
             foreach (string argument in arguments) psi.ArgumentList.Add(argument);
 
             using var process = Process.Start(psi);
-            if (process is null) return CloudRedirectCommandResult.Fail("CloudRedirect CLI could not be started.");
+            if (process is null) return CloudRedirectCommandResult.Fail(Resources.Strings.CloudFix_Failed);
 
             Task<string> stdout = process.StandardOutput.ReadToEndAsync(ct);
             Task<string> stderr = process.StandardError.ReadToEndAsync(ct);
@@ -178,7 +177,7 @@ public class CloudRedirectService(GithubProxy gh)
             string error = (await stderr).Trim();
             if (process.ExitCode == 0 && resultFilePath is not null &&
                 !File.Exists(resultFilePath) && !Directory.Exists(resultFilePath))
-                return CloudRedirectCommandResult.Fail("CloudRedirect reported success but did not create the save files.", output);
+                return CloudRedirectCommandResult.Fail(Resources.Strings.CloudFix_Failed, output);
             return process.ExitCode == 0
                 ? CloudRedirectCommandResult.Ok(output, resultFilePath)
                 : CloudRedirectCommandResult.Fail(
@@ -186,7 +185,7 @@ public class CloudRedirectService(GithubProxy gh)
                     output);
         }
         catch (OperationCanceledException) { throw; }
-        catch (Exception ex) { return CloudRedirectCommandResult.Fail(ex.Message); }
+        catch { return CloudRedirectCommandResult.Fail(Resources.Strings.CloudFix_Failed); }
     }
 
     /// <summary>Prefer the CLI's structured JSON error, then stderr, before falling back to an exit code.</summary>
@@ -211,7 +210,7 @@ public class CloudRedirectService(GithubProxy gh)
 
         return !string.IsNullOrWhiteSpace(standardError)
             ? standardError.Trim()
-            : $"CloudRedirect CLI exited with code {exitCode}.";
+            : string.Format(Resources.Strings.CloudFix_CliExited, exitCode);
     }
 
     /// <summary>Use an already-installed save CLI or download it from the temporary LuaTools integration

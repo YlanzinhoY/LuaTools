@@ -527,4 +527,22 @@ Dette sletter .lua-filerne fra Steam\config\stplug-in. Genstart Steam bagefter, 
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Du har nået din daglige Hubcap-grænse.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Der er ingen Hubcap-manifest til denne app.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap-download mislykkedes ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Dette spil har ingen brugbar Steam Cloud. Sikkerhedskopiér eller gendan dets gemte filer via CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Sikkerhedskopiér nu</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Gendan gemt fil</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Placeringerne af gemte filer til dette spil er endnu ikke konfigureret.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Der blev ikke fundet nogen mappe med gemte filer på de konfigurerede placeringer.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect fuldførte handlingen.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect kunne ikke fuldføre handlingen.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Vælg version af gemt fil</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Hvilken version af spillet bruger du?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools bruger den tilsvarende placering af gemte filer til {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Konfigurer en cloud- eller mappeudbyder i CloudRedirect, før du sikkerhedskopierer gemte filer.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Den aktive Steam-konto kunne ikke identificeres. Åbn Steam, og prøv igen.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Denne CloudRedirect-version indeholder ikke kommandoerne til upload og download af gemte filer.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CloudRedirect CLI afsluttede med koden {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Den cloudgemte fil kunne ikke valideres eller gendannes.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>Gendannede {0} gemte filer.</value></data>
 </root>

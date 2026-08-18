@@ -547,4 +547,22 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>已达到每日 Hubcap 限额。</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>此应用没有可用的 Hubcap 清单。</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap 下载失败（{0}）。</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>此游戏没有可用的 Steam Cloud。你可以通过 CloudRedirect 备份或还原存档。</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>立即备份</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>还原存档</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>尚未配置此游戏的存档位置。</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>在已配置的位置中未找到存档文件夹。</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect 已完成操作。</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect 无法完成操作。</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>选择存档版本</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>你使用的是哪个游戏版本？</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools 将使用与 {0} 对应的存档位置。</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>备份存档前，请在 CloudRedirect 中配置云端或文件夹提供程序。</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>无法识别当前 Steam 账户。请打开 Steam 后重试。</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>此 CloudRedirect 版本不包含存档上传和下载命令。</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CloudRedirect CLI 已退出，代码为 {0}。</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>无法验证或还原云存档。</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>已还原 {0} 个存档文件。</value></data>
 </root>

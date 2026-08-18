@@ -527,4 +527,22 @@ Thao tác này sẽ xóa các tệp .lua khỏi Steam\config\stplug-in. Sau đó
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Bạn đã đạt giới hạn Hubcap hằng ngày.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Không có manifest Hubcap cho ứng dụng này.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Tải xuống từ Hubcap thất bại ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Trò chơi này không có Steam Cloud khả dụng. Hãy sao lưu hoặc khôi phục tệp lưu qua CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Sao lưu ngay</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Khôi phục tệp lưu</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Vị trí tệp lưu của trò chơi này chưa được cấu hình.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Không tìm thấy thư mục tệp lưu tại các vị trí đã cấu hình.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect đã hoàn tất thao tác.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect không thể hoàn tất thao tác.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Chọn phiên bản tệp lưu</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Bạn đang sử dụng phiên bản trò chơi nào?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools sẽ sử dụng vị trí tệp lưu phù hợp với {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Hãy cấu hình nhà cung cấp đám mây hoặc thư mục trong CloudRedirect trước khi sao lưu tệp lưu.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Không thể xác định tài khoản Steam đang hoạt động. Hãy mở Steam và thử lại.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Phiên bản CloudRedirect này không có các lệnh tải lên và tải xuống tệp lưu.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CLI CloudRedirect đã thoát với mã {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Không thể xác thực hoặc khôi phục tệp lưu trên đám mây.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>Đã khôi phục {0} tệp lưu.</value></data>
 </root>

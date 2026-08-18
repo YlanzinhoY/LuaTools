@@ -479,7 +479,7 @@ public static class Strings
     public static string Launch_Drift_Body => Get(nameof(Launch_Drift_Body));
     public static string Launch_Drift_Action => Get(nameof(Launch_Drift_Action));
 
-    // ── Cloud Redirect Fix ── (English fallback; pt-BR is translated)
+    // ── Cloud Redirect Fix ──
     public static string CloudFix_Title => Get(nameof(CloudFix_Title));
     public static string CloudFix_Description => Get(nameof(CloudFix_Description));
     public static string CloudFix_BackupNow => Get(nameof(CloudFix_BackupNow));
@@ -491,6 +491,12 @@ public static class Strings
     public static string CloudFix_Variant_Title => Get(nameof(CloudFix_Variant_Title));
     public static string CloudFix_Variant_Question => Get(nameof(CloudFix_Variant_Question));
     public static string CloudFix_Variant_Hint => Get(nameof(CloudFix_Variant_Hint));
+    public static string CloudFix_ConfigureProvider => Get(nameof(CloudFix_ConfigureProvider));
+    public static string CloudFix_AccountNotFound => Get(nameof(CloudFix_AccountNotFound));
+    public static string CloudFix_CliUnavailable => Get(nameof(CloudFix_CliUnavailable));
+    public static string CloudFix_CliExited => Get(nameof(CloudFix_CliExited));
+    public static string CloudFix_InvalidSave => Get(nameof(CloudFix_InvalidSave));
+    public static string CloudFix_RestoredFiles => Get(nameof(CloudFix_RestoredFiles));
 
     // Service error messages, surfaced to the user via toasts / MessageBox.
     public static string Err_SteamNotFound => Get(nameof(Err_SteamNotFound));

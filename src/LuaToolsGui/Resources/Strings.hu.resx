@@ -527,4 +527,22 @@ Ez törli a .lua fájlokat a Steam\config\stplug-in mappából. Ezután indítsd
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Elérted a napi Hubcap-korlátot.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Ehhez az alkalmazáshoz nincs Hubcap-manifeszt.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>A Hubcap-letöltés sikertelen ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Ehhez a játékhoz nem használható a Steam Cloud. A mentéseket a CloudRedirect segítségével mentheted vagy állíthatod vissza.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Biztonsági mentés most</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Mentés visszaállítása</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>A játék mentési helyei még nincsenek beállítva.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>A beállított helyeken nem található mentési mappa.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>A CloudRedirect befejezte a műveletet.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>A CloudRedirect nem tudta befejezni a műveletet.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Mentésverzió kiválasztása</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>A játék melyik verzióját használod?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>A LuaTools a(z) {0} verzióhoz tartozó mentési helyet fogja használni.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>A mentések biztonsági mentése előtt állíts be felhő- vagy mappaszolgáltatót a CloudRedirectban.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Az aktív Steam-fiók nem azonosítható. Nyisd meg a Steamet, majd próbáld újra.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Ez a CloudRedirect-verzió nem tartalmazza a mentések fel- és letöltésére szolgáló parancsokat.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>A CloudRedirect CLI a(z) {0} kóddal lépett ki.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>A felhőmentést nem sikerült ellenőrizni vagy visszaállítani.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>{0} mentési fájl visszaállítva.</value></data>
 </root>

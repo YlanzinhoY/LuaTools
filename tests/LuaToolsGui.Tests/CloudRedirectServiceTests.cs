@@ -29,6 +29,6 @@ public sealed class CloudRedirectServiceTests
     {
         string message = CloudRedirectService.ResolveCliFailureMessage(1, "", "");
 
-        Assert.Equal("CloudRedirect CLI exited with code 1.", message);
+        Assert.Equal(string.Format(Resources.Strings.CloudFix_CliExited, 1), message);
     }
 }

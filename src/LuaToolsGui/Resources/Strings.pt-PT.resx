@@ -527,4 +527,22 @@ Isto elimina os ficheiros .lua de Steam\config\stplug-in. Reinicie o Steam depoi
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Atingiste o teu limite diário do Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Nenhum manifesto Hubcap disponível para esta app.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Falha no download do Hubcap ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Este jogo não dispõe de um Steam Cloud utilizável. Cria uma cópia de segurança ou restaura os dados guardados através do CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Criar cópia agora</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Restaurar dados guardados</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>As localizações dos dados guardados deste jogo ainda não foram configuradas.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Não foi encontrada nenhuma pasta de dados guardados nas localizações configuradas.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>O CloudRedirect concluiu a operação.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>O CloudRedirect não conseguiu concluir a operação.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Escolher versão dos dados guardados</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Que versão do jogo estás a utilizar?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>O LuaTools utilizará a localização correspondente para {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Configura um fornecedor de nuvem ou pasta no CloudRedirect antes de criares cópias dos dados guardados.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Não foi possível identificar a conta Steam ativa. Abre o Steam e tenta novamente.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Esta versão do CloudRedirect não inclui os comandos para enviar e transferir dados guardados.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>A CLI do CloudRedirect terminou com o código {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Não foi possível validar ou restaurar os dados guardados na nuvem.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>Foram restaurados {0} ficheiros de dados guardados.</value></data>
 </root>

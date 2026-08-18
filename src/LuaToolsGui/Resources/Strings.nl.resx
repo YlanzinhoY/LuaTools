@@ -527,4 +527,22 @@ Dit verwijdert de .lua-bestanden uit Steam\config\stplug-in. Herstart Steam daar
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Je dagelijkse Hubcap-limiet is bereikt.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Er is geen Hubcap-manifest voor deze app.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap-download mislukt ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Deze game heeft geen bruikbare Steam Cloud. Maak een back-up van de opgeslagen spellen of herstel ze via CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Nu back-up maken</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Opgeslagen spel herstellen</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>De opslaglocaties voor deze game zijn nog niet geconfigureerd.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Er is geen map met opgeslagen spellen gevonden op de geconfigureerde locaties.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect heeft de bewerking voltooid.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect kon de bewerking niet voltooien.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Versie van opgeslagen spel kiezen</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Welke versie van de game gebruik je?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools gebruikt de bijbehorende opslaglocatie voor {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Configureer een cloud- of mapprovider in CloudRedirect voordat je opgeslagen spellen back-upt.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Het actieve Steam-account kon niet worden geïdentificeerd. Open Steam en probeer het opnieuw.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Deze versie van CloudRedirect bevat geen opdrachten voor het uploaden en downloaden van opgeslagen spellen.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>De CloudRedirect-CLI is afgesloten met code {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Het opgeslagen cloudspel kon niet worden gevalideerd of hersteld.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>{0} opslagbestanden hersteld.</value></data>
 </root>

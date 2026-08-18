@@ -527,4 +527,22 @@ Cela supprime les fichiers .lua de Steam\config\stplug-in. Redémarrez Steam ens
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Ta limite quotidienne Hubcap est atteinte.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Aucun manifeste Hubcap n'est disponible pour cette app.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Échec du téléchargement Hubcap ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Ce jeu ne dispose pas d’un Steam Cloud utilisable. Sauvegardez ou restaurez ses sauvegardes avec CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Sauvegarder maintenant</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Restaurer la sauvegarde</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Les emplacements de sauvegarde de ce jeu n’ont pas encore été configurés.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Aucun dossier de sauvegarde n’a été trouvé dans les emplacements configurés.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect a terminé l’opération.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect n’a pas pu terminer l’opération.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Choisir la version de sauvegarde</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Quelle version du jeu utilisez-vous ?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools utilisera l’emplacement de sauvegarde correspondant à {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Configurez un fournisseur cloud ou un dossier dans CloudRedirect avant de sauvegarder les parties.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Le compte Steam actif n’a pas pu être identifié. Ouvrez Steam et réessayez.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Cette version de CloudRedirect n’inclut pas les commandes d’envoi et de téléchargement des sauvegardes.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>La CLI CloudRedirect s’est arrêtée avec le code {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>La sauvegarde cloud n’a pas pu être validée ou restaurée.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>{0} fichiers de sauvegarde ont été restaurés.</value></data>
 </root>

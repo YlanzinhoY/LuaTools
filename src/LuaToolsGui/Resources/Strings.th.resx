@@ -527,4 +527,22 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>คุณใช้ Hubcap ครบตามขีดจำกัดรายวันแล้ว</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>ไม่มี manifest ของ Hubcap สำหรับแอปนี้</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>ดาวน์โหลดจาก Hubcap ไม่สำเร็จ ({0})</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>เกมนี้ไม่มี Steam Cloud ที่ใช้งานได้ สำรองหรือกู้คืนไฟล์เซฟผ่าน CloudRedirect</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>สำรองข้อมูลตอนนี้</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>กู้คืนไฟล์เซฟ</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>ยังไม่ได้กำหนดตำแหน่งไฟล์เซฟสำหรับเกมนี้</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>ไม่พบโฟลเดอร์ไฟล์เซฟในตำแหน่งที่กำหนด</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect ดำเนินการเสร็จสิ้นแล้ว</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect ไม่สามารถดำเนินการให้เสร็จสิ้นได้</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>เลือกเวอร์ชันไฟล์เซฟ</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>คุณกำลังใช้เกมเวอร์ชันใด</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools จะใช้ตำแหน่งไฟล์เซฟที่ตรงกับ {0}</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>กำหนดค่าผู้ให้บริการคลาวด์หรือโฟลเดอร์ใน CloudRedirect ก่อนสำรองไฟล์เซฟ</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>ไม่สามารถระบุบัญชี Steam ที่ใช้งานอยู่ได้ โปรดเปิด Steam แล้วลองอีกครั้ง</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>CloudRedirect เวอร์ชันนี้ไม่มีคำสั่งสำหรับอัปโหลดและดาวน์โหลดไฟล์เซฟ</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CLI ของ CloudRedirect จบการทำงานด้วยรหัส {0}</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>ไม่สามารถตรวจสอบหรือกู้คืนไฟล์เซฟบนคลาวด์ได้</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>กู้คืนไฟล์เซฟแล้ว {0} ไฟล์</value></data>
 </root>

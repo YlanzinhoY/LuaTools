@@ -527,4 +527,22 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Достигнут дневной лимит Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Для этого приложения нет манифеста Hubcap.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Не удалось загрузить с Hubcap ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Эта игра не поддерживает доступный Steam Cloud. Создайте резервную копию сохранений или восстановите их через CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Создать копию</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Восстановить сохранение</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Пути к сохранениям этой игры ещё не настроены.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>В настроенных расположениях не найдена папка с сохранениями.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect завершил операцию.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect не удалось завершить операцию.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Выбрать версию сохранения</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Какую версию игры вы используете?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools будет использовать расположение сохранений, соответствующее версии {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Перед резервным копированием сохранений настройте облачное хранилище или папку в CloudRedirect.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Не удалось определить активную учётную запись Steam. Откройте Steam и повторите попытку.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>В этой версии CloudRedirect отсутствуют команды отправки и загрузки сохранений.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CLI CloudRedirect завершила работу с кодом {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Не удалось проверить или восстановить облачное сохранение.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>Восстановлено файлов сохранений: {0}.</value></data>
 </root>

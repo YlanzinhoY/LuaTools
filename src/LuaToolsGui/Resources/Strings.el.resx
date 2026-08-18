@@ -527,4 +527,22 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Έφτασες το ημερήσιο όριο του Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Δεν υπάρχει διαθέσιμο manifest Hubcap για αυτήν την εφαρμογή.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Η λήψη από το Hubcap απέτυχε ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Αυτό το παιχνίδι δεν διαθέτει λειτουργικό Steam Cloud. Δημιουργήστε αντίγραφο ασφαλείας ή επαναφέρετε τις αποθηκεύσεις του μέσω του CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Δημιουργία αντιγράφου τώρα</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Επαναφορά αποθήκευσης</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Οι τοποθεσίες αποθήκευσης για αυτό το παιχνίδι δεν έχουν ρυθμιστεί ακόμη.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Δεν βρέθηκε φάκελος αποθήκευσης στις ρυθμισμένες τοποθεσίες.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>Το CloudRedirect ολοκλήρωσε τη λειτουργία.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>Το CloudRedirect δεν μπόρεσε να ολοκληρώσει τη λειτουργία.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Επιλογή έκδοσης αποθήκευσης</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Ποια έκδοση του παιχνιδιού χρησιμοποιείτε;</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>Το LuaTools θα χρησιμοποιήσει την αντίστοιχη τοποθεσία αποθήκευσης για το {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Ρυθμίστε έναν πάροχο cloud ή φακέλου στο CloudRedirect πριν δημιουργήσετε αντίγραφα ασφαλείας.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Δεν ήταν δυνατή η αναγνώριση του ενεργού λογαριασμού Steam. Ανοίξτε το Steam και δοκιμάστε ξανά.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Αυτή η έκδοση του CloudRedirect δεν περιλαμβάνει τις εντολές μεταφόρτωσης και λήψης αποθηκεύσεων.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>Το CLI του CloudRedirect τερματίστηκε με κωδικό {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Δεν ήταν δυνατή η επικύρωση ή η επαναφορά της αποθήκευσης cloud.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>Επαναφέρθηκαν {0} αρχεία αποθήκευσης.</value></data>
 </root>

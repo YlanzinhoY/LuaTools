@@ -527,4 +527,22 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Достигна дневния си лимит за Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Няма наличен Hubcap манифест за това приложение.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Изтеглянето от Hubcap е неуспешно ({0}).</value></data>
+  <!-- ── Cloud Redirect Fix ── -->
+  <data name="CloudFix_Title" xml:space="preserve"><value>Cloud Redirect Fix</value></data>
+  <data name="CloudFix_Description" xml:space="preserve"><value>Тази игра няма използваем Steam Cloud. Архивирайте или възстановете записите ѝ чрез CloudRedirect.</value></data>
+  <data name="CloudFix_BackupNow" xml:space="preserve"><value>Архивиране сега</value></data>
+  <data name="CloudFix_Restore" xml:space="preserve"><value>Възстановяване на запис</value></data>
+  <data name="CloudFix_PathsNotConfigured" xml:space="preserve"><value>Местоположенията на записите за тази игра още не са конфигурирани.</value></data>
+  <data name="CloudFix_SaveNotFound" xml:space="preserve"><value>Не е намерена папка със записи в конфигурираните местоположения.</value></data>
+  <data name="CloudFix_Completed" xml:space="preserve"><value>CloudRedirect завърши операцията.</value></data>
+  <data name="CloudFix_Failed" xml:space="preserve"><value>CloudRedirect не можа да завърши операцията.</value></data>
+  <data name="CloudFix_Variant_Title" xml:space="preserve"><value>Избор на версия на записа</value></data>
+  <data name="CloudFix_Variant_Question" xml:space="preserve"><value>Коя версия на играта използвате?</value></data>
+  <data name="CloudFix_Variant_Hint" xml:space="preserve"><value>LuaTools ще използва съответното местоположение на записите за {0}.</value></data>
+  <data name="CloudFix_ConfigureProvider" xml:space="preserve"><value>Конфигурирайте доставчик за облак или папка в CloudRedirect, преди да архивирате записите.</value></data>
+  <data name="CloudFix_AccountNotFound" xml:space="preserve"><value>Активният Steam акаунт не можа да бъде разпознат. Отворете Steam и опитайте отново.</value></data>
+  <data name="CloudFix_CliUnavailable" xml:space="preserve"><value>Тази версия на CloudRedirect не включва командите за качване и изтегляне на записи.</value></data>
+  <data name="CloudFix_CliExited" xml:space="preserve"><value>CLI на CloudRedirect приключи с код {0}.</value></data>
+  <data name="CloudFix_InvalidSave" xml:space="preserve"><value>Облачният запис не можа да бъде проверен или възстановен.</value></data>
+  <data name="CloudFix_RestoredFiles" xml:space="preserve"><value>Възстановени са {0} файла със записи.</value></data>
 </root>
