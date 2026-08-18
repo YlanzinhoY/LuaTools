@@ -79,6 +79,7 @@ public sealed class GamesWithoutSteamCloudTests : IDisposable
                 {
                     Id = "voices38",
                     Name = "voices38",
+                    CloudFolder = "voices",
                     SaveLocations = [location],
                 }
             ],
@@ -86,11 +87,13 @@ public sealed class GamesWithoutSteamCloudTests : IDisposable
         var resolver = new GameSaveResolver();
         var backup = new SaveBackupService(resolver);
         var restore = new SaveRestoreService(resolver);
-        using var saveFiles = await backup.CreateSaveFilesAsync(game.ForVariant(game.SaveVariants[0]));
+        var selectedGame = game.ForVariant(game.SaveVariants[0]);
+        using var saveFiles = await backup.CreateSaveFilesAsync(selectedGame);
         Assert.NotNull(saveFiles);
+        Assert.True(File.Exists(Path.Combine(saveFiles.DirectoryPath, "voices", "slot.save")));
 
         await File.WriteAllTextAsync(save, "corrupted");
-        var result = await restore.RestoreAsync(game, saveFiles.DirectoryPath);
+        var result = await restore.RestoreAsync(selectedGame, saveFiles.DirectoryPath);
 
         Assert.True(result.Success, result.Error);
         Assert.Equal("known-good", await File.ReadAllTextAsync(save));
@@ -111,6 +114,7 @@ public sealed class GamesWithoutSteamCloudTests : IDisposable
             {
                 Assert.Equal("voices38", voices38.Id);
                 Assert.Equal("Voices38", voices38.Name);
+                Assert.Equal("voices", voices38.CloudFolder);
                 var location = Assert.Single(voices38.SaveLocations);
                 Assert.Equal("RoamingAppData", location.Base);
                 Assert.Equal("Goldberg UplayEmu Saves/66088", location.RelativePath);
@@ -121,6 +125,7 @@ public sealed class GamesWithoutSteamCloudTests : IDisposable
             {
                 Assert.Equal("hv", hv.Id);
                 Assert.Equal("HV", hv.Name);
+                Assert.Equal("hv", hv.CloudFolder);
                 var location = Assert.Single(hv.SaveLocations);
                 Assert.Equal("SteamInstall", location.Base);
                 Assert.Equal("saves/65043", location.RelativePath);
@@ -140,6 +145,7 @@ public sealed class GamesWithoutSteamCloudTests : IDisposable
         {
             Id = "hv",
             Name = "HV",
+            CloudFolder = "hv",
             SaveLocations =
             [
                 new GameSaveLocation
@@ -165,8 +171,74 @@ public sealed class GamesWithoutSteamCloudTests : IDisposable
 
         using var saveFiles = await new SaveBackupService(resolver).CreateSaveFilesAsync(game.ForVariant(variant));
         Assert.NotNull(saveFiles);
-        Assert.True(File.Exists(Path.Combine(saveFiles.DirectoryPath, "saves", "slot.save")));
-        Assert.False(File.Exists(Path.Combine(saveFiles.DirectoryPath, "saves", "info.txt")));
+        Assert.True(File.Exists(Path.Combine(saveFiles.DirectoryPath, "hv", "slot.save")));
+        Assert.False(File.Exists(Path.Combine(saveFiles.DirectoryPath, "hv", "info.txt")));
+        Assert.True(File.Exists(Path.Combine(saveFiles.DirectoryPath, "_cloudredirect-save-hv.json")));
+    }
+
+    [Fact]
+    public async Task VariantBackupsCoexistInIndependentDataDefinedCloudFolders()
+    {
+        string voicesRelative = Path.Combine(_saveRelative, "coexist", "voices");
+        string hvRelative = Path.Combine(_saveRelative, "coexist", "hv");
+        string roaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        Directory.CreateDirectory(Path.Combine(roaming, voicesRelative));
+        Directory.CreateDirectory(Path.Combine(roaming, hvRelative));
+        await File.WriteAllTextAsync(Path.Combine(roaming, voicesRelative, "voices.save"), "voices");
+        await File.WriteAllTextAsync(Path.Combine(roaming, hvRelative, "hv.save"), "hv");
+
+        var voices = new GameSaveVariant
+        {
+            Id = "voices38",
+            Name = "Voices38",
+            CloudFolder = "voices",
+            SaveLocations =
+            [
+                new GameSaveLocation
+                {
+                    Base = "RoamingAppData",
+                    RelativePath = voicesRelative,
+                    IncludePatterns = ["*.save"],
+                    Recursive = false,
+                }
+            ],
+        };
+        var hv = new GameSaveVariant
+        {
+            Id = "hv",
+            Name = "HV",
+            CloudFolder = "hv",
+            SaveLocations =
+            [
+                new GameSaveLocation
+                {
+                    Base = "RoamingAppData",
+                    RelativePath = hvRelative,
+                    IncludePatterns = ["*.save"],
+                    Recursive = false,
+                }
+            ],
+        };
+        var game = new GameSaveDefinition
+        {
+            AppId = 3751950,
+            Name = "Assassin's Creed Black Flag Resynced",
+            SaveVariants = [voices, hv],
+        };
+        var backup = new SaveBackupService(new GameSaveResolver());
+        using var voicesFiles = await backup.CreateSaveFilesAsync(game.ForVariant(voices));
+        using var hvFiles = await backup.CreateSaveFilesAsync(game.ForVariant(hv));
+        Assert.NotNull(voicesFiles);
+        Assert.NotNull(hvFiles);
+
+        string cloudMirror = Path.Combine(_dir, "cloud-mirror");
+        MergeDirectory(voicesFiles.DirectoryPath, cloudMirror);
+        MergeDirectory(hvFiles.DirectoryPath, cloudMirror);
+
+        Assert.Equal("voices", await File.ReadAllTextAsync(Path.Combine(cloudMirror, "voices", "voices.save")));
+        Assert.Equal("hv", await File.ReadAllTextAsync(Path.Combine(cloudMirror, "hv", "hv.save")));
+        Assert.True(File.Exists(Path.Combine(cloudMirror, "_cloudredirect-save-voices.json")));
+        Assert.True(File.Exists(Path.Combine(cloudMirror, "_cloudredirect-save-hv.json")));
     }
 
     [Fact]
@@ -248,5 +320,15 @@ public sealed class GamesWithoutSteamCloudTests : IDisposable
             Directory.Delete(saveRoot, recursive: true);
         }
         catch { }
+    }
+
+    private static void MergeDirectory(string source, string destination)
+    {
+        foreach (string file in Directory.EnumerateFiles(source, "*", SearchOption.AllDirectories))
+        {
+            string target = Path.Combine(destination, Path.GetRelativePath(source, file));
+            Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+            File.Copy(file, target, overwrite: true);
+        }
     }
 }

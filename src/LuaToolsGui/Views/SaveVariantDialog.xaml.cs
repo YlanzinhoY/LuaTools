@@ -3,7 +3,7 @@ using LuaToolsGui.Models;
 
 namespace LuaToolsGui.Views;
 
-/// <summary>Asks which data-defined release/mod save layout should be backed up.</summary>
+/// <summary>Asks which data-defined release/mod save layout should be backed up or restored.</summary>
 public partial class SaveVariantDialog : Wpf.Ui.Controls.FluentWindow
 {
     public string GameName { get; }

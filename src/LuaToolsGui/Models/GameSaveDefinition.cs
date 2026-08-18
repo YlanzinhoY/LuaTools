@@ -24,6 +24,9 @@ public sealed class GameSaveDefinition
     [JsonPropertyName("saveLocations")] public List<GameSaveLocation> SaveLocations { get; set; } = [];
     [JsonPropertyName("saveVariants")] public List<GameSaveVariant> SaveVariants { get; set; } = [];
 
+    /// <summary>The data-defined variant selected for the current backup or restore operation.</summary>
+    [JsonIgnore] public GameSaveVariant? SelectedSaveVariant { get; private set; }
+
     [JsonIgnore]
     public bool HasConfiguredSaveLocations =>
         SaveLocations.Count > 0 || SaveVariants.Any(variant => variant.SaveLocations.Count > 0);
@@ -38,14 +41,19 @@ public sealed class GameSaveDefinition
         Name = Name,
         Executables = Executables,
         SaveLocations = variant.SaveLocations,
+        SelectedSaveVariant = variant,
     };
 }
 
-/// <summary>A selectable release/mod whose saves live in different locations.</summary>
+/// <summary>
+/// A selectable release/mod whose saves live in a different location and cloud folder.
+/// The folder is data-defined so variants are not tied to any particular game or naming scheme.
+/// </summary>
 public sealed class GameSaveVariant
 {
     [JsonPropertyName("id")] public string Id { get; set; } = "";
     [JsonPropertyName("name")] public string Name { get; set; } = "";
+    [JsonPropertyName("cloudFolder")] public string CloudFolder { get; set; } = "";
     [JsonPropertyName("saveLocations")] public List<GameSaveLocation> SaveLocations { get; set; } = [];
 }
 

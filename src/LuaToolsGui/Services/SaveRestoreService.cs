@@ -24,7 +24,12 @@ public sealed class SaveRestoreService(GameSaveResolver resolver)
 
         try
         {
-            string manifestPath = SafeDestination(downloadedDirectory, SaveBackupService.ManifestFileName);
+            string manifestPath = SafeDestination(
+                downloadedDirectory, SaveBackupService.GetManifestFileName(game));
+            // Backups made before variant cloud folders used one manifest at the game root.
+            // Keep them restorable; their save-location metadata is still validated below.
+            if (!File.Exists(manifestPath) && game.SelectedSaveVariant is not null)
+                manifestPath = SafeDestination(downloadedDirectory, SaveBackupService.ManifestFileName);
             if (!File.Exists(manifestPath)) throw new InvalidDataException("Save metadata is missing.");
             SaveFilesManifest metadata;
             await using (var stream = File.OpenRead(manifestPath))
@@ -32,9 +37,14 @@ public sealed class SaveRestoreService(GameSaveResolver resolver)
                 metadata = await JsonSerializer.DeserializeAsync<SaveFilesManifest>(stream, JsonOptions, ct)
                     ?? throw new InvalidDataException("Save metadata is invalid.");
             }
-            if (metadata.FormatVersion != 2 || metadata.AppId != game.AppId ||
+            if (metadata.FormatVersion is not (2 or 3) || metadata.AppId != game.AppId ||
                 !metadata.Game.Equals(game.Name, StringComparison.Ordinal))
                 throw new InvalidDataException("Cloud save belongs to a different game or format.");
+            if (metadata.FormatVersion == 3 &&
+                (game.SelectedSaveVariant is not { } selectedVariant ||
+                 !selectedVariant.Id.Equals(metadata.SaveVariantId, StringComparison.OrdinalIgnoreCase) ||
+                 !selectedVariant.CloudFolder.Equals(metadata.CloudFolder, StringComparison.OrdinalIgnoreCase)))
+                throw new InvalidDataException("Cloud save belongs to a different save variant.");
 
             int restoredFiles = 0;
             for (int index = 0; index < metadata.SaveLocations.Count; index++)
@@ -154,6 +164,8 @@ public sealed class SaveRestoreService(GameSaveResolver resolver)
         public int FormatVersion { get; set; }
         public long AppId { get; set; }
         public string Game { get; set; } = "";
+        public string? SaveVariantId { get; set; }
+        public string? CloudFolder { get; set; }
         public List<SaveLocationMetadata> SaveLocations { get; set; } = [];
     }
 

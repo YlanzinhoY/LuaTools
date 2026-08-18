@@ -339,7 +339,7 @@ public partial class App : Application
             dialog.ShowDialog();
         });
 
-        // Games whose releases/mods save in different places ask which layout to back up.
+        // Games whose releases/mods save in different places ask which layout to back up or restore.
         manage.SelectSaveVariant = game => Dispatcher.Invoke(() =>
         {
             var dialog = new SaveVariantDialog(game) { Owner = window };

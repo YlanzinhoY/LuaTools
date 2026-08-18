@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using LuaToolsGui.Models;
 
 namespace LuaToolsGui.Services;
@@ -16,7 +17,13 @@ public sealed class SaveBackupService(GameSaveResolver resolver)
     {
         WriteIndented = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     };
+
+    internal static string GetManifestFileName(GameSaveDefinition game) =>
+        game.SelectedSaveVariant is { } variant
+            ? $"_cloudredirect-save-{variant.CloudFolder}.json"
+            : ManifestFileName;
 
     public async Task<PreparedSaveFiles?> CreateSaveFilesAsync(
         GameSaveDefinition game,
@@ -32,13 +39,14 @@ public sealed class SaveBackupService(GameSaveResolver resolver)
         {
             var metadataLocations = new List<SaveLocationMetadata>();
             int fileCount = 0;
+            string cloudRoot = game.SelectedSaveVariant?.CloudFolder ?? "saves";
 
             for (int index = 0; index < locations.Count; index++)
             {
                 var location = locations[index];
-                // Keep the common one-location case human-readable in cloud storage:
-                // account/appid/game name/saves/file.save. Multiple roots remain modular under saves/0, saves/1, ...
-                string directoryName = locations.Count == 1 ? "saves" : $"saves/{index}";
+                // A selected variant owns an independent data-defined folder, allowing multiple save layouts
+                // to coexist for one AppID. Games without variants retain the original saves/ path.
+                string directoryName = locations.Count == 1 ? cloudRoot : $"{cloudRoot}/{index}";
                 metadataLocations.Add(new SaveLocationMetadata(
                     location.Definition.Base,
                     location.Definition.RelativePath,
@@ -60,11 +68,13 @@ public sealed class SaveBackupService(GameSaveResolver resolver)
             }
 
             var manifest = new SaveFilesManifest(
-                FormatVersion: 2,
+                FormatVersion: game.SelectedSaveVariant is null ? 2 : 3,
                 AppId: game.AppId,
                 Game: game.Name,
+                SaveVariantId: game.SelectedSaveVariant?.Id,
+                CloudFolder: game.SelectedSaveVariant?.CloudFolder,
                 SaveLocations: metadataLocations);
-            string manifestPath = Path.Combine(staging, ManifestFileName);
+            string manifestPath = Path.Combine(staging, GetManifestFileName(game));
             await using (var output = new FileStream(manifestPath, FileMode.CreateNew, FileAccess.Write,
                 FileShare.None, bufferSize: 81920, useAsync: true))
             {
@@ -93,6 +103,8 @@ public sealed class SaveBackupService(GameSaveResolver resolver)
         int FormatVersion,
         long AppId,
         string Game,
+        string? SaveVariantId,
+        string? CloudFolder,
         IReadOnlyList<SaveLocationMetadata> SaveLocations);
 
     internal sealed record SaveLocationMetadata(string Base, string RelativePath, string Directory);

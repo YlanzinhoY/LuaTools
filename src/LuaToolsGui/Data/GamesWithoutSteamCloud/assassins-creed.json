@@ -14,6 +14,7 @@
         {
           "id": "voices38",
           "name": "Voices38",
+          "cloudFolder": "voices",
           "saveLocations": [
             {
               "platform": "windows",
@@ -27,6 +28,7 @@
         {
           "id": "hv",
           "name": "HV",
+          "cloudFolder": "hv",
           "saveLocations": [
             {
               "platform": "windows",

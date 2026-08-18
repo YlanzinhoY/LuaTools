@@ -105,14 +105,28 @@ public sealed class GamesWithoutSteamCloud
             if (game.SaveVariants.Select(variant => variant.Id).Distinct(StringComparer.OrdinalIgnoreCase).Count()
                 != game.SaveVariants.Count)
                 throw new InvalidDataException($"Game definition {game.AppId} contains duplicate save variant IDs.");
+            if (game.SaveVariants.Select(variant => variant.CloudFolder)
+                    .Distinct(StringComparer.OrdinalIgnoreCase).Count() != game.SaveVariants.Count)
+                throw new InvalidDataException(
+                    $"Game definition {game.AppId} contains duplicate save variant cloud folders.");
             foreach (var variant in game.SaveVariants)
             {
                 if (string.IsNullOrWhiteSpace(variant.Id) || string.IsNullOrWhiteSpace(variant.Name))
                     throw new InvalidDataException($"Game definition {game.AppId} contains an unnamed save variant.");
+                if (!IsSafeCloudFolder(variant.CloudFolder))
+                    throw new InvalidDataException(
+                        $"Save variant '{variant.Id}' for game {game.AppId} needs a safe cloudFolder.");
                 if (variant.SaveLocations.Count == 0)
                     throw new InvalidDataException(
                         $"Save variant '{variant.Id}' for game {game.AppId} needs at least one save location.");
             }
         }
+    }
+
+    private static bool IsSafeCloudFolder(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value) || value != value.Trim() || value is "." or "..") return false;
+        return value.All(c => c >= 32 && c is not ('/' or '\\' or ':' or '*' or '?' or '"' or '<' or '>' or '|'))
+               && value[^1] is not (' ' or '.');
     }
 }

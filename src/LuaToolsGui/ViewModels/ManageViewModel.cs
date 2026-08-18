@@ -417,15 +417,8 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
             return;
         }
 
-        GameSaveDefinition backupGame = game;
-        if (game.SaveVariants.Count > 0)
-        {
-            var variant = game.SaveVariants.Count == 1
-                ? game.SaveVariants[0]
-                : SelectSaveVariant?.Invoke(game);
-            if (variant is null) return;
-            backupGame = game.ForVariant(variant);
-        }
+        var backupGame = SelectCloudSaveDefinition(game);
+        if (backupGame is null) return;
 
         await RunCloudRedirectCommandAsync(async progress =>
         {
@@ -446,16 +439,28 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
             return;
         }
 
+        var restoreGame = SelectCloudSaveDefinition(game);
+        if (restoreGame is null) return;
+
         await RunCloudRedirectCommandAsync(async progress =>
         {
-            var download = await _cloudRedirect.DownloadSaveAsync(game, progress);
+            var download = await _cloudRedirect.DownloadSaveAsync(restoreGame, progress);
             if (!download.Success || download.FilePath is null) return download;
 
-            var restore = await _saveRestore.RestoreAsync(game, download.FilePath);
+            var restore = await _saveRestore.RestoreAsync(restoreGame, download.FilePath);
             return restore.Success
                 ? CloudRedirectCommandResult.Ok($"Restored {restore.RestoredFiles} save files.")
                 : CloudRedirectCommandResult.Fail(restore.Error ?? Resources.Strings.CloudFix_Failed);
         });
+    }
+
+    private GameSaveDefinition? SelectCloudSaveDefinition(GameSaveDefinition game)
+    {
+        if (game.SaveVariants.Count == 0) return game;
+        var variant = game.SaveVariants.Count == 1
+            ? game.SaveVariants[0]
+            : SelectSaveVariant?.Invoke(game);
+        return variant is null ? null : game.ForVariant(variant);
     }
 
     private async Task RunCloudRedirectCommandAsync(
