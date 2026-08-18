@@ -182,11 +182,36 @@ public class CloudRedirectService(GithubProxy gh)
             return process.ExitCode == 0
                 ? CloudRedirectCommandResult.Ok(output, resultFilePath)
                 : CloudRedirectCommandResult.Fail(
-                    string.IsNullOrWhiteSpace(error) ? $"CloudRedirect CLI exited with code {process.ExitCode}." : error,
+                    ResolveCliFailureMessage(process.ExitCode, output, error),
                     output);
         }
         catch (OperationCanceledException) { throw; }
         catch (Exception ex) { return CloudRedirectCommandResult.Fail(ex.Message); }
+    }
+
+    /// <summary>Prefer the CLI's structured JSON error, then stderr, before falling back to an exit code.</summary>
+    internal static string ResolveCliFailureMessage(int exitCode, string standardOutput, string standardError)
+    {
+        if (!string.IsNullOrWhiteSpace(standardOutput))
+        {
+            try
+            {
+                using var json = JsonDocument.Parse(standardOutput);
+                if (json.RootElement.ValueKind == JsonValueKind.Object &&
+                    json.RootElement.TryGetProperty("error", out var error) &&
+                    error.ValueKind == JsonValueKind.String &&
+                    !string.IsNullOrWhiteSpace(error.GetString()))
+                    return error.GetString()!.Trim();
+            }
+            catch (JsonException)
+            {
+                // Some CLI failures may not produce JSON. Fall through to stderr or the exit code.
+            }
+        }
+
+        return !string.IsNullOrWhiteSpace(standardError)
+            ? standardError.Trim()
+            : $"CloudRedirect CLI exited with code {exitCode}.";
     }
 
     /// <summary>Use an already-installed save CLI or download it when a future official release
