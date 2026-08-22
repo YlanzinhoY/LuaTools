@@ -8,30 +8,13 @@ namespace LuaToolsGui.Services;
 
 /// <summary>Shows image-rich unlock notifications above the game without activating LuaTools.</summary>
 public sealed class AchievementPopupService(
-    R2AchievementService achievements,
+    AchievementCatalogService achievements,
     AchievementIconService icons)
 {
     private readonly SemaphoreSlim _queue = new(1, 1);
 
-    public async Task ShowR2Async(int productId, string sourceId)
+    public async Task ShowAchievementAsync(Achievement achievement)
     {
-        if (productId != R2AchievementService.BlackFlagProductId ||
-            !int.TryParse(sourceId, out int achievementId)) return;
-
-        R2AchievementCatalog catalog;
-        try
-        {
-            catalog = await Task.Run(() =>
-                achievements.Load(R2AchievementService.BlackFlagSteamAppId));
-        }
-        catch
-        {
-            return;
-        }
-
-        R2Achievement? achievement = catalog.Achievements.FirstOrDefault(item => item.Id == achievementId);
-        if (achievement is null) return;
-
         ImageSource? icon = await icons.GetAsync(achievement.IconUrl);
         await ShowAsync(new AchievementPopupContent(
             Resources.Strings.Achievements_NotificationTitle,
@@ -40,13 +23,34 @@ public sealed class AchievementPopupService(
             icon));
     }
 
-    internal Task ShowBridgeEventAsync(AchievementBridgeEvent achievement)
+    internal async Task ShowBridgeEventAsync(AchievementBridgeEvent achievement)
     {
-        if (achievement.Provider.Equals("uplay_r2", StringComparison.OrdinalIgnoreCase) &&
-            achievement.ProductId is int productId)
-            return ShowR2Async(productId, achievement.Achievement);
+        long? appId = achievement.AppId;
+        if (appId is null && achievement.Provider.Equals("uplay_r2", StringComparison.OrdinalIgnoreCase) &&
+            achievement.ProductId == R2AchievementService.BlackFlagProductId)
+            appId = R2AchievementService.BlackFlagSteamAppId;
+        if (appId is null) return;
 
-        return Task.CompletedTask;
+        try
+        {
+            AchievementCatalog catalog = await achievements.LoadAsync(appId.Value);
+            Achievement? item = catalog.Achievements.FirstOrDefault(candidate =>
+                candidate.ApiName.Equals(achievement.Achievement, StringComparison.OrdinalIgnoreCase))
+                ?? catalog.Achievements.FirstOrDefault(candidate =>
+                    NumericSuffix(candidate.ApiName) == achievement.Achievement);
+            if (item is not null) await ShowAchievementAsync(item);
+        }
+        catch
+        {
+            // A notification is best-effort and must never terminate a provider reader.
+        }
+    }
+
+    private static string? NumericSuffix(string apiName)
+    {
+        int start = apiName.Length;
+        while (start > 0 && char.IsDigit(apiName[start - 1])) start--;
+        return start == apiName.Length ? null : apiName[start..];
     }
 
     private async Task ShowAsync(AchievementPopupContent content)

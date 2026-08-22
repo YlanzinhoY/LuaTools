@@ -1,49 +1,51 @@
 using System.Collections.ObjectModel;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LuaToolsGui.Models;
 using LuaToolsGui.Services;
-using System.Windows.Media;
 
 namespace LuaToolsGui.ViewModels;
 
-/// <summary>Bindable achievement row whose icon arrives asynchronously from the Steam CDN cache.</summary>
-public sealed partial class R2AchievementRowViewModel(R2Achievement achievement) : ObservableObject
+/// <summary>Bindable provider-neutral achievement row whose icon is loaded asynchronously.</summary>
+public sealed partial class AchievementRowViewModel(Achievement achievement) : ObservableObject
 {
-    public int Id => achievement.Id;
+    public Achievement Achievement => achievement;
     public string ApiName => achievement.ApiName;
     public string DisplayName => achievement.DisplayName;
     public string Description => achievement.Description;
-    public string? IconUrl => achievement.IconUrl;
+    // Keep each achievement recognizable while locked; the row already dims the artwork and adds
+    // a lock badge. Steam often uses one generic icon_gray for every locked item in a game.
+    public string? IconUrl => achievement.IconUrl ?? achievement.LockedIconUrl;
     public bool Earned => achievement.Earned;
     public long? EarnedTime => achievement.EarnedTime;
+    public string StateSource => achievement.StateSource;
+    public double? GlobalPercent => achievement.GlobalPercent;
 
     [ObservableProperty] private ImageSource? _icon;
 }
 
-/// <summary>Read-only popup model for one game's local Ubisoft R2 achievements.</summary>
-public partial class R2AchievementsViewModel(
-    R2AchievementService achievements,
+/// <summary>Read-only achievement catalog for any Steam AppID supported by the bridge.</summary>
+public partial class AchievementsViewModel(
+    AchievementCatalogService achievements,
     AchievementIconService icons,
     AchievementPopupService popups) : ObservableObject
 {
-    private List<R2AchievementRowViewModel> _all = [];
+    private List<AchievementRowViewModel> _all = [];
 
-    public ObservableCollection<R2AchievementRowViewModel> Items { get; } = [];
+    public ObservableCollection<AchievementRowViewModel> Items { get; } = [];
     public Action? CloseRequested { get; set; }
 
     [ObservableProperty] private long _appId;
     [ObservableProperty] private string _gameName = "";
-    [ObservableProperty] private int _productId;
-    [ObservableProperty] private string _statePath = "";
+    [ObservableProperty] private string _sourceLabel = "Steam";
+    [ObservableProperty] private string? _statePath;
     [ObservableProperty] private bool _stateFileExists;
     [ObservableProperty][NotifyPropertyChangedFor(nameof(ShowEmpty))] private bool _isLoading;
     [ObservableProperty][NotifyPropertyChangedFor(nameof(ShowEmpty))] private string? _error;
     [ObservableProperty] private string _searchText = "";
-    [ObservableProperty][NotifyPropertyChangedFor(nameof(ProgressText))]
-    private int _earnedCount;
-    [ObservableProperty][NotifyPropertyChangedFor(nameof(ProgressText))]
-    private int _totalCount;
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(ProgressText))] private int _earnedCount;
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(ProgressText))] private int _totalCount;
 
     public string ProgressText =>
         string.Format(Resources.Strings.Achievements_Progress, EarnedCount, TotalCount);
@@ -68,9 +70,9 @@ public partial class R2AchievementsViewModel(
         Error = null;
         try
         {
-            R2AchievementCatalog catalog = await Task.Run(() => achievements.Load(AppId));
-            _all = catalog.Achievements.Select(item => new R2AchievementRowViewModel(item)).ToList();
-            ProductId = catalog.ProductId;
+            AchievementCatalog catalog = await achievements.LoadAsync(AppId);
+            _all = catalog.Achievements.Select(item => new AchievementRowViewModel(item)).ToList();
+            SourceLabel = FriendlySource(catalog.MetadataSource);
             StatePath = catalog.StatePath;
             StateFileExists = catalog.StateFileExists;
             EarnedCount = catalog.EarnedCount;
@@ -98,28 +100,35 @@ public partial class R2AchievementsViewModel(
     [RelayCommand]
     private async Task PreviewAsync()
     {
-        R2AchievementRowViewModel? row = _all.FirstOrDefault(item => item.Earned) ?? _all.FirstOrDefault();
-        if (row is not null) await popups.ShowR2Async(ProductId, row.Id.ToString());
+        AchievementRowViewModel? row = _all.FirstOrDefault(item => item.Earned) ?? _all.FirstOrDefault();
+        if (row is not null) await popups.ShowAchievementAsync(row.Achievement);
     }
 
     private void ApplyFilter()
     {
         string query = SearchText.Trim();
-        IEnumerable<R2AchievementRowViewModel> filtered = string.IsNullOrEmpty(query)
+        IEnumerable<AchievementRowViewModel> filtered = string.IsNullOrEmpty(query)
             ? _all
             : _all.Where(item =>
                 item.DisplayName.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                 item.Description.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                item.ApiName.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                item.Id.ToString().Contains(query, StringComparison.OrdinalIgnoreCase));
+                item.ApiName.Contains(query, StringComparison.OrdinalIgnoreCase));
 
         Items.Clear();
-        foreach (R2AchievementRowViewModel item in filtered) Items.Add(item);
+        foreach (AchievementRowViewModel item in filtered) Items.Add(item);
         OnPropertyChanged(nameof(ShowEmpty));
     }
 
-    private async Task LoadIconsAsync(IReadOnlyList<R2AchievementRowViewModel> rows)
+    private async Task LoadIconsAsync(IReadOnlyList<AchievementRowViewModel> rows)
     {
         await Task.WhenAll(rows.Select(async row => row.Icon = await icons.GetAsync(row.IconUrl)));
     }
+
+    private static string FriendlySource(string source) => source switch
+    {
+        "steam_client" => "Steam",
+        "uplay_r2" => "Ubisoft R2",
+        "steam_client+uplay_r2" => "Steam + Ubisoft R2",
+        _ => source,
+    };
 }

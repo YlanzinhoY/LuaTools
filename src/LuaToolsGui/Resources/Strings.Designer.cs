@@ -275,7 +275,7 @@ public static class Strings
     public static string Manage_RemoveFailed_File => Get(nameof(Manage_RemoveFailed_File));
     public static string Manage_RemoveFailed_Named => Get(nameof(Manage_RemoveFailed_Named));
 
-    // ── Ubisoft R2 achievements ──
+    // ── Achievements ──
     public static string Achievements_Title => Get(nameof(Achievements_Title));
     public static string Achievements_Progress => Get(nameof(Achievements_Progress));
     public static string Achievements_Search => Get(nameof(Achievements_Search));

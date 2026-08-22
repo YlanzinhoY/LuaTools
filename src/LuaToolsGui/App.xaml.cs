@@ -25,6 +25,8 @@ public partial class App : Application
                 services.AddSingleton<SettingsService>();
                 services.AddSingleton<AchievementPopupService>();
                 services.AddSingleton<AchievementBridgeService>();
+                services.AddSingleton<AchievementBridgeClient>();
+                services.AddSingleton<AchievementCatalogService>();
                 services.AddHostedService(sp => sp.GetRequiredService<AchievementBridgeService>());
                 services.AddSingleton<CacheService>();
                 services.AddSingleton<SteamService>();
@@ -66,7 +68,7 @@ public partial class App : Application
                 services.AddSingleton<ManageViewModel>();
                 services.AddSingleton<BuildsViewModel>();
                 services.AddTransient<LaunchOptionsViewModel>(); // one per dialog
-                services.AddTransient<R2AchievementsViewModel>(); // one per dialog
+                services.AddTransient<AchievementsViewModel>(); // one per dialog
                 services.AddSingleton<HomeViewModel>();
                 services.AddSingleton<ModeViewModel>();
                 services.AddSingleton<FixesViewModel>();
@@ -341,11 +343,11 @@ public partial class App : Application
             dialog.ShowDialog();
         });
 
-        // Black Flag Resynced "Achievements" → read-only view of its local Ubisoft R2 state.
+        // Every managed AppID gets the Steam-first achievement view; compatible local providers are merged.
         manage.OpenAchievements = (appId, name) => Dispatcher.Invoke(() =>
         {
-            var dialog = new R2AchievementsDialog(
-                _host.Services.GetRequiredService<R2AchievementsViewModel>(), appId, name)
+            var dialog = new AchievementsDialog(
+                _host.Services.GetRequiredService<AchievementsViewModel>(), appId, name)
             { Owner = window };
             dialog.ShowDialog();
         });

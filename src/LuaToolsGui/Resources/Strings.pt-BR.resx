@@ -532,15 +532,15 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Instalar provedores automaticamente</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Notificações</value></data>
   <data name="Manage_Action_Achievements" xml:space="preserve"><value>Conquistas</value></data>
-  <data name="Achievements_Title" xml:space="preserve"><value>Conquistas R2</value></data>
+  <data name="Achievements_Title" xml:space="preserve"><value>Conquistas</value></data>
   <data name="Achievements_Progress" xml:space="preserve"><value>{0} de {1} desbloqueadas</value></data>
   <data name="Achievements_Search" xml:space="preserve"><value>Buscar conquistas por nome ou ID…</value></data>
   <data name="Achievements_Earned" xml:space="preserve"><value>Desbloqueada</value></data>
   <data name="Achievements_Locked" xml:space="preserve"><value>Bloqueada</value></data>
   <data name="Achievements_Empty" xml:space="preserve"><value>Nenhuma conquista corresponde à busca.</value></data>
-  <data name="Achievements_Source" xml:space="preserve"><value>Produto Ubisoft R2 {0}</value></data>
+  <data name="Achievements_Source" xml:space="preserve"><value>Fonte: {0}</value></data>
   <data name="Achievements_StatePath" xml:space="preserve"><value>Estado local: {0}</value></data>
-  <data name="Achievements_LoadFailed" xml:space="preserve"><value>Não foi possível ler as conquistas R2. {0}</value></data>
+  <data name="Achievements_LoadFailed" xml:space="preserve"><value>Não foi possível ler as conquistas. {0}</value></data>
   <data name="Achievements_Close" xml:space="preserve"><value>Fechar</value></data>
   <data name="Achievements_Preview" xml:space="preserve"><value>Ver popup</value></data>
   <data name="Achievements_NotificationTitle" xml:space="preserve"><value>CONQUISTA DESBLOQUEADA</value></data>
