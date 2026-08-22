@@ -553,4 +553,8 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>لقد بلغت حدّك اليومي في Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>لا يوجد بيان Hubcap متاح لهذا التطبيق.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>فشل التنزيل من Hubcap ({0}).</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>جسر الإنجازات</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>الإنجازات</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>تثبيت المزوّدات تلقائيًا</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>الإشعارات</value></data>
 </root>

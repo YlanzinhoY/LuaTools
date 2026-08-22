@@ -40,6 +40,12 @@
     <Resource Include="icon.ico" />
   </ItemGroup>
 
+  <!-- Release packaging may place the independently built Zig bridge here. Development builds remain
+       valid when it is absent; ACHIEVEMENT_BRIDGE_PATH can point at a local binary. -->
+  <ItemGroup Condition="Exists('AchievementBridge\achievement-bridge.exe')">
+    <Content Include="AchievementBridge\achievement-bridge.exe" CopyToOutputDirectory="PreserveNewest" Link="AchievementBridge\achievement-bridge.exe" />
+  </ItemGroup>
+
   <!-- Nothing in public/ is bundled anymore. The frontend (luatools.js) is fetched from GitHub releases
        by PluginInstallerService into %AppData%\LuaToolsGui\plugin; the Millennium-aware polyfill is inline
        (CefInjectorService.BuildInlinePolyfill); and the manifest-source list falls back to the hardcoded

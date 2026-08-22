@@ -547,4 +547,8 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>已达到每日 Hubcap 限额。</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>此应用没有可用的 Hubcap 清单。</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap 下载失败（{0}）。</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>成就桥接</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>成就</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>自动安装提供程序</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>通知</value></data>
 </root>

@@ -527,4 +527,8 @@ Bu işlem, .lua dosyalarını Steam\config\stplug-in konumundan siler. Değişik
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Günlük Hubcap sınırına ulaştın.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Bu uygulama için Hubcap manifesti yok.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap indirmesi başarısız ({0}).</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>Başarım köprüsü</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>Başarımlar</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Sağlayıcıları otomatik yükle</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Bildirimler</value></data>
 </root>

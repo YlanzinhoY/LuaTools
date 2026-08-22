@@ -52,10 +52,17 @@ public class AppSettings
     // When true, FastFetch auto-picks the first available source and downloads immediately.
     // Nullable so "never set" (→ default OFF) is distinguishable from an explicit choice.
     public bool? FastFetch { get; set; }
+
+    // Achievement Bridge integration. Nullable fields preserve the intended default-ON behavior for
+    // users whose settings file predates the feature.
+    public bool? AchievementsEnabled { get; set; }
+    public bool? AchievementAutoInstallProviders { get; set; }
+    public bool? AchievementNotifications { get; set; }
 }
 
 public class SettingsService
 {
+    public event Action? AchievementSettingsChanged;
     private static readonly string Dir =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LuaToolsGui");
     private static readonly string FilePath = Path.Combine(Dir, "settings.json");
@@ -153,6 +160,24 @@ public class SettingsService
         set { _settings.FastFetch = value; Save(); }
     }
 
+    public bool AchievementsEnabled
+    {
+        get => _settings.AchievementsEnabled ?? true;
+        set { _settings.AchievementsEnabled = value; Save(); AchievementSettingsChanged?.Invoke(); }
+    }
+
+    public bool AchievementAutoInstallProviders
+    {
+        get => _settings.AchievementAutoInstallProviders ?? true;
+        set { _settings.AchievementAutoInstallProviders = value; Save(); AchievementSettingsChanged?.Invoke(); }
+    }
+
+    public bool AchievementNotifications
+    {
+        get => _settings.AchievementNotifications ?? true;
+        set { _settings.AchievementNotifications = value; Save(); AchievementSettingsChanged?.Invoke(); }
+    }
+
     private static readonly string TmpPath = FilePath + ".tmp";
     private static readonly string BakPath = FilePath + ".bak";
 
@@ -211,7 +236,10 @@ public class SettingsService
             && _settings.HubcapApiKey is null
             && _settings.StartWithWindows is null
             && _settings.MinimizeToTray is null
-            && _settings.FastFetch is null;
+            && _settings.FastFetch is null
+            && _settings.AchievementsEnabled is null
+            && _settings.AchievementAutoInstallProviders is null
+            && _settings.AchievementNotifications is null;
         if (empty)
         {
             foreach (var p in new[] { FilePath, BakPath, TmpPath })

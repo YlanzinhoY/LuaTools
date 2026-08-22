@@ -527,4 +527,8 @@ Ez törli a .lua fájlokat a Steam\config\stplug-in mappából. Ezután indítsd
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Elérted a napi Hubcap-korlátot.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Ehhez az alkalmazáshoz nincs Hubcap-manifeszt.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>A Hubcap-letöltés sikertelen ({0}).</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>Teljesítményhíd</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>Teljesítmények</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Szolgáltatók automatikus telepítése</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Értesítések</value></data>
 </root>

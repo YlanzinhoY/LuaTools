@@ -67,6 +67,16 @@ public partial class SettingsViewModel : ObservableObject
 
     partial void OnFastFetchChanged(bool value) => _settings.FastFetch = value;
 
+    // ── Achievement Bridge ──────────────────────────────────────────
+    [ObservableProperty] private bool _achievementsEnabled;
+    partial void OnAchievementsEnabledChanged(bool value) => _settings.AchievementsEnabled = value;
+
+    [ObservableProperty] private bool _achievementAutoInstallProviders;
+    partial void OnAchievementAutoInstallProvidersChanged(bool value) => _settings.AchievementAutoInstallProviders = value;
+
+    [ObservableProperty] private bool _achievementNotifications;
+    partial void OnAchievementNotificationsChanged(bool value) => _settings.AchievementNotifications = value;
+
     /// <summary>Donate spare Steam decryption keys to the community pool. Persisted via SettingsService.</summary>
     [ObservableProperty] private bool _donateKeys;
 
@@ -232,6 +242,9 @@ public partial class SettingsViewModel : ObservableObject
         RefreshSteam();
         _autoUpdateApps = settings.AutoUpdateApps; // init from saved value (default ON) without triggering Save
         _fastFetch = settings.FastFetch;
+        _achievementsEnabled = settings.AchievementsEnabled;
+        _achievementAutoInstallProviders = settings.AchievementAutoInstallProviders;
+        _achievementNotifications = settings.AchievementNotifications;
         _donateKeys = settings.DonateKeys;
         _startWithWindows = settings.StartWithWindows; // default OFF. Init without triggering the registry write
         _minimizeToTray = settings.MinimizeToTray;

@@ -527,4 +527,8 @@ Ini menghapus file .lua dari Steam\config\stplug-in. Mulai ulang Steam setelahny
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Kamu sudah mencapai batas harian Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Tidak ada manifes Hubcap untuk aplikasi ini.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Unduhan Hubcap gagal ({0}).</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>Jembatan pencapaian</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>Pencapaian</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Instal penyedia secara otomatis</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Notifikasi</value></data>
 </root>

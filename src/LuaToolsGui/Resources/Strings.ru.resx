@@ -527,4 +527,8 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Достигнут дневной лимит Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Для этого приложения нет манифеста Hubcap.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Не удалось загрузить с Hubcap ({0}).</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>Мост достижений</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>Достижения</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Автоматически устанавливать провайдеры</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Уведомления</value></data>
 </root>

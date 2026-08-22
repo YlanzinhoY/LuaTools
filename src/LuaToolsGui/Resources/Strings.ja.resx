@@ -527,4 +527,8 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Hubcap の 1 日の上限に達しました。</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>このアプリ用の Hubcap マニフェストはありません。</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap からのダウンロードに失敗しました ({0})。</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>実績ブリッジ</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>実績</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>プロバイダーを自動インストール</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>通知</value></data>
 </root>

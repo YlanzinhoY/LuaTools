@@ -23,6 +23,8 @@ public partial class App : Application
             .ConfigureServices(services =>
             {
                 services.AddSingleton<SettingsService>();
+                services.AddSingleton<AchievementBridgeService>();
+                services.AddHostedService(sp => sp.GetRequiredService<AchievementBridgeService>());
                 services.AddSingleton<CacheService>();
                 services.AddSingleton<SteamService>();
                 services.AddSingleton<SteamAppListCache>();

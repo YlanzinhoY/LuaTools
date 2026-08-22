@@ -527,4 +527,8 @@ Tämä poistaa .lua-tiedostot sijainnista Steam\config\stplug-in. Käynnistä St
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Päivittäinen Hubcap-rajasi on täynnä.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Tälle sovellukselle ei ole Hubcap-manifestia.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap-lataus epäonnistui ({0}).</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>Saavutussilta</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>Saavutukset</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Asenna palveluntarjoajat automaattisesti</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Ilmoitukset</value></data>
 </root>

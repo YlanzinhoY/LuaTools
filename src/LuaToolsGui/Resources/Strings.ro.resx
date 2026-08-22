@@ -527,4 +527,8 @@ Aceasta șterge fișierele .lua din Steam\config\stplug-in. Repornește Steam du
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Ai atins limita zilnică Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Nu există manifest Hubcap pentru această aplicație.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Descărcarea Hubcap a eșuat ({0}).</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>Punte pentru realizări</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>Realizări</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Instalează automat furnizorii</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Notificări</value></data>
 </root>

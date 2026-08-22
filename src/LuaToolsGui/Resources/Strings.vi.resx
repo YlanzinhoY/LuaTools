@@ -527,4 +527,8 @@ Thao tác này sẽ xóa các tệp .lua khỏi Steam\config\stplug-in. Sau đó
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Bạn đã đạt giới hạn Hubcap hằng ngày.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Không có manifest Hubcap cho ứng dụng này.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Tải xuống từ Hubcap thất bại ({0}).</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>Cầu thành tựu</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>Thành tựu</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Tự động cài đặt nhà cung cấp</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Thông báo</value></data>
 </root>

@@ -527,4 +527,8 @@
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Досягнуто денний ліміт Hubcap.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>Для цього застосунку немає маніфесту Hubcap.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Не вдалося завантажити з Hubcap ({0}).</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>Міст досягнень</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>Досягнення</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Автоматично встановлювати постачальників</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Сповіщення</value></data>
 </root>

@@ -85,6 +85,10 @@ public static class Strings
     public static string Settings_StartWithWindows_Hint => Get(nameof(Settings_StartWithWindows_Hint));
     public static string Settings_MinimizeToTray => Get(nameof(Settings_MinimizeToTray));
     public static string Settings_MinimizeToTray_Hint => Get(nameof(Settings_MinimizeToTray_Hint));
+    public static string Settings_Section_AchievementBridge => Get(nameof(Settings_Section_AchievementBridge));
+    public static string Settings_Achievements => Get(nameof(Settings_Achievements));
+    public static string Settings_AutoInstallProviders => Get(nameof(Settings_AutoInstallProviders));
+    public static string Settings_AchievementNotifications => Get(nameof(Settings_AchievementNotifications));
     public static string Tray_Open => Get(nameof(Tray_Open));
     public static string Tray_Exit => Get(nameof(Tray_Exit));
     public static string Settings_SteamNotFound => Get(nameof(Settings_SteamNotFound));

@@ -562,4 +562,8 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="Hubcap_Err_LimitReached" xml:space="preserve"><value>Your Hubcap daily limit has been reached.</value></data>
   <data name="Hubcap_Err_NoManifest" xml:space="preserve"><value>No Hubcap manifest is available for this app.</value></data>
   <data name="Hubcap_Err_DownloadFailed" xml:space="preserve"><value>Hubcap download failed ({0}).</value></data>
+  <data name="Settings_Section_AchievementBridge" xml:space="preserve"><value>Achievement Bridge</value></data>
+  <data name="Settings_Achievements" xml:space="preserve"><value>Achievements</value></data>
+  <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Auto-install providers</value></data>
+  <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Notifications</value></data>
 </root>
