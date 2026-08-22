@@ -68,4 +68,14 @@ public class AchievementBridgeServiceTests
         Assert.Contains("provider = \"github\"", configured);
         Assert.Equal(1, configured.Count(line => line.StartsWith("library =", StringComparison.Ordinal)));
     }
+
+    [Theory]
+    [InlineData("store_queued", true)]
+    [InlineData("set_failed", false)]
+    [InlineData("not_new", false)]
+    [InlineData("not_requested", false)]
+    public void NativeSteamNotification_OnlySuppressesPopupWhenQueued(string status, bool expected)
+    {
+        Assert.Equal(expected, AchievementBridgeService.ShouldSuppressLuaToolsPopup(status));
+    }
 }

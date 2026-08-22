@@ -52,7 +52,7 @@ public class AchievementCatalogServiceTests
     public void BridgeLocalSync_ParsesLiveHostResult()
     {
         const string json = """
-            {"appid":3751950,"achievement":"ACObsidian_Ach_10","changed":false,"account_id":1208830004,"stat_id":1,"bit":9,"permission":2,"timestamp":1787390253,"crc":3982734981,"host_status":"captured","steam_refreshed":true,"stats_path":"C:\\steam\\appcache\\stats\\UserGameStats.bin","backup_path":null}
+            {"appid":3751950,"achievement":"ACObsidian_Ach_10","changed":false,"account_id":1208830004,"stat_id":1,"bit":9,"permission":2,"timestamp":1787390253,"crc":3982734981,"host_status":"captured","steam_refreshed":true,"native_notification":"store_queued","stats_path":"C:\\steam\\appcache\\stats\\UserGameStats.bin","backup_path":null}
             """;
 
         LocalSteamSyncResult result = AchievementBridgeClient.ParseLocalSync(json);
@@ -64,5 +64,6 @@ public class AchievementCatalogServiceTests
         Assert.Equal(9, result.Bit);
         Assert.Equal("captured", result.HostStatus);
         Assert.True(result.SteamRefreshed);
+        Assert.Equal("store_queued", result.NativeNotification);
     }
 }
