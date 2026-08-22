@@ -46,6 +46,12 @@
     <Content Include="AchievementBridge\achievement-bridge.exe" CopyToOutputDirectory="PreserveNewest" Link="AchievementBridge\achievement-bridge.exe" />
   </ItemGroup>
 
+  <!-- Built-in metadata for game-specific local achievement viewers. The installed game's schema
+       takes precedence, while this copy keeps the viewer functional without manual setup. -->
+  <ItemGroup>
+    <Content Include="Assets\Achievements\*.json" CopyToOutputDirectory="PreserveNewest" Link="Achievements\%(Filename)%(Extension)" />
+  </ItemGroup>
+
   <!-- Nothing in public/ is bundled anymore. The frontend (luatools.js) is fetched from GitHub releases
        by PluginInstallerService into %AppData%\LuaToolsGui\plugin; the Millennium-aware polyfill is inline
        (CefInjectorService.BuildInlinePolyfill); and the manifest-source list falls back to the hardcoded

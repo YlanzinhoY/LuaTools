@@ -28,7 +28,19 @@ PLACEHOLDER_RE = re.compile(r'\{(\d+)\}')
 # This list IS the handoff to the translation pass. When a feature's UI is final: translate its keys
 # across every Strings.<tag>.resx, clear them from here, and this check goes back to demanding full
 # parity. Anything left here is untranslated in all 29 languages.
-PENDING_TRANSLATION: set[str] = set()
+PENDING_TRANSLATION: set[str] = {
+    "Manage_Action_Achievements",
+    "Achievements_Title",
+    "Achievements_Progress",
+    "Achievements_Search",
+    "Achievements_Earned",
+    "Achievements_Locked",
+    "Achievements_Empty",
+    "Achievements_Source",
+    "Achievements_StatePath",
+    "Achievements_LoadFailed",
+    "Achievements_Close",
+}
 # Empty on purpose: every key is translated in all 29 languages, so the parity check above is
 # unconditional. Add a key here ONLY while its feature's UI is still moving, and clear it again
 # as soon as the translations land. Anything listed is English-only for every user.

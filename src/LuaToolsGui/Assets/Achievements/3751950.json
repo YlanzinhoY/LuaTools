@@ -1,0 +1,247 @@
+{
+  "1": {
+    "displayName": "Last To Leave",
+    "description": "Take a seat on a burning ship",
+    "earned": 0
+  },
+  "2": {
+    "displayName": "King of the Castle",
+    "description": "Capture all forts",
+    "earned": 0
+  },
+  "3": {
+    "displayName": "The Memory of My Enemy",
+    "description": "Display all character portraits in the Great Inagua manor",
+    "earned": 0
+  },
+  "4": {
+    "displayName": "Dilettante",
+    "description": "Fill all Art Collection and Equipment slots in the Great Inagua manor",
+    "earned": 0
+  },
+  "5": {
+    "displayName": "Governor",
+    "description": "Restore all buildings in the Great Inagua village",
+    "earned": 0
+  },
+  "6": {
+    "displayName": "Zero Waste",
+    "description": "Restore a map from map pieces",
+    "earned": 0
+  },
+  "7": {
+    "displayName": "Grandmaster",
+    "description": "Win at each of the different tavern games",
+    "earned": 0
+  },
+  "8": {
+    "displayName": "Articles Of Agreement",
+    "description": "Ensure the survival of all pirates in a street fight",
+    "earned": 0
+  },
+  "9": {
+    "displayName": "Among Thieves",
+    "description": "Unlock a smuggler's chest",
+    "earned": 0
+  },
+  "10": {
+    "displayName": "Help A Brother Out",
+    "description": "Complete a Templar Hunt sequence",
+    "earned": 0
+  },
+  "11": {
+    "displayName": "Seven Deadly Seas",
+    "description": "Find all treasure chests in underwater shipwrecks",
+    "earned": 0
+  },
+  "12": {
+    "displayName": "Silence, Fool!",
+    "description": "Kill a guard ringing a bell",
+    "earned": 0
+  },
+  "13": {
+    "displayName": "Matador",
+    "description": "Dodge a total of three charge attacks by a Wild Pig",
+    "earned": 0
+  },
+  "14": {
+    "displayName": "Perfect Predator",
+    "description": "Get a perfect harpoon shot on a Great White Shark",
+    "earned": 0
+  },
+  "15": {
+    "displayName": "Double Tap",
+    "description": "Parry two Ocelot attacks in rapid succession",
+    "earned": 0
+  },
+  "16": {
+    "displayName": "Owned",
+    "description": "Complete every activity in a single location",
+    "earned": 0
+  },
+  "17": {
+    "displayName": "The Hangman",
+    "description": "Kill 10 enemies by hanging them with the rope dart",
+    "earned": 0
+  },
+  "18": {
+    "displayName": "Caught 'Em All",
+    "description": "Catch at least five enemies within a single smoke bomb",
+    "earned": 0
+  },
+  "19": {
+    "displayName": "Gun-kata",
+    "description": "Use pistols to kill four enemies in a row within five seconds",
+    "earned": 0
+  },
+  "20": {
+    "displayName": "Backs To The Wall",
+    "description": "Kill an enemy with a wall takedown",
+    "earned": 0
+  },
+  "21": {
+    "displayName": "Let Me Explain",
+    "description": "After a perfect parry, perform a total of four takedowns",
+    "earned": 0
+  },
+  "22": {
+    "displayName": "Overdesign IV",
+    "description": "Kick a berserk enemy caught in smoke off a ship",
+    "earned": 0
+  },
+  "23": {
+    "displayName": "Lively Havana",
+    "description": "Get a tour of Havana (complete Sequence 2, Memory 1)",
+    "earned": 0
+  },
+  "24": {
+    "displayName": "A Poxy Bird",
+    "description": "Captain your own ship (complete Sequence 2, Memory 6)",
+    "earned": 0
+  },
+  "25": {
+    "displayName": "Walls That Hold Back The Wind",
+    "description": "Settle in a new home (complete Sequence 4, Memory 1)",
+    "earned": 0
+  },
+  "26": {
+    "displayName": "In A World Without Gold",
+    "description": "Witness the end of a legend (complete Sequence 8, Memory 1)",
+    "earned": 0
+  },
+  "27": {
+    "displayName": "Ever A Splinter",
+    "description": "Stop a Templar plot (complete Sequence 12, Memory 5)",
+    "earned": 0
+  },
+  "28": {
+    "displayName": "All Hands On Deck",
+    "description": "Recruit all Officers",
+    "earned": 0
+  },
+  "29": {
+    "displayName": "Hungover",
+    "description": "Wake up in a haystack",
+    "earned": 0
+  },
+  "30": {
+    "displayName": "Collective Madness",
+    "description": "Add one of each ship class to Kenway's fleet",
+    "earned": 0
+  },
+  "31": {
+    "displayName": "Strike The Colors",
+    "description": "Board a Lead Convoy ship",
+    "earned": 0
+  },
+  "32": {
+    "displayName": "Unsinkable",
+    "description": "Survive a rogue wave taken from the side",
+    "earned": 0
+  },
+  "33": {
+    "displayName": "Yo Ho…",
+    "description": "Learn a new shanty",
+    "earned": 0
+  },
+  "34": {
+    "displayName": "Return The Favor",
+    "description": "Dash ram a ramming Brig",
+    "earned": 0
+  },
+  "35": {
+    "displayName": "Hunter Hunted",
+    "description": "Defeat a Pirate Hunter while at maximum Wanted Level",
+    "earned": 0
+  },
+  "36": {
+    "displayName": "Devil of the Caribbean",
+    "description": "Defeat all legendary ships",
+    "earned": 0
+  },
+  "37": {
+    "displayName": "Old Ironsides",
+    "description": "Perform 3 perfect braces",
+    "earned": 0
+  },
+  "38": {
+    "displayName": "Not So Little Friend",
+    "description": "Unlock the secondary firing mode on a Jackdaw weapon",
+    "earned": 0
+  },
+  "39": {
+    "displayName": "Dressing Overall",
+    "description": "Equip new cosmetics in each of the Jackdaw's vanity slots",
+    "earned": 0
+  },
+  "40": {
+    "displayName": "Smooth Operator",
+    "description": "Craft an item",
+    "earned": 0
+  },
+  "41": {
+    "displayName": "Business And Pleasure",
+    "description": "Spend 50,000 Reales",
+    "earned": 0
+  },
+  "42": {
+    "displayName": "Ship This",
+    "description": "Fully upgrade the Jackdaw",
+    "earned": 0
+  },
+  "43": {
+    "displayName": "Glutton for Nourishment",
+    "description": "Consume 20 food items",
+    "earned": 0
+  },
+  "44": {
+    "displayName": "Friend To All",
+    "description": "Interact with all seven friendly animals",
+    "earned": 0
+  },
+  "45": {
+    "displayName": "Blow The Man Down",
+    "description": "Shoot down all the hanging bodies in Long Bay",
+    "earned": 0
+  },
+  "46": {
+    "displayName": "Davy Jones' Locker",
+    "description": "Swim to the lowest point on the map",
+    "earned": 0
+  },
+  "47": {
+    "displayName": "Cartographer",
+    "description": "Visit every location in the game",
+    "earned": 0
+  },
+  "48": {
+    "displayName": "Edward Catway",
+    "description": "Break 50 potted plants",
+    "earned": 0
+  },
+  "49": {
+    "displayName": "Ed the Diver",
+    "description": "Swim a total of 1000m underwater, excluding underwater shipwrecks",
+    "earned": 0
+  }
+}

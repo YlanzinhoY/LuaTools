@@ -742,6 +742,14 @@
                         <ui:Button
                             Margin="0,8,0,0"
                             HorizontalAlignment="Stretch"
+                            Command="{Binding DataContext.ShowAchievementsCommand, ElementName=Root}"
+                            CommandParameter="{Binding}"
+                            Content="{x:Static res:Strings.Manage_Action_Achievements}"
+                            Icon="{ui:SymbolIcon Star24}"
+                            Visibility="{Binding SupportsR2Achievements, Converter={StaticResource BoolToVis}}" />
+                        <ui:Button
+                            Margin="0,8,0,0"
+                            HorizontalAlignment="Stretch"
                             Command="{Binding DataContext.RemoveDrmCommand, ElementName=Root}"
                             CommandParameter="{Binding}"
                             Content="{x:Static res:Strings.Manage_Action_RemoveDrm}"

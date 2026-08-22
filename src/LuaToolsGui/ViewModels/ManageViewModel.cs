@@ -13,6 +13,7 @@ namespace LuaToolsGui.ViewModels;
 public partial class LuaTileViewModel : ObservableObject
 {
     public long AppId { get; }
+    public bool SupportsR2Achievements => R2AchievementService.Supports(AppId);
     public string FilePath { get; }
     public DateTime AddedAt { get; }
     // Invariant culture so the month is always the 3-letter abbreviation ("Jun", not "June" or a
@@ -349,9 +350,18 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
     /// <summary>Set by App. Opens the launch-option editor for a game (appid, name).</summary>
     public Action<long, string>? OpenLaunchOptions { get; set; }
 
+    /// <summary>Set by App. Opens the local Ubisoft R2 achievement viewer (appid, name).</summary>
+    public Action<long, string>? OpenAchievements { get; set; }
+
     /// <summary>Edit this game's Steam launch options (the entries behind the Play button).</summary>
     [RelayCommand]
     private void EditLaunchOptions(LuaTileViewModel tile) => OpenLaunchOptions?.Invoke(tile.AppId, tile.Name);
+
+    [RelayCommand]
+    private void ShowAchievements(LuaTileViewModel tile)
+    {
+        if (tile.SupportsR2Achievements) OpenAchievements?.Invoke(tile.AppId, tile.Name);
+    }
 
     [RelayCommand]
     private static void OpenStorePage(LuaTileViewModel tile) =>

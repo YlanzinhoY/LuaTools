@@ -37,6 +37,7 @@ public partial class App : Application
                 services.AddSingleton<Services.AppInfo.LaunchOptionsService>();
                 services.AddSingleton<LuaInstaller>();
                 services.AddSingleton<SteamLibraryService>();
+                services.AddSingleton<R2AchievementService>();
                 services.AddSingleton<DonateKeysService>();
                 services.AddSingleton<AnalyticsService>();
                 services.AddSingleton<GithubProxy>();
@@ -63,6 +64,7 @@ public partial class App : Application
                 services.AddSingleton<ManageViewModel>();
                 services.AddSingleton<BuildsViewModel>();
                 services.AddTransient<LaunchOptionsViewModel>(); // one per dialog
+                services.AddTransient<R2AchievementsViewModel>(); // one per dialog
                 services.AddSingleton<HomeViewModel>();
                 services.AddSingleton<ModeViewModel>();
                 services.AddSingleton<FixesViewModel>();
@@ -333,6 +335,15 @@ public partial class App : Application
         {
             var dialog = new LaunchOptionsDialog(
                 _host.Services.GetRequiredService<LaunchOptionsViewModel>(), appId, name)
+            { Owner = window };
+            dialog.ShowDialog();
+        });
+
+        // Black Flag Resynced "Achievements" → read-only view of its local Ubisoft R2 state.
+        manage.OpenAchievements = (appId, name) => Dispatcher.Invoke(() =>
+        {
+            var dialog = new R2AchievementsDialog(
+                _host.Services.GetRequiredService<R2AchievementsViewModel>(), appId, name)
             { Owner = window };
             dialog.ShowDialog();
         });

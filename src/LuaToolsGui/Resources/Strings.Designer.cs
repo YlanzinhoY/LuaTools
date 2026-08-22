@@ -223,6 +223,7 @@ public static class Strings
     public static string Manage_Action_CopyAppId => Get(nameof(Manage_Action_CopyAppId));
     public static string Manage_Action_RemoveDrm => Get(nameof(Manage_Action_RemoveDrm));
     public static string Manage_Action_ManageBuild => Get(nameof(Manage_Action_ManageBuild));
+    public static string Manage_Action_Achievements => Get(nameof(Manage_Action_Achievements));
     public static string Manage_AboutHeader => Get(nameof(Manage_AboutHeader));
     public static string Manage_Info_Developer => Get(nameof(Manage_Info_Developer));
     public static string Manage_Info_Publisher => Get(nameof(Manage_Info_Publisher));
@@ -273,6 +274,18 @@ public static class Strings
     public static string Manage_RemoveFailed_Title => Get(nameof(Manage_RemoveFailed_Title));
     public static string Manage_RemoveFailed_File => Get(nameof(Manage_RemoveFailed_File));
     public static string Manage_RemoveFailed_Named => Get(nameof(Manage_RemoveFailed_Named));
+
+    // ── Ubisoft R2 achievements ──
+    public static string Achievements_Title => Get(nameof(Achievements_Title));
+    public static string Achievements_Progress => Get(nameof(Achievements_Progress));
+    public static string Achievements_Search => Get(nameof(Achievements_Search));
+    public static string Achievements_Earned => Get(nameof(Achievements_Earned));
+    public static string Achievements_Locked => Get(nameof(Achievements_Locked));
+    public static string Achievements_Empty => Get(nameof(Achievements_Empty));
+    public static string Achievements_Source => Get(nameof(Achievements_Source));
+    public static string Achievements_StatePath => Get(nameof(Achievements_StatePath));
+    public static string Achievements_LoadFailed => Get(nameof(Achievements_LoadFailed));
+    public static string Achievements_Close => Get(nameof(Achievements_Close));
     public static string Manage_RemoveFailed_Count => Get(nameof(Manage_RemoveFailed_Count));
     public static string Manage_RestartSteam_Title => Get(nameof(Manage_RestartSteam_Title));
     public static string Manage_RestartSteam_Ask => Get(nameof(Manage_RestartSteam_Ask));
