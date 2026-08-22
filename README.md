@@ -18,6 +18,10 @@
   <br><sub>Found a translation error? Tell us about it over on [Discord](https://discord.gg/luatools)</sub>
 </p>
 
+## Achievement Bridge experiment
+
+The Achievement Bridge settings include an opt-in **Steam notification (Experimental)** toggle, off by default. For new live unlocks it asks Steam to queue the normal `StoreStats` path so the native overlay can try to display its achievement toast. This may contact Steam services. If Steam cannot queue the request, LuaTools automatically uses its image-rich popup instead; recovered and already-synced achievements always keep the stable fallback.
+
 ## Statistics
 <div>
   <img src="https://img.shields.io/github/downloads/madoiscool/luatools/LuaTools-win-Setup.exe?displayAssetName=true&style=for-the-badge" />
