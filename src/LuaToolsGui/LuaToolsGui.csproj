@@ -47,6 +47,7 @@
        valid when it is absent; ACHIEVEMENT_BRIDGE_PATH can point at a local binary. -->
   <ItemGroup Condition="Exists('AchievementBridge\achievement-bridge.exe')">
     <Content Include="AchievementBridge\achievement-bridge.exe" CopyToOutputDirectory="PreserveNewest" Link="AchievementBridge\achievement-bridge.exe" />
+    <Content Include="AchievementBridge\achievement-bridge-cloud.dll" Condition="Exists('AchievementBridge\achievement-bridge-cloud.dll')" CopyToOutputDirectory="PreserveNewest" Link="AchievementBridge\achievement-bridge-cloud.dll" />
   </ItemGroup>
 
   <Target Name="CompileAchievementBridge"

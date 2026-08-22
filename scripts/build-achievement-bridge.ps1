@@ -42,6 +42,9 @@ if ($LASTEXITCODE -ne 0) { throw "Achievement Bridge build failed with exit code
 
 $binary = Join-Path $project 'zig-out\bin\achievement-bridge.exe'
 if (-not (Test-Path -LiteralPath $binary)) { throw "Achievement Bridge output was not produced at $binary." }
+$proxy = Join-Path $project 'zig-out\bin\achievement-bridge-cloud.dll'
+if (-not (Test-Path -LiteralPath $proxy)) { throw "Achievement Bridge proxy was not produced at $proxy." }
 New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
 Copy-Item -LiteralPath $binary -Destination (Join-Path $OutputDir 'achievement-bridge.exe') -Force
-Write-Host "Achievement Bridge $version copied to $OutputDir"
+Copy-Item -LiteralPath $proxy -Destination (Join-Path $OutputDir 'achievement-bridge-cloud.dll') -Force
+Write-Host "Achievement Bridge $version and live Steam proxy copied to $OutputDir"
