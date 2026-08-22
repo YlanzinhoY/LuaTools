@@ -73,18 +73,16 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         string? executable = FindExecutable();
         if (executable is null) return;
 
-        // Providers remain separate OS processes until the Zig host owns concurrent provider workers.
-        // A failure in one reader therefore cannot take down the other sources or the LuaTools UI.
-        StartReader(executable, "watch");
-        StartReader(executable, "ubisoft-watch");
-        StartReader(executable, "uplay-r2-watch");
+        // The Zig host owns isolated concurrent provider workers while LuaTools
+        // keeps a single child process and one ordered event stream.
+        StartReader(executable, "watch-all");
     }
 
     private void StartReader(string executable, string command)
     {
         // LuaTools owns the image-rich R2 notification. Other providers keep the bridge's legacy
         // notification until their events can be enriched with artwork as well.
-        bool usesImagePopup = command == "uplay-r2-watch";
+        bool usesImagePopup = command is "uplay-r2-watch" or "watch-all";
         string arguments = usesImagePopup || !_settings.AchievementNotifications
             ? $"{command} --no-notifications"
             : command;
