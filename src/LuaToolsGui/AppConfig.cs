@@ -70,10 +70,9 @@ public static class AppConfig
     /// </summary>
     public static readonly string[] GithubReleasesRepos =
     [
-        "https://github.com/madoiscool/LuaTools",   // primary
-        "https://github.com/mendy-tools/LuaTools",  // backup. Create this repo + re-upload the Velopack
-                                                    // assets ONLY if the primary goes down (404s harmlessly
-                                                    // until then; UpdateService just falls through past it).
+        // Achievement Bridge builds must only update from the owner's fork.
+        // Pointing at upstream here could silently replace the integration.
+        "https://github.com/YlanzinhoY/LuaTools",
     ];
 
     /// <summary>The primary releases repo (first in <see cref="GithubReleasesRepos"/>).</summary>
