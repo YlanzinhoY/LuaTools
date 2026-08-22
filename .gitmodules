@@ -1,0 +1,3 @@
+[submodule "src/AchievementBridge"]
+	path = src/AchievementBridge
+	url = https://github.com/YlanzinhoY/AchievementBridge.git
