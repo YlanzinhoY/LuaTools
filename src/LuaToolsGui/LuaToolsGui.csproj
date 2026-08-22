@@ -14,6 +14,9 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <!-- Velopack needs a custom Main (Program.Main) that runs before WPF -->
     <StartupObject>LuaToolsGui.Program</StartupObject>
+    <BuildAchievementBridge Condition="'$(BuildAchievementBridge)' == ''">true</BuildAchievementBridge>
+    <AchievementBridgeSource>$(MSBuildProjectDirectory)\..\AchievementBridge</AchievementBridgeSource>
+    <AchievementBridgeBuildScript>$(MSBuildProjectDirectory)\..\..\scripts\build-achievement-bridge.ps1</AchievementBridgeBuildScript>
   </PropertyGroup>
 
   <!-- UseWindowsForms (for the tray NotifyIcon) injects WinForms into the implicit global usings, which
@@ -45,6 +48,18 @@
   <ItemGroup Condition="Exists('AchievementBridge\achievement-bridge.exe')">
     <Content Include="AchievementBridge\achievement-bridge.exe" CopyToOutputDirectory="PreserveNewest" Link="AchievementBridge\achievement-bridge.exe" />
   </ItemGroup>
+
+  <Target Name="CompileAchievementBridge"
+          AfterTargets="Build"
+          Condition="'$(BuildAchievementBridge)' == 'true' and '$(OS)' == 'Windows_NT' and Exists('$(AchievementBridgeSource)\build.zig')">
+    <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(AchievementBridgeBuildScript)&quot; -ProjectDir &quot;$(AchievementBridgeSource)&quot; -OutputDir &quot;$(TargetDir)AchievementBridge&quot; -Configuration &quot;$(Configuration)&quot;" />
+  </Target>
+
+  <Target Name="PublishAchievementBridge"
+          AfterTargets="Publish"
+          Condition="'$(BuildAchievementBridge)' == 'true' and '$(OS)' == 'Windows_NT' and '$(PublishDir)' != '' and Exists('$(AchievementBridgeSource)\build.zig')">
+    <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(AchievementBridgeBuildScript)&quot; -ProjectDir &quot;$(AchievementBridgeSource)&quot; -OutputDir &quot;$(PublishDir)AchievementBridge&quot; -Configuration &quot;$(Configuration)&quot;" />
+  </Target>
 
   <!-- Built-in metadata for game-specific local achievement viewers. It enriches the minimal R2
        schema with Steam metadata (for example icon URLs) and works without manual setup. -->
