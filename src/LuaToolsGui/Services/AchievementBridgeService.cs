@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using Microsoft.Extensions.Hosting;
 
 namespace LuaToolsGui.Services;
@@ -87,6 +88,8 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
                     WorkingDirectory = Path.GetDirectoryName(executable) ?? AppContext.BaseDirectory,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
+                    StandardOutputEncoding = Encoding.UTF8,
+                    StandardErrorEncoding = Encoding.UTF8,
                 },
                 EnableRaisingEvents = true,
             };

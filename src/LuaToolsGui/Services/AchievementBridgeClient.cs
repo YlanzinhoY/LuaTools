@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text;
 using LuaToolsGui.Models;
 
 namespace LuaToolsGui.Services;
@@ -23,6 +24,8 @@ public sealed class AchievementBridgeClient(SteamService steam)
                 WindowStyle = ProcessWindowStyle.Hidden,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
+                StandardOutputEncoding = Encoding.UTF8,
+                StandardErrorEncoding = Encoding.UTF8,
                 WorkingDirectory = Path.GetDirectoryName(executable) ?? AppContext.BaseDirectory,
             },
         };
