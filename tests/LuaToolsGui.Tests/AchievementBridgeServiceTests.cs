@@ -16,6 +16,8 @@ public class AchievementBridgeServiceTests
         Assert.Null(parser.PushLine("product_id=66088"));
         Assert.Null(parser.PushLine("achievement=10"));
         Assert.Null(parser.PushLine("state=unlocked"));
+        Assert.Null(parser.PushLine("timestamp=1787390253"));
+        Assert.Null(parser.PushLine("recovered=false"));
 
         AchievementBridgeEvent? achievement = parser.PushLine("");
 
@@ -23,6 +25,8 @@ public class AchievementBridgeServiceTests
         Assert.Equal("uplay_r2", achievement.Provider);
         Assert.Equal(66088, achievement.ProductId);
         Assert.Equal("10", achievement.Achievement);
+        Assert.Equal(1787390253, achievement.Timestamp);
+        Assert.False(achievement.Recovered);
     }
 
     [Fact]
@@ -41,5 +45,27 @@ public class AchievementBridgeServiceTests
             Environment.SetEnvironmentVariable("ACHIEVEMENT_BRIDGE_PATH", previous);
             File.Delete(tempFile);
         }
+    }
+
+    [Fact]
+    public void CloudHostConfig_EnablesStandaloneProxyAndPreservesOtherTables()
+    {
+        string[] configured = AchievementBridgeSetupService.ConfigureOpenSteamTool(
+        [
+            "[lua]",
+            "paths = [\"config/stplug-in\"]",
+            "",
+            "[cloud]",
+            "enabled = false",
+            "library = \"cloud_redirect.dll\"",
+            "",
+            "[remote]",
+            "provider = \"github\"",
+        ]);
+
+        Assert.Contains("enabled = true", configured);
+        Assert.Contains("library = \"AchievementBridge/achievement-bridge-cloud.dll\"", configured);
+        Assert.Contains("provider = \"github\"", configured);
+        Assert.Equal(1, configured.Count(line => line.StartsWith("library =", StringComparison.Ordinal)));
     }
 }

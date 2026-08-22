@@ -47,4 +47,22 @@ public class AchievementCatalogServiceTests
         Assert.Equal("uplay_r2", item.StateSource);
         Assert.Equal(@"C:\r2.json", merged.StatePath);
     }
+
+    [Fact]
+    public void BridgeLocalSync_ParsesLiveHostResult()
+    {
+        const string json = """
+            {"appid":3751950,"achievement":"ACObsidian_Ach_10","changed":false,"account_id":1208830004,"stat_id":1,"bit":9,"permission":2,"timestamp":1787390253,"crc":3982734981,"host_status":"captured","steam_refreshed":true,"stats_path":"C:\\steam\\appcache\\stats\\UserGameStats.bin","backup_path":null}
+            """;
+
+        LocalSteamSyncResult result = AchievementBridgeClient.ParseLocalSync(json);
+
+        Assert.Equal(3751950, result.AppId);
+        Assert.Equal("ACObsidian_Ach_10", result.Achievement);
+        Assert.False(result.Changed);
+        Assert.Equal(1, result.StatId);
+        Assert.Equal(9, result.Bit);
+        Assert.Equal("captured", result.HostStatus);
+        Assert.True(result.SteamRefreshed);
+    }
 }
