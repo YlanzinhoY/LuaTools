@@ -24,6 +24,7 @@ public partial class App : Application
             {
                 services.AddSingleton<SettingsService>();
                 services.AddSingleton<AchievementPopupService>();
+                services.AddSingleton<AchievementBridgeSetupService>();
                 services.AddSingleton<AchievementBridgeService>();
                 services.AddSingleton<AchievementBridgeClient>();
                 services.AddSingleton<AchievementCatalogService>();
