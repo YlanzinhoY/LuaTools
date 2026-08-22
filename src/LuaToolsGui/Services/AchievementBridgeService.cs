@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using LuaToolsGui.Models;
 using Microsoft.Extensions.Hosting;
 
 namespace LuaToolsGui.Services;
@@ -13,14 +14,26 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
 {
     private readonly SettingsService _settings;
     private readonly AchievementPopupService _popups;
+    private readonly AchievementBridgeSetupService _setup;
+    private readonly AchievementBridgeClient _client;
+    private readonly AchievementCatalogService _catalogs;
+    private readonly SemaphoreSlim _syncQueue = new(1, 1);
     private readonly object _gate = new();
     private readonly List<Process> _processes = [];
     private bool _started;
 
-    public AchievementBridgeService(SettingsService settings, AchievementPopupService popups)
+    public AchievementBridgeService(
+        SettingsService settings,
+        AchievementPopupService popups,
+        AchievementBridgeSetupService setup,
+        AchievementBridgeClient client,
+        AchievementCatalogService catalogs)
     {
         _settings = settings;
         _popups = popups;
+        _setup = setup;
+        _client = client;
+        _catalogs = catalogs;
         _settings.AchievementSettingsChanged += OnSettingsChanged;
     }
 
@@ -56,6 +69,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     {
         StopProcessesLocked();
         if (!_settings.AchievementsEnabled) return;
+        _setup.EnsureInstalled();
         string? executable = FindExecutable();
         if (executable is null) return;
 
@@ -115,8 +129,75 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     private void HandleBridgeLine(AchievementBridgeEventParser parser, string? line)
     {
         AchievementBridgeEvent? achievement = parser.PushLine(line);
-        if (achievement is not null && _settings.AchievementNotifications)
-            _ = _popups.ShowBridgeEventAsync(achievement);
+        if (achievement is not null) _ = HandleBridgeEventAsync(achievement);
+    }
+
+    private async Task HandleBridgeEventAsync(AchievementBridgeEvent achievement)
+    {
+        try
+        {
+            ResolvedBridgeAchievement? resolved = await ResolveBridgeEventAsync(achievement);
+            if (resolved is null) return;
+
+            // The visual feedback begins immediately. Persistence is serialized so
+            // two providers cannot rewrite the same native cache concurrently.
+            Task popup = _settings.AchievementNotifications
+                ? _popups.ShowAchievementAsync(resolved.Achievement)
+                : Task.CompletedTask;
+            await _syncQueue.WaitAsync();
+            try
+            {
+                long timestamp = achievement.Timestamp is > 0
+                    ? achievement.Timestamp.Value
+                    : DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                await _client.SyncLocalAchievementAsync(
+                    resolved.AppId,
+                    resolved.Achievement.ApiName,
+                    timestamp);
+            }
+            catch
+            {
+                // The provider journal remains the source of truth and the popup
+                // still completes. A later recovered event can retry local sync.
+            }
+            finally
+            {
+                _syncQueue.Release();
+            }
+            try { await popup; } catch { /* best-effort visual feedback */ }
+        }
+        catch
+        {
+            // Provider readers must survive missing schemas, Steam updates, and
+            // incomplete mappings for games that are not supported yet.
+        }
+    }
+
+    internal async Task<ResolvedBridgeAchievement?> ResolveBridgeEventAsync(
+        AchievementBridgeEvent achievement,
+        CancellationToken cancellationToken = default)
+    {
+        long? appId = achievement.AppId;
+        if (appId is null && achievement.ProductId == R2AchievementService.BlackFlagProductId)
+            appId = R2AchievementService.BlackFlagSteamAppId;
+        if (appId is null) return null;
+
+        AchievementCatalog catalog = await _catalogs.LoadAsync(appId.Value, cancellationToken);
+        Achievement? item = catalog.Achievements.FirstOrDefault(candidate =>
+            candidate.ApiName.Equals(achievement.Achievement, StringComparison.OrdinalIgnoreCase));
+        if (item is null)
+        {
+            item = catalog.Achievements.FirstOrDefault(candidate =>
+                NumericSuffix(candidate.ApiName) == achievement.Achievement);
+        }
+        return item is null ? null : new ResolvedBridgeAchievement(appId.Value, item);
+    }
+
+    private static string? NumericSuffix(string apiName)
+    {
+        int start = apiName.Length;
+        while (start > 0 && char.IsDigit(apiName[start - 1])) start--;
+        return start == apiName.Length ? null : apiName[start..];
     }
 
     internal static string? FindExecutable()
@@ -159,7 +240,11 @@ internal sealed record AchievementBridgeEvent(
     string Provider,
     int? AppId,
     int? ProductId,
-    string Achievement);
+    string Achievement,
+    long? Timestamp,
+    bool Recovered);
+
+internal sealed record ResolvedBridgeAchievement(long AppId, Achievement Achievement);
 
 /// <summary>Incrementally parses the bridge's stable key/value event envelope from stdout/stderr.</summary>
 internal sealed class AchievementBridgeEventParser
@@ -188,7 +273,9 @@ internal sealed class AchievementBridgeEventParser
                 provider,
                 ReadInt("appid"),
                 ReadInt("product_id"),
-                achievement);
+                achievement,
+                ReadLong("timestamp"),
+                ReadBool("recovered"));
         }
 
         int separator = line.IndexOf('=');
@@ -201,4 +288,12 @@ internal sealed class AchievementBridgeEventParser
         _fields.TryGetValue(key, out string? value) && int.TryParse(value, out int number)
             ? number
             : null;
+
+    private long? ReadLong(string key) =>
+        _fields.TryGetValue(key, out string? value) && long.TryParse(value, out long number)
+            ? number
+            : null;
+
+    private bool ReadBool(string key) =>
+        _fields.TryGetValue(key, out string? value) && bool.TryParse(value, out bool result) && result;
 }
