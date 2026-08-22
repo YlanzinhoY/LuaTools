@@ -46,8 +46,8 @@
     <Content Include="AchievementBridge\achievement-bridge.exe" CopyToOutputDirectory="PreserveNewest" Link="AchievementBridge\achievement-bridge.exe" />
   </ItemGroup>
 
-  <!-- Built-in metadata for game-specific local achievement viewers. The installed game's schema
-       takes precedence, while this copy keeps the viewer functional without manual setup. -->
+  <!-- Built-in metadata for game-specific local achievement viewers. It enriches the minimal R2
+       schema with Steam metadata (for example icon URLs) and works without manual setup. -->
   <ItemGroup>
     <Content Include="Assets\Achievements\*.json" CopyToOutputDirectory="PreserveNewest" Link="Achievements\%(Filename)%(Extension)" />
   </ItemGroup>

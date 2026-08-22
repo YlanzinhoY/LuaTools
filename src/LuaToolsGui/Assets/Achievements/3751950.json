@@ -2,246 +2,295 @@
   "1": {
     "displayName": "Last To Leave",
     "description": "Take a seat on a burning ship",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/34a75e8dee8de8b524c57006fe21487ade9fd248.jpg"
   },
   "2": {
     "displayName": "King of the Castle",
     "description": "Capture all forts",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/6dcb51151dd997f495b290f0e2d73b30497a372d.jpg"
   },
   "3": {
     "displayName": "The Memory of My Enemy",
     "description": "Display all character portraits in the Great Inagua manor",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/2a0e8962eae4d6bf3e5ef5728952333f29947982.jpg"
   },
   "4": {
     "displayName": "Dilettante",
     "description": "Fill all Art Collection and Equipment slots in the Great Inagua manor",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/7be85c50377b55ad41363b370cc7109b306e570b.jpg"
   },
   "5": {
     "displayName": "Governor",
     "description": "Restore all buildings in the Great Inagua village",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/d233c699e46c41a95b93fca2bdc48697b548304b.jpg"
   },
   "6": {
     "displayName": "Zero Waste",
     "description": "Restore a map from map pieces",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/079bcd07dcd25c3812a1d8eb6908f002e950de53.jpg"
   },
   "7": {
     "displayName": "Grandmaster",
     "description": "Win at each of the different tavern games",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/e45ca54440a8ebfc7d583e4079b6dfe627427f19.jpg"
   },
   "8": {
     "displayName": "Articles Of Agreement",
     "description": "Ensure the survival of all pirates in a street fight",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/78c021b5bdd7b2bf5ea67a183eb1916ac3d3c906.jpg"
   },
   "9": {
     "displayName": "Among Thieves",
     "description": "Unlock a smuggler's chest",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/cd8e8c00ec4e80b94918ac579a8c1830abdb0498.jpg"
   },
   "10": {
     "displayName": "Help A Brother Out",
     "description": "Complete a Templar Hunt sequence",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/36e0a1dc21cebd6e522c86315c0cc156400ae6c8.jpg"
   },
   "11": {
     "displayName": "Seven Deadly Seas",
     "description": "Find all treasure chests in underwater shipwrecks",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/3f95c7bc336032e284e29a4e1d838bd4611b1811.jpg"
   },
   "12": {
     "displayName": "Silence, Fool!",
     "description": "Kill a guard ringing a bell",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/d76d275bbccb63a6c2b5e2231296930430e51f45.jpg"
   },
   "13": {
     "displayName": "Matador",
     "description": "Dodge a total of three charge attacks by a Wild Pig",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/c3e2bee4afdb106e0d1f6ae9dc1069dee6ed044f.jpg"
   },
   "14": {
     "displayName": "Perfect Predator",
     "description": "Get a perfect harpoon shot on a Great White Shark",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/5b70332cb7f038f333bccab4b8e1d0f7cc758d2a.jpg"
   },
   "15": {
     "displayName": "Double Tap",
     "description": "Parry two Ocelot attacks in rapid succession",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/382388fad295574aa1d73e65476ffa6899d39e2b.jpg"
   },
   "16": {
     "displayName": "Owned",
     "description": "Complete every activity in a single location",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/ece54f2c9ce0d480fc3256e38ca515115d209cf6.jpg"
   },
   "17": {
     "displayName": "The Hangman",
     "description": "Kill 10 enemies by hanging them with the rope dart",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/ffa7021317cb044686bdf28aa4e6772574b8e443.jpg"
   },
   "18": {
     "displayName": "Caught 'Em All",
     "description": "Catch at least five enemies within a single smoke bomb",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/d0f2f2f29b26c905a51635a41f24e6d8ffae0872.jpg"
   },
   "19": {
     "displayName": "Gun-kata",
     "description": "Use pistols to kill four enemies in a row within five seconds",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/2307456f3894cb46b60e39fa409f79fd436facb0.jpg"
   },
   "20": {
     "displayName": "Backs To The Wall",
     "description": "Kill an enemy with a wall takedown",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/e2e413eae78ed06e5c262e6fa50e94ce9da737cc.jpg"
   },
   "21": {
     "displayName": "Let Me Explain",
     "description": "After a perfect parry, perform a total of four takedowns",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/6cc7040a0c566f46dceafa5a543266d05bcb9ecf.jpg"
   },
   "22": {
     "displayName": "Overdesign IV",
     "description": "Kick a berserk enemy caught in smoke off a ship",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/97f6503a2ed8490e339bfb1e34ec4abace0352d8.jpg"
   },
   "23": {
     "displayName": "Lively Havana",
     "description": "Get a tour of Havana (complete Sequence 2, Memory 1)",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/af8fedfb5846270b5dfa516ee46e52765e1e9c1c.jpg"
   },
   "24": {
     "displayName": "A Poxy Bird",
     "description": "Captain your own ship (complete Sequence 2, Memory 6)",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/860230941c0ca355307946fb2400950d09ef3c0c.jpg"
   },
   "25": {
     "displayName": "Walls That Hold Back The Wind",
     "description": "Settle in a new home (complete Sequence 4, Memory 1)",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/d736e7f50497c64e9d5f536c85b56c33f24a8847.jpg"
   },
   "26": {
     "displayName": "In A World Without Gold",
     "description": "Witness the end of a legend (complete Sequence 8, Memory 1)",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/0536d6a7ca8c9b54fd2edfb2e8186f89d61b5f7e.jpg"
   },
   "27": {
     "displayName": "Ever A Splinter",
     "description": "Stop a Templar plot (complete Sequence 12, Memory 5)",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/33b63a5879a33e2da4ac0a6f19557d16cf9d3cde.jpg"
   },
   "28": {
     "displayName": "All Hands On Deck",
     "description": "Recruit all Officers",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/dabe31db97282db9f6d12095a162f93a5ae5aff4.jpg"
   },
   "29": {
     "displayName": "Hungover",
     "description": "Wake up in a haystack",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/0e5b244b539269b32e0e8a4a6fe4b48e66b37cfd.jpg"
   },
   "30": {
     "displayName": "Collective Madness",
     "description": "Add one of each ship class to Kenway's fleet",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/7bbb9cb88ca403e44f81c196d9bde83ac8e2d0ae.jpg"
   },
   "31": {
     "displayName": "Strike The Colors",
     "description": "Board a Lead Convoy ship",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/853a6fdabad08cfcc9c99a5ca90a2c7129bc7f09.jpg"
   },
   "32": {
     "displayName": "Unsinkable",
     "description": "Survive a rogue wave taken from the side",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/cb7d226de8cd51aa21ea91dd49a1c0ec242b5aa7.jpg"
   },
   "33": {
     "displayName": "Yo Ho…",
     "description": "Learn a new shanty",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/04702741eea98d4025273db2958a27d8fd14ea27.jpg"
   },
   "34": {
     "displayName": "Return The Favor",
     "description": "Dash ram a ramming Brig",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/7de70a7945cd58c8af8790ca4c221e465ed7b6be.jpg"
   },
   "35": {
     "displayName": "Hunter Hunted",
     "description": "Defeat a Pirate Hunter while at maximum Wanted Level",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/0cfb0403d092b1983b6bd4aa591b2fc1161f5d76.jpg"
   },
   "36": {
     "displayName": "Devil of the Caribbean",
     "description": "Defeat all legendary ships",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/a61733d0d9a9bf44f2afaf2212d9ff90b8dd9027.jpg"
   },
   "37": {
     "displayName": "Old Ironsides",
     "description": "Perform 3 perfect braces",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/df31998984d2872f4db05971206c263eae64138c.jpg"
   },
   "38": {
     "displayName": "Not So Little Friend",
     "description": "Unlock the secondary firing mode on a Jackdaw weapon",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/28e5079abc7d3abb4a36acafc7eea3f3258cecb8.jpg"
   },
   "39": {
     "displayName": "Dressing Overall",
     "description": "Equip new cosmetics in each of the Jackdaw's vanity slots",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/4aa61899335da9bdb52026a17a543f4025dec96b.jpg"
   },
   "40": {
     "displayName": "Smooth Operator",
     "description": "Craft an item",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/0b1a0dd8d3ae0c6a15c70f416811db0bbd507221.jpg"
   },
   "41": {
     "displayName": "Business And Pleasure",
     "description": "Spend 50,000 Reales",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/92bc56ed8303cc5c18970ddae71919b06940e52a.jpg"
   },
   "42": {
     "displayName": "Ship This",
     "description": "Fully upgrade the Jackdaw",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/de6b931dbc1bf0d4dfc0ff2b11f9558dfb2dd874.jpg"
   },
   "43": {
     "displayName": "Glutton for Nourishment",
     "description": "Consume 20 food items",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/a9d1d20f42b417f5f33a6dc6c453914d75d8f9e9.jpg"
   },
   "44": {
     "displayName": "Friend To All",
     "description": "Interact with all seven friendly animals",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/b523b5ea6fa530415d8c9bc3abadecf35680012b.jpg"
   },
   "45": {
     "displayName": "Blow The Man Down",
     "description": "Shoot down all the hanging bodies in Long Bay",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/b2a9d997a56340652c6a991bd9f25d05ea81f397.jpg"
   },
   "46": {
     "displayName": "Davy Jones' Locker",
     "description": "Swim to the lowest point on the map",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/4c9cbca8b6a882c6aa5ced4cdf156172daac529f.jpg"
   },
   "47": {
     "displayName": "Cartographer",
     "description": "Visit every location in the game",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/eed7675336ec5e35312149b95d6a5bc6fd9631a6.jpg"
   },
   "48": {
     "displayName": "Edward Catway",
     "description": "Break 50 potted plants",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/3b86822fc5b48eadbd023ffb755c01ae41a0b7e3.jpg"
   },
   "49": {
     "displayName": "Ed the Diver",
     "description": "Swim a total of 1000m underwater, excluding underwater shipwrecks",
-    "earned": 0
+    "earned": 0,
+    "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3751950/bb7e43952073ac992cfe5f94df0793065aedc311.jpg"
   }
 }

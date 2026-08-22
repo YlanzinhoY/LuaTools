@@ -6,6 +6,7 @@ public sealed record R2Achievement(
     string ApiName,
     string DisplayName,
     string Description,
+    string? IconUrl,
     bool Earned,
     long? EarnedTime);
 

@@ -577,4 +577,6 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="Achievements_StatePath" xml:space="preserve"><value>Local state: {0}</value></data>
   <data name="Achievements_LoadFailed" xml:space="preserve"><value>Couldn't read the R2 achievements. {0}</value></data>
   <data name="Achievements_Close" xml:space="preserve"><value>Close</value></data>
+  <data name="Achievements_Preview" xml:space="preserve"><value>Preview popup</value></data>
+  <data name="Achievements_NotificationTitle" xml:space="preserve"><value>ACHIEVEMENT UNLOCKED</value></data>
 </root>

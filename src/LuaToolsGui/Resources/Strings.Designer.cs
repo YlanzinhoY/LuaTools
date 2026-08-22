@@ -286,6 +286,8 @@ public static class Strings
     public static string Achievements_StatePath => Get(nameof(Achievements_StatePath));
     public static string Achievements_LoadFailed => Get(nameof(Achievements_LoadFailed));
     public static string Achievements_Close => Get(nameof(Achievements_Close));
+    public static string Achievements_Preview => Get(nameof(Achievements_Preview));
+    public static string Achievements_NotificationTitle => Get(nameof(Achievements_NotificationTitle));
     public static string Manage_RemoveFailed_Count => Get(nameof(Manage_RemoveFailed_Count));
     public static string Manage_RestartSteam_Title => Get(nameof(Manage_RestartSteam_Title));
     public static string Manage_RestartSteam_Ask => Get(nameof(Manage_RestartSteam_Ask));

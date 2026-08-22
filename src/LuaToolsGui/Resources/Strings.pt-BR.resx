@@ -542,4 +542,6 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="Achievements_StatePath" xml:space="preserve"><value>Estado local: {0}</value></data>
   <data name="Achievements_LoadFailed" xml:space="preserve"><value>Não foi possível ler as conquistas R2. {0}</value></data>
   <data name="Achievements_Close" xml:space="preserve"><value>Fechar</value></data>
+  <data name="Achievements_Preview" xml:space="preserve"><value>Ver popup</value></data>
+  <data name="Achievements_NotificationTitle" xml:space="preserve"><value>CONQUISTA DESBLOQUEADA</value></data>
 </root>

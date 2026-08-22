@@ -23,6 +23,7 @@ public partial class App : Application
             .ConfigureServices(services =>
             {
                 services.AddSingleton<SettingsService>();
+                services.AddSingleton<AchievementPopupService>();
                 services.AddSingleton<AchievementBridgeService>();
                 services.AddHostedService(sp => sp.GetRequiredService<AchievementBridgeService>());
                 services.AddSingleton<CacheService>();
@@ -38,6 +39,7 @@ public partial class App : Application
                 services.AddSingleton<LuaInstaller>();
                 services.AddSingleton<SteamLibraryService>();
                 services.AddSingleton<R2AchievementService>();
+                services.AddSingleton<AchievementIconService>();
                 services.AddSingleton<DonateKeysService>();
                 services.AddSingleton<AnalyticsService>();
                 services.AddSingleton<GithubProxy>();

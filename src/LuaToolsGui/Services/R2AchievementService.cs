@@ -40,15 +40,19 @@ public sealed class R2AchievementService(SteamLibraryService steamLibrary)
 
     private string? ResolveSchemaPath(long steamAppId)
     {
+        // The bundled contract is versioned with LuaTools and contains enriched Steam metadata such
+        // as icon URLs. A loader-installed schema remains a useful fallback for development/custom
+        // bindings, but is commonly the minimal R2 shape (name/description/earned only).
+        string bundled = Path.Combine(AppContext.BaseDirectory, "Achievements", $"{steamAppId}.json");
+        if (File.Exists(bundled)) return bundled;
+
         string? installDir = steamLibrary.GetInstallDir(steamAppId);
         if (installDir is not null)
         {
             string installed = Path.Combine(installDir, "achievements_schema.json");
             if (File.Exists(installed)) return installed;
         }
-
-        string bundled = Path.Combine(AppContext.BaseDirectory, "Achievements", $"{steamAppId}.json");
-        return File.Exists(bundled) ? bundled : null;
+        return null;
     }
 
     internal static string GetStatePath(int productId)
@@ -86,6 +90,7 @@ public sealed class R2AchievementService(SteamLibraryService steamLibrary)
                 JsonElement definition = property.Value;
                 string displayName = ReadString(definition, "displayName") ?? $"Achievement {id}";
                 string description = ReadString(definition, "description") ?? "";
+                string? iconUrl = ResolveIconUrl(steamAppId, ReadString(definition, "icon"));
 
                 JsonElement saved = default;
                 bool hasSaved = stateRoot.ValueKind == JsonValueKind.Object &&
@@ -100,6 +105,7 @@ public sealed class R2AchievementService(SteamLibraryService steamLibrary)
                     $"ACObsidian_Ach_{id}",
                     displayName,
                     description,
+                    iconUrl,
                     earned,
                     earnedTime));
             }
@@ -131,6 +137,15 @@ public sealed class R2AchievementService(SteamLibraryService steamLibrary)
         value.ValueKind == JsonValueKind.String
             ? value.GetString()
             : null;
+
+    private static string? ResolveIconUrl(long steamAppId, string? icon)
+    {
+        if (string.IsNullOrWhiteSpace(icon)) return null;
+        if (Uri.TryCreate(icon, UriKind.Absolute, out Uri? absolute)) return absolute.ToString();
+
+        string fileName = Uri.EscapeDataString(icon);
+        return $"https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{steamAppId}/{fileName}";
+    }
 
     private static long? ReadInt64(JsonElement element, string name)
     {
