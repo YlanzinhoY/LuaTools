@@ -531,4 +531,6 @@
   <data name="Settings_Achievements" xml:space="preserve"><value>実績</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>プロバイダーを自動インストール</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>通知</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Steam 通知（実験的）</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>新しいリアルタイム解除で Steam Overlay の標準通知を表示します。Steam サービスに接続する場合があります。要求をキューに入れられない場合は LuaTools の通知を使用します。</value></data>
 </root>

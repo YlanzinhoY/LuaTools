@@ -531,4 +531,6 @@ Thao tác này sẽ xóa các tệp .lua khỏi Steam\config\stplug-in. Sau đó
   <data name="Settings_Achievements" xml:space="preserve"><value>Thành tựu</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Tự động cài đặt nhà cung cấp</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Thông báo</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Thông báo Steam (Thử nghiệm)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Thử hiển thị thông báo Steam Overlay gốc cho thành tựu mới theo thời gian thực. Có thể liên hệ dịch vụ Steam; dùng thông báo LuaTools nếu không thể đưa yêu cầu vào hàng đợi.</value></data>
 </root>

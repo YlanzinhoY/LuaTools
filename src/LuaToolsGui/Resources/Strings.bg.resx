@@ -531,4 +531,6 @@
   <data name="Settings_Achievements" xml:space="preserve"><value>Постижения</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Автоматично инсталиране на доставчици</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Известия</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Известие от Steam (Експериментално)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Опитва да покаже вграденото известие на Steam Overlay за нови отключвания в реално време. Може да се свърже с услугите на Steam; използва известието на LuaTools, ако заявката не може да бъде поставена на опашка.</value></data>
 </root>

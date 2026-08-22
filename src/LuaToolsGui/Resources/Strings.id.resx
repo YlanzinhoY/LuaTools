@@ -531,4 +531,6 @@ Ini menghapus file .lua dari Steam\config\stplug-in. Mulai ulang Steam setelahny
   <data name="Settings_Achievements" xml:space="preserve"><value>Pencapaian</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Instal penyedia secara otomatis</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Notifikasi</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Notifikasi Steam (Eksperimental)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Mencoba menampilkan notifikasi asli Steam Overlay untuk pencapaian baru secara langsung. Dapat menghubungi layanan Steam; menggunakan notifikasi LuaTools jika permintaan tidak dapat dimasukkan ke antrean.</value></data>
 </root>

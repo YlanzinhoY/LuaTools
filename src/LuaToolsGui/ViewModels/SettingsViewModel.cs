@@ -77,6 +77,10 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty] private bool _achievementNotifications;
     partial void OnAchievementNotificationsChanged(bool value) => _settings.AchievementNotifications = value;
 
+    [ObservableProperty] private bool _experimentalSteamAchievementNotifications;
+    partial void OnExperimentalSteamAchievementNotificationsChanged(bool value) =>
+        _settings.ExperimentalSteamAchievementNotifications = value;
+
     /// <summary>Donate spare Steam decryption keys to the community pool. Persisted via SettingsService.</summary>
     [ObservableProperty] private bool _donateKeys;
 
@@ -245,6 +249,7 @@ public partial class SettingsViewModel : ObservableObject
         _achievementsEnabled = settings.AchievementsEnabled;
         _achievementAutoInstallProviders = settings.AchievementAutoInstallProviders;
         _achievementNotifications = settings.AchievementNotifications;
+        _experimentalSteamAchievementNotifications = settings.ExperimentalSteamAchievementNotifications;
         _donateKeys = settings.DonateKeys;
         _startWithWindows = settings.StartWithWindows; // default OFF. Init without triggering the registry write
         _minimizeToTray = settings.MinimizeToTray;

@@ -551,4 +551,6 @@
   <data name="Settings_Achievements" xml:space="preserve"><value>成就</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>自动安装提供程序</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>通知</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Steam 通知（实验性）</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>尝试为新的实时解锁显示 Steam 叠加界面原生通知。可能会连接 Steam 服务；如果请求无法排队，则使用 LuaTools 通知。</value></data>
 </root>

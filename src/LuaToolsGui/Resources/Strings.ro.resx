@@ -531,4 +531,6 @@ Aceasta șterge fișierele .lua din Steam\config\stplug-in. Repornește Steam du
   <data name="Settings_Achievements" xml:space="preserve"><value>Realizări</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Instalează automat furnizorii</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Notificări</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Notificare Steam (Experimental)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Încearcă să afișeze notificarea nativă Steam Overlay pentru realizări noi în timp real. Poate contacta serviciile Steam; folosește notificarea LuaTools dacă solicitarea nu poate fi pusă în coadă.</value></data>
 </root>

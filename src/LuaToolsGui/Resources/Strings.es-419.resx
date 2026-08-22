@@ -531,4 +531,6 @@ Esto borra los archivos .lua de Steam\config\stplug-in. Reinicia Steam después 
   <data name="Settings_Achievements" xml:space="preserve"><value>Logros</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Instalar proveedores automáticamente</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Notificaciones</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Notificación de Steam (Experimental)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Intenta mostrar el aviso nativo de Steam Overlay para nuevos logros en tiempo real. Puede contactar los servicios de Steam; usa el aviso de LuaTools si la solicitud no se puede poner en cola.</value></data>
 </root>

@@ -89,6 +89,8 @@ public static class Strings
     public static string Settings_Achievements => Get(nameof(Settings_Achievements));
     public static string Settings_AutoInstallProviders => Get(nameof(Settings_AutoInstallProviders));
     public static string Settings_AchievementNotifications => Get(nameof(Settings_AchievementNotifications));
+    public static string Settings_ExperimentalSteamNotifications => Get(nameof(Settings_ExperimentalSteamNotifications));
+    public static string Settings_ExperimentalSteamNotifications_Hint => Get(nameof(Settings_ExperimentalSteamNotifications_Hint));
     public static string Tray_Open => Get(nameof(Tray_Open));
     public static string Tray_Exit => Get(nameof(Tray_Exit));
     public static string Settings_SteamNotFound => Get(nameof(Settings_SteamNotFound));

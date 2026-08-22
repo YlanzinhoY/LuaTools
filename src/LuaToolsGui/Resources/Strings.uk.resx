@@ -531,4 +531,6 @@
   <data name="Settings_Achievements" xml:space="preserve"><value>Досягнення</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Автоматично встановлювати постачальників</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Сповіщення</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Сповіщення Steam (Експериментально)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Намагається показати вбудоване сповіщення оверлею Steam для нових досягнень у реальному часі. Може звертатися до служб Steam; використовує сповіщення LuaTools, якщо запит не можна поставити в чергу.</value></data>
 </root>

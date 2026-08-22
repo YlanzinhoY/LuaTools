@@ -531,4 +531,6 @@ Spowoduje to usunięcie plików .lua z Steam\config\stplug-in. Następnie urucho
   <data name="Settings_Achievements" xml:space="preserve"><value>Osiągnięcia</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Automatycznie instaluj dostawców</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Powiadomienia</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Powiadomienie Steam (Eksperymentalne)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Próbuje wyświetlić natywne powiadomienie nakładki Steam dla nowych osiągnięć na żywo. Może kontaktować się z usługami Steam; używa powiadomienia LuaTools, jeśli żądania nie można dodać do kolejki.</value></data>
 </root>

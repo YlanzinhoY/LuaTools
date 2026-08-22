@@ -531,4 +531,6 @@ Detta tar bort .lua-filerna från Steam\config\stplug-in. Starta om Steam efter�
   <data name="Settings_Achievements" xml:space="preserve"><value>Prestationer</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Installera leverantörer automatiskt</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Aviseringar</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Steam-avisering (Experimentell)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Försöker visa Steam Overlays inbyggda avisering för nya upplåsningar i realtid. Kan kontakta Steam-tjänster; använder LuaTools-aviseringen om begäran inte kan köas.</value></data>
 </root>

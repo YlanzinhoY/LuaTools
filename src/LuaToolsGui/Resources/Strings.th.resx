@@ -531,4 +531,6 @@
   <data name="Settings_Achievements" xml:space="preserve"><value>ความสำเร็จ</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>ติดตั้งผู้ให้บริการอัตโนมัติ</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>การแจ้งเตือน</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>การแจ้งเตือน Steam (ทดลอง)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>ลองแสดงการแจ้งเตือนดั้งเดิมของ Steam Overlay สำหรับความสำเร็จใหม่แบบเรียลไทม์ อาจติดต่อบริการ Steam และจะใช้การแจ้งเตือน LuaTools หากไม่สามารถจัดคิวคำขอได้</value></data>
 </root>

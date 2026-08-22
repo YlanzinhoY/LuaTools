@@ -531,4 +531,6 @@
   <data name="Settings_Achievements" xml:space="preserve"><value>Достижения</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Автоматически устанавливать провайдеры</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Уведомления</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Уведомление Steam (Экспериментально)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Пытается показать встроенное уведомление оверлея Steam для новых достижений в реальном времени. Может обращаться к службам Steam; использует уведомление LuaTools, если запрос нельзя поставить в очередь.</value></data>
 </root>

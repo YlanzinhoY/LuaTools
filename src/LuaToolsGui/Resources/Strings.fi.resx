@@ -531,4 +531,6 @@ Tämä poistaa .lua-tiedostot sijainnista Steam\config\stplug-in. Käynnistä St
   <data name="Settings_Achievements" xml:space="preserve"><value>Saavutukset</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Asenna palveluntarjoajat automaattisesti</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Ilmoitukset</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Steam-ilmoitus (Kokeellinen)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Yrittää näyttää Steam Overlay -ilmoituksen uusista reaaliaikaisista avauksista. Voi ottaa yhteyttä Steam-palveluihin; käyttää LuaTools-ilmoitusta, jos pyyntöä ei voi asettaa jonoon.</value></data>
 </root>

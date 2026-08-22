@@ -557,4 +557,6 @@
   <data name="Settings_Achievements" xml:space="preserve"><value>الإنجازات</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>تثبيت المزوّدات تلقائيًا</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>الإشعارات</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>إشعار Steam (تجريبي)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>يحاول عرض إشعار Steam Overlay الأصلي للإنجازات الجديدة في الوقت الفعلي. قد يتصل بخدمات Steam؛ ويستخدم إشعار LuaTools إذا تعذرت إضافة الطلب إلى قائمة الانتظار.</value></data>
 </root>

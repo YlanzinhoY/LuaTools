@@ -531,4 +531,6 @@
   <data name="Settings_Achievements" xml:space="preserve"><value>成就</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>自動安裝提供者</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>通知</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Steam 通知（實驗性）</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>嘗試為新的即時解鎖顯示 Steam 覆蓋介面原生通知。可能會連線 Steam 服務；如果請求無法排入佇列，則使用 LuaTools 通知。</value></data>
 </root>

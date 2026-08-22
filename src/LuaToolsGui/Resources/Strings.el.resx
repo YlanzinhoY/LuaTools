@@ -531,4 +531,6 @@
   <data name="Settings_Achievements" xml:space="preserve"><value>Επιτεύγματα</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Αυτόματη εγκατάσταση παρόχων</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Ειδοποιήσεις</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Ειδοποίηση Steam (Πειραματική)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Δοκιμάζει την εγγενή ειδοποίηση του Steam Overlay για νέα ξεκλειδώματα σε πραγματικό χρόνο. Ενδέχεται να επικοινωνήσει με τις υπηρεσίες Steam· χρησιμοποιεί την ειδοποίηση LuaTools αν το αίτημα δεν μπορεί να μπει στην ουρά.</value></data>
 </root>

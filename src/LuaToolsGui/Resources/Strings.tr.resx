@@ -531,4 +531,6 @@ Bu işlem, .lua dosyalarını Steam\config\stplug-in konumundan siler. Değişik
   <data name="Settings_Achievements" xml:space="preserve"><value>Başarımlar</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Sağlayıcıları otomatik yükle</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Bildirimler</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Steam bildirimi (Deneysel)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Yeni canlı başarımlar için yerel Steam Overlay bildirimini göstermeyi dener. Steam hizmetleriyle iletişim kurabilir; istek kuyruğa alınamazsa LuaTools bildirimini kullanır.</value></data>
 </root>

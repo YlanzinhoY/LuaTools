@@ -531,4 +531,6 @@
   <data name="Settings_Achievements" xml:space="preserve"><value>도전 과제</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>공급자 자동 설치</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>알림</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Steam 알림(실험적)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>새 실시간 도전 과제 해제 시 Steam Overlay 기본 알림을 표시합니다. Steam 서비스에 연결할 수 있으며, 요청을 대기열에 넣을 수 없으면 LuaTools 알림을 사용합니다.</value></data>
 </root>

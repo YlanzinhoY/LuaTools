@@ -531,4 +531,6 @@ Questo elimina i file .lua da Steam\config\stplug-in. Riavvia Steam in seguito a
   <data name="Settings_Achievements" xml:space="preserve"><value>Obiettivi</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Installa automaticamente i provider</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Notifiche</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Notifica Steam (Sperimentale)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Prova a mostrare l’avviso nativo dell’overlay di Steam per i nuovi obiettivi in tempo reale. Può contattare i servizi Steam; usa l’avviso di LuaTools se la richiesta non può essere accodata.</value></data>
 </root>

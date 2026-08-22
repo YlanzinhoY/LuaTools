@@ -531,6 +531,8 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="Settings_Achievements" xml:space="preserve"><value>Conquistas</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Instalar provedores automaticamente</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Notificações</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Notificação da Steam (Experimental)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Tenta exibir o aviso nativo do Steam Overlay em novas conquistas ao vivo. Pode contatar os serviços da Steam; usa o popup do LuaTools se a solicitação não puder ser enfileirada.</value></data>
   <data name="Manage_Action_Achievements" xml:space="preserve"><value>Conquistas</value></data>
   <data name="Achievements_Title" xml:space="preserve"><value>Conquistas</value></data>
   <data name="Achievements_Progress" xml:space="preserve"><value>{0} de {1} desbloqueadas</value></data>

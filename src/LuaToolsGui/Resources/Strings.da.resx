@@ -531,4 +531,6 @@ Dette sletter .lua-filerne fra Steam\config\stplug-in. Genstart Steam bagefter, 
   <data name="Settings_Achievements" xml:space="preserve"><value>Præstationer</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Installer udbydere automatisk</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Notifikationer</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Steam-notifikation (Eksperimentel)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Forsøger at vise Steam Overlays indbyggede notifikation ved nye oplåsninger i realtid. Kan kontakte Steam-tjenester; bruger LuaTools-notifikationen, hvis anmodningen ikke kan sættes i kø.</value></data>
 </root>

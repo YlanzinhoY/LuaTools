@@ -423,6 +423,18 @@
                         <TextBlock VerticalAlignment="Center" FontSize="13" FontWeight="Medium" Text="{x:Static res:Strings.Settings_AchievementNotifications}" />
                         <ui:ToggleSwitch Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center" IsChecked="{Binding AchievementNotifications, Mode=TwoWay}" />
                     </Grid>
+                    <Border Style="{StaticResource RowDivider}" />
+                    <Grid Margin="14,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock FontSize="13" FontWeight="Medium" Text="{x:Static res:Strings.Settings_ExperimentalSteamNotifications}" />
+                            <TextBlock Margin="0,3,0,0" MaxWidth="520" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{x:Static res:Strings.Settings_ExperimentalSteamNotifications_Hint}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ui:ToggleSwitch Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center" IsChecked="{Binding ExperimentalSteamAchievementNotifications, Mode=TwoWay}" />
+                    </Grid>
                 </StackPanel>
             </Border>
 

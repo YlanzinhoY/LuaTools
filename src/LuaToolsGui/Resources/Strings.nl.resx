@@ -531,4 +531,6 @@ Dit verwijdert de .lua-bestanden uit Steam\config\stplug-in. Herstart Steam daar
   <data name="Settings_Achievements" xml:space="preserve"><value>Prestaties</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Providers automatisch installeren</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Meldingen</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Steam-melding (Experimenteel)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Probeert de systeemeigen Steam Overlay-melding te tonen voor nieuwe live ontgrendelingen. Kan contact maken met Steam-diensten; gebruikt de LuaTools-melding als het verzoek niet in de wachtrij kan worden geplaatst.</value></data>
 </root>

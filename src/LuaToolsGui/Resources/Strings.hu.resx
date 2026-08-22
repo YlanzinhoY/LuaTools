@@ -531,4 +531,6 @@ Ez törli a .lua fájlokat a Steam\config\stplug-in mappából. Ezután indítsd
   <data name="Settings_Achievements" xml:space="preserve"><value>Teljesítmények</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Szolgáltatók automatikus telepítése</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Értesítések</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Steam-értesítés (Kísérleti)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Megpróbálja megjeleníteni a Steam Overlay natív értesítését az új, élő feloldásokhoz. Kapcsolatba léphet a Steam szolgáltatásaival; a LuaTools értesítését használja, ha a kérés nem állítható sorba.</value></data>
 </root>

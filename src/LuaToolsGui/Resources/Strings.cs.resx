@@ -531,4 +531,6 @@ Tím se smažou soubory .lua ze Steam\config\stplug-in. Poté restartujte Steam,
   <data name="Settings_Achievements" xml:space="preserve"><value>Úspěchy</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Automaticky instalovat poskytovatele</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Oznámení</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Oznámení Steamu (Experimentální)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Pokusí se zobrazit nativní oznámení překryvu Steam pro nová živá odemčení. Může kontaktovat služby Steam; pokud požadavek nelze zařadit do fronty, použije oznámení LuaTools.</value></data>
 </root>

@@ -58,6 +58,7 @@ public class AppSettings
     public bool? AchievementsEnabled { get; set; }
     public bool? AchievementAutoInstallProviders { get; set; }
     public bool? AchievementNotifications { get; set; }
+    public bool? ExperimentalSteamAchievementNotifications { get; set; }
 }
 
 public class SettingsService
@@ -178,6 +179,12 @@ public class SettingsService
         set { _settings.AchievementNotifications = value; Save(); AchievementSettingsChanged?.Invoke(); }
     }
 
+    public bool ExperimentalSteamAchievementNotifications
+    {
+        get => _settings.ExperimentalSteamAchievementNotifications ?? false;
+        set { _settings.ExperimentalSteamAchievementNotifications = value; Save(); AchievementSettingsChanged?.Invoke(); }
+    }
+
     private static readonly string TmpPath = FilePath + ".tmp";
     private static readonly string BakPath = FilePath + ".bak";
 
@@ -239,7 +246,8 @@ public class SettingsService
             && _settings.FastFetch is null
             && _settings.AchievementsEnabled is null
             && _settings.AchievementAutoInstallProviders is null
-            && _settings.AchievementNotifications is null;
+            && _settings.AchievementNotifications is null
+            && _settings.ExperimentalSteamAchievementNotifications is null;
         if (empty)
         {
             foreach (var p in new[] { FilePath, BakPath, TmpPath })

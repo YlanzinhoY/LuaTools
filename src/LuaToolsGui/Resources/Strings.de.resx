@@ -531,4 +531,6 @@ Dadurch werden die .lua-Dateien aus Steam\config\stplug-in gelöscht. Starte Ste
   <data name="Settings_Achievements" xml:space="preserve"><value>Errungenschaften</value></data>
   <data name="Settings_AutoInstallProviders" xml:space="preserve"><value>Anbieter automatisch installieren</value></data>
   <data name="Settings_AchievementNotifications" xml:space="preserve"><value>Benachrichtigungen</value></data>
+  <data name="Settings_ExperimentalSteamNotifications" xml:space="preserve"><value>Steam-Benachrichtigung (Experimentell)</value></data>
+  <data name="Settings_ExperimentalSteamNotifications_Hint" xml:space="preserve"><value>Versucht bei neuen Live-Freischaltungen den nativen Steam-Overlay-Hinweis anzuzeigen. Kann Steam-Dienste kontaktieren; verwendet den LuaTools-Hinweis, wenn die Anfrage nicht eingereiht werden kann.</value></data>
 </root>
