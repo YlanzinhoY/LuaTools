@@ -22,6 +22,8 @@
 
 The Achievement Bridge settings include an opt-in **Steam notification (Experimental)** toggle, off by default. For new live unlocks it first asks Steam to queue the normal `StoreStats` path. If that write is protected, it requests a native `1/2` progress toast for the same achievement name and image without changing Steam state. This may contact Steam services. If Steam rejects both requests, LuaTools automatically uses its image-rich popup instead; recovered and already-synced achievements always keep the stable fallback.
 
+The protected-achievement fallback was manually reproduced twice with Assassin's Creed IV Black Flag (`ACObsidian_Ach_10`, `permission=2`): Steam rejected `SetAchievement`, returned `progress_queued`, and visibly displayed the localized native progress toast while the Bridge completed its local sync.
+
 ## Statistics
 <div>
   <img src="https://img.shields.io/github/downloads/madoiscool/luatools/LuaTools-win-Setup.exe?displayAssetName=true&style=for-the-badge" />
