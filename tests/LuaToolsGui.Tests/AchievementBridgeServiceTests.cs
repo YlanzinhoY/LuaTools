@@ -71,10 +71,12 @@ public class AchievementBridgeServiceTests
 
     [Theory]
     [InlineData("store_queued", true)]
+    [InlineData("progress_queued", true)]
     [InlineData("set_failed", false)]
+    [InlineData("progress_failed", false)]
     [InlineData("not_new", false)]
     [InlineData("not_requested", false)]
-    public void NativeSteamNotification_OnlySuppressesPopupWhenQueued(string status, bool expected)
+    public void NativeSteamNotification_OnlySuppressesPopupWhenNativeToastWasQueued(string status, bool expected)
     {
         Assert.Equal(expected, AchievementBridgeService.ShouldSuppressLuaToolsPopup(status));
     }

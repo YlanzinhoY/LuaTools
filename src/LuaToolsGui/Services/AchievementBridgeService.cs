@@ -143,7 +143,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
                 !achievement.Recovered;
             // The stable LuaTools popup still starts immediately when the experiment
             // is disabled. In experimental mode it becomes a fallback after Steam
-            // reports that StoreStats could not be queued.
+            // reports that neither an unlock nor a progress toast was queued.
             Task popup = notificationsEnabled && !trySteamNotification
                 ? _popups.ShowAchievementAsync(resolved.Achievement)
                 : Task.CompletedTask;
@@ -224,7 +224,8 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     }
 
     internal static bool ShouldSuppressLuaToolsPopup(string nativeNotification) =>
-        nativeNotification.Equals("store_queued", StringComparison.OrdinalIgnoreCase);
+        nativeNotification.Equals("store_queued", StringComparison.OrdinalIgnoreCase) ||
+        nativeNotification.Equals("progress_queued", StringComparison.OrdinalIgnoreCase);
 
     private void StopProcessesLocked()
     {
