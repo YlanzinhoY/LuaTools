@@ -7,7 +7,7 @@ using LuaToolsGui.Models;
 
 namespace LuaToolsGui.Services;
 
-/// <summary>Runs short-lived, read-only queries against the independently built Zig bridge.</summary>
+/// <summary>Runs short-lived catalog and automatic local-sync operations against the independent Zig bridge.</summary>
 public sealed class AchievementBridgeClient(SteamService steam)
 {
     public async Task<AchievementCatalog> LoadSteamCatalogAsync(long appId, CancellationToken cancellationToken = default)
@@ -62,6 +62,69 @@ public sealed class AchievementBridgeClient(SteamService steam)
         return ParseCatalog(stdout, GetLocalStorePath());
     }
 
+    public async Task<LocalSteamSyncResult> SyncLocalAchievementAsync(
+        long appId,
+        string apiName,
+        long unlockTime,
+        CancellationToken cancellationToken = default)
+    {
+        if (appId <= 0 || appId > uint.MaxValue) throw new ArgumentOutOfRangeException(nameof(appId));
+        if (string.IsNullOrWhiteSpace(apiName)) throw new ArgumentException("Achievement API name is required.", nameof(apiName));
+        long timestamp = Math.Clamp(unlockTime, 1, uint.MaxValue);
+        string executable = AchievementBridgeService.FindExecutable()
+            ?? throw new FileNotFoundException("Achievement Bridge is not installed.");
+        using var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = executable,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                StandardOutputEncoding = Encoding.UTF8,
+                StandardErrorEncoding = Encoding.UTF8,
+                WorkingDirectory = Path.GetDirectoryName(executable) ?? AppContext.BaseDirectory,
+            },
+        };
+        process.StartInfo.ArgumentList.Add("steam-local-sync");
+        process.StartInfo.ArgumentList.Add("--appid");
+        process.StartInfo.ArgumentList.Add(appId.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        process.StartInfo.ArgumentList.Add("--achievement");
+        process.StartInfo.ArgumentList.Add(apiName);
+        process.StartInfo.ArgumentList.Add("--timestamp");
+        process.StartInfo.ArgumentList.Add(timestamp.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        if (steam.EffectivePath is { } steamRoot)
+        {
+            process.StartInfo.ArgumentList.Add("--steam-root");
+            process.StartInfo.ArgumentList.Add(steamRoot);
+        }
+
+        if (!process.Start()) throw new InvalidOperationException("Achievement Bridge did not start.");
+        Task<string> stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
+        Task<string> stderrTask = process.StandardError.ReadToEndAsync(cancellationToken);
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        timeout.CancelAfter(TimeSpan.FromSeconds(12));
+        try
+        {
+            await process.WaitForExitAsync(timeout.Token);
+        }
+        catch
+        {
+            try { if (!process.HasExited) process.Kill(entireProcessTree: true); } catch { }
+            throw;
+        }
+
+        string stdout = await stdoutTask;
+        string stderr = await stderrTask;
+        if (process.ExitCode != 0)
+            throw new InvalidOperationException(string.IsNullOrWhiteSpace(stderr)
+                ? $"Achievement Bridge exited with code {process.ExitCode}."
+                : stderr.Trim());
+        return ParseLocalSync(stdout);
+    }
+
     internal static AchievementCatalog ParseCatalog(string json, string? localStorePath = null)
     {
         BridgeCatalogDto dto = JsonSerializer.Deserialize<BridgeCatalogDto>(json)
@@ -86,6 +149,26 @@ public sealed class AchievementBridgeClient(SteamService steam)
             localStorePath,
             localStorePath is not null && File.Exists(localStorePath),
             items);
+    }
+
+    internal static LocalSteamSyncResult ParseLocalSync(string json)
+    {
+        BridgeLocalSyncDto dto = JsonSerializer.Deserialize<BridgeLocalSyncDto>(json)
+            ?? throw new InvalidDataException("Achievement Bridge returned an empty local sync result.");
+        if (dto.AppId <= 0 || string.IsNullOrWhiteSpace(dto.Achievement) || dto.StatId < 0 || dto.Bit is < 0 or > 31)
+            throw new InvalidDataException("Achievement Bridge returned an invalid local sync result.");
+        return new LocalSteamSyncResult(
+            dto.AppId,
+            dto.Achievement,
+            dto.Changed,
+            dto.StatId,
+            dto.Bit,
+            dto.Permission,
+            dto.Timestamp,
+            dto.HostStatus ?? "unknown",
+            dto.SteamRefreshed,
+            dto.StatsPath,
+            dto.BackupPath);
     }
 
     internal static string? ResolveIconUrl(long appId, string? icon)
@@ -122,4 +205,32 @@ public sealed class AchievementBridgeClient(SteamService steam)
         [JsonPropertyName("hidden")] public bool Hidden { get; init; }
         [JsonPropertyName("global_percent")] public double? GlobalPercent { get; init; }
     }
+
+    private sealed class BridgeLocalSyncDto
+    {
+        [JsonPropertyName("appid")] public long AppId { get; init; }
+        [JsonPropertyName("achievement")] public string Achievement { get; init; } = "";
+        [JsonPropertyName("changed")] public bool Changed { get; init; }
+        [JsonPropertyName("stat_id")] public int StatId { get; init; }
+        [JsonPropertyName("bit")] public int Bit { get; init; }
+        [JsonPropertyName("permission")] public int Permission { get; init; }
+        [JsonPropertyName("timestamp")] public long Timestamp { get; init; }
+        [JsonPropertyName("host_status")] public string? HostStatus { get; init; }
+        [JsonPropertyName("steam_refreshed")] public bool SteamRefreshed { get; init; }
+        [JsonPropertyName("stats_path")] public string? StatsPath { get; init; }
+        [JsonPropertyName("backup_path")] public string? BackupPath { get; init; }
+    }
 }
+
+public sealed record LocalSteamSyncResult(
+    long AppId,
+    string Achievement,
+    bool Changed,
+    int StatId,
+    int Bit,
+    int Permission,
+    long Timestamp,
+    string HostStatus,
+    bool SteamRefreshed,
+    string? StatsPath,
+    string? BackupPath);
