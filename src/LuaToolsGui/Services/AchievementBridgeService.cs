@@ -137,21 +137,29 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             ResolvedBridgeAchievement? resolved = await ResolveBridgeEventAsync(achievement);
             if (resolved is null) return;
 
-            // The visual feedback begins immediately. Persistence is serialized so
-            // two providers cannot rewrite the same native cache concurrently.
-            Task popup = _settings.AchievementNotifications
+            bool notificationsEnabled = _settings.AchievementNotifications;
+            bool trySteamNotification = notificationsEnabled &&
+                _settings.ExperimentalSteamAchievementNotifications &&
+                !achievement.Recovered;
+            // The stable LuaTools popup still starts immediately when the experiment
+            // is disabled. In experimental mode it becomes a fallback after Steam
+            // reports that StoreStats could not be queued.
+            Task popup = notificationsEnabled && !trySteamNotification
                 ? _popups.ShowAchievementAsync(resolved.Achievement)
                 : Task.CompletedTask;
+            string nativeNotification = "not_requested";
             await _syncQueue.WaitAsync();
             try
             {
                 long timestamp = achievement.Timestamp is > 0
                     ? achievement.Timestamp.Value
                     : DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                await _client.SyncLocalAchievementAsync(
+                LocalSteamSyncResult result = await _client.SyncLocalAchievementAsync(
                     resolved.AppId,
                     resolved.Achievement.ApiName,
-                    timestamp);
+                    timestamp,
+                    trySteamNotification);
+                nativeNotification = result.NativeNotification;
             }
             catch
             {
@@ -162,6 +170,9 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             {
                 _syncQueue.Release();
             }
+            if (notificationsEnabled && trySteamNotification &&
+                !ShouldSuppressLuaToolsPopup(nativeNotification))
+                popup = _popups.ShowAchievementAsync(resolved.Achievement);
             try { await popup; } catch { /* best-effort visual feedback */ }
         }
         catch
@@ -211,6 +222,9 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         ];
         return candidates.FirstOrDefault(path => !string.IsNullOrWhiteSpace(path) && File.Exists(path));
     }
+
+    internal static bool ShouldSuppressLuaToolsPopup(string nativeNotification) =>
+        nativeNotification.Equals("store_queued", StringComparison.OrdinalIgnoreCase);
 
     private void StopProcessesLocked()
     {
