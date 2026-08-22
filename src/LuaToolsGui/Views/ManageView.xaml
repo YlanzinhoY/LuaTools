@@ -745,8 +745,7 @@
                             Command="{Binding DataContext.ShowAchievementsCommand, ElementName=Root}"
                             CommandParameter="{Binding}"
                             Content="{x:Static res:Strings.Manage_Action_Achievements}"
-                            Icon="{ui:SymbolIcon Star24}"
-                            Visibility="{Binding SupportsR2Achievements, Converter={StaticResource BoolToVis}}" />
+                            Icon="{ui:SymbolIcon Star24}" />
                         <ui:Button
                             Margin="0,8,0,0"
                             HorizontalAlignment="Stretch"
