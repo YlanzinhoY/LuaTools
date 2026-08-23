@@ -145,6 +145,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
                 _settings.ExperimentalSteamAchievementNotifications &&
                 !achievement.Recovered;
             string nativeNotification = "not_requested";
+            bool cacheConfirmed = false;
             bool steamConfirmed = false;
             bool changed = false;
             await _syncQueue.WaitAsync();
@@ -159,6 +160,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
                     timestamp,
                     trySteamNotification);
                 nativeNotification = result.NativeNotification;
+                cacheConfirmed = result.CacheConfirmed;
                 steamConfirmed = result.SteamConfirmed;
                 changed = result.Changed;
             }
@@ -174,7 +176,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             // A popup is a promise to the player that the achievement now exists
             // in Steam's local state. Never show one for a cache write that Steam
             // did not read back as unlocked, or for an idempotent/replayed event.
-            if (ShouldShowLuaToolsPopup(notificationsEnabled, achievement.Recovered, changed, steamConfirmed, nativeNotification))
+            if (ShouldShowLuaToolsPopup(notificationsEnabled, achievement.Recovered, changed, cacheConfirmed, steamConfirmed, nativeNotification))
                 try { await _popups.ShowAchievementAsync(resolved.Achievement); }
                 catch { /* best-effort visual feedback after confirmed sync */ }
         }
@@ -234,9 +236,10 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         bool notificationsEnabled,
         bool recovered,
         bool changed,
+        bool cacheConfirmed,
         bool steamConfirmed,
         string nativeNotification) =>
-        notificationsEnabled && !recovered && changed && steamConfirmed &&
+        notificationsEnabled && !recovered && changed && (cacheConfirmed || steamConfirmed) &&
         !ShouldSuppressLuaToolsPopup(nativeNotification);
 
     private void StopProcessesLocked()

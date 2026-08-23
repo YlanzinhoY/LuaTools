@@ -104,21 +104,23 @@ public class AchievementBridgeServiceTests
     }
 
     [Theory]
-    [InlineData(true, false, true, true, "sync_unconfirmed", true)]
-    [InlineData(true, false, true, false, "sync_unconfirmed", false)]
-    [InlineData(true, false, false, true, "not_new", false)]
-    [InlineData(true, true, true, true, "not_requested", false)]
-    [InlineData(false, false, true, true, "not_requested", false)]
-    [InlineData(true, false, true, true, "progress_queued", false)]
-    public void Popup_RequiresConfirmedNewSteamState(
+    [InlineData(true, false, true, true, false, "sync_unconfirmed", true)]
+    [InlineData(true, false, true, false, true, "not_requested", true)]
+    [InlineData(true, false, true, false, false, "sync_unconfirmed", false)]
+    [InlineData(true, false, false, true, true, "not_new", false)]
+    [InlineData(true, true, true, true, true, "not_requested", false)]
+    [InlineData(false, false, true, true, true, "not_requested", false)]
+    [InlineData(true, false, true, true, true, "progress_queued", false)]
+    public void Popup_RequiresConfirmedNewSteamCacheOrApiState(
         bool enabled,
         bool recovered,
         bool changed,
-        bool confirmed,
+        bool cacheConfirmed,
+        bool steamConfirmed,
         string nativeNotification,
         bool expected)
     {
         Assert.Equal(expected, AchievementBridgeService.ShouldShowLuaToolsPopup(
-            enabled, recovered, changed, confirmed, nativeNotification));
+            enabled, recovered, changed, cacheConfirmed, steamConfirmed, nativeNotification));
     }
 }
