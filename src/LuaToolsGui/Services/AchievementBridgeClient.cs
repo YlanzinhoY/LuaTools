@@ -164,6 +164,7 @@ public sealed class AchievementBridgeClient(SteamService steam)
             dto.AppId,
             dto.Achievement,
             dto.Changed,
+            dto.AccountId,
             dto.StatId,
             dto.Bit,
             dto.Permission,
@@ -217,6 +218,7 @@ public sealed class AchievementBridgeClient(SteamService steam)
         [JsonPropertyName("appid")] public long AppId { get; init; }
         [JsonPropertyName("achievement")] public string Achievement { get; init; } = "";
         [JsonPropertyName("changed")] public bool Changed { get; init; }
+        [JsonPropertyName("account_id")] public long AccountId { get; init; }
         [JsonPropertyName("stat_id")] public int StatId { get; init; }
         [JsonPropertyName("bit")] public int Bit { get; init; }
         [JsonPropertyName("permission")] public int Permission { get; init; }
@@ -235,6 +237,7 @@ public sealed record LocalSteamSyncResult(
     long AppId,
     string Achievement,
     bool Changed,
+    long AccountId,
     int StatId,
     int Bit,
     int Permission,

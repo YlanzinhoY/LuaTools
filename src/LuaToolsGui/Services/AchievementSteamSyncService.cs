@@ -52,6 +52,8 @@ public sealed class AchievementSteamSyncService
         int updated = 0;
         int alreadyPresent = 0;
         int failed = 0;
+        long? accountId = null;
+        List<string> confirmedApiNames = [];
         long fallbackTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
         for (int index = 0; index < earned.Length; index++)
@@ -69,10 +71,20 @@ public sealed class AchievementSteamSyncService
                     cancellationToken);
                 if (!IsDurableLocalResult(result))
                     failed++;
-                else if (result.Changed)
-                    updated++;
                 else
-                    alreadyPresent++;
+                {
+                    accountId ??= result.AccountId;
+                    if (accountId != result.AccountId)
+                    {
+                        failed++;
+                        continue;
+                    }
+                    confirmedApiNames.Add(item.ApiName);
+                    if (result.Changed)
+                        updated++;
+                    else
+                        alreadyPresent++;
+                }
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
@@ -84,7 +96,13 @@ public sealed class AchievementSteamSyncService
             }
         }
 
-        return new AchievementBatchSyncResult(earned.Length, updated, alreadyPresent, failed);
+        return new AchievementBatchSyncResult(
+            earned.Length,
+            updated,
+            alreadyPresent,
+            failed,
+            accountId,
+            confirmedApiNames);
     }
 
     internal static bool IsDurableLocalResult(LocalSteamSyncResult result) =>
@@ -94,4 +112,10 @@ public sealed class AchievementSteamSyncService
 
 public sealed record AchievementBatchSyncProgress(int Current, int Total, string DisplayName);
 
-public sealed record AchievementBatchSyncResult(int Total, int Updated, int AlreadyPresent, int Failed);
+public sealed record AchievementBatchSyncResult(
+    int Total,
+    int Updated,
+    int AlreadyPresent,
+    int Failed,
+    long? AccountId,
+    IReadOnlyList<string> ConfirmedApiNames);

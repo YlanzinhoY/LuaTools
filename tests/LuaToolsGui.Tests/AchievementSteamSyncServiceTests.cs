@@ -29,6 +29,8 @@ public class AchievementSteamSyncServiceTests
         Assert.Equal(1, result.Updated);
         Assert.Equal(1, result.AlreadyPresent);
         Assert.Equal(0, result.Failed);
+        Assert.Equal(1208830004, result.AccountId);
+        Assert.Equal(["ACH_1", "ACH_3"], result.ConfirmedApiNames);
         Assert.Equal(["ACH_1", "ACH_3"], calls.Select(call => call.ApiName));
         Assert.Equal([111, 333], calls.Select(call => call.Timestamp));
         Assert.All(calls, call => Assert.False(call.Notification));
@@ -65,6 +67,7 @@ public class AchievementSteamSyncServiceTests
             3751950,
             apiName,
             changed,
+            1208830004,
             1,
             0,
             2,
