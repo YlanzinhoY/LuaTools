@@ -202,7 +202,29 @@ public sealed class SteamAchievementUiProjectionStore
                   [...document.querySelectorAll('div,span')]
                     .filter(node => node.children.length === 0 && exactRatio.test(node.textContent || ''))
                     .forEach(node => { node.textContent = ratio; });
+
                   section.dataset.achievementBridgeProjection = String(p.achieved_count);
+                }
+
+                const playBarImage = [...document.images].find(img => {
+                  const src = img.src || '';
+                  const status = img.closest('[class~="StatusAndStats"]');
+                  return src.includes(`/assets/${p.app_id}/`) &&
+                    status && status.querySelector('[class~="MiniAchievements"]');
+                });
+                const miniAchievements = playBarImage
+                  ?.closest('[class~="StatusAndStats"]')
+                  ?.querySelector('[class~="MiniAchievements"]');
+                if (miniAchievements) {
+                  const progressContainer = miniAchievements.querySelector('[role="progressbar"]');
+                  const progressBar = miniAchievements.querySelector('[class~="DetailsProgressBar"]');
+                  if (progressContainer) {
+                    progressContainer.setAttribute('aria-valuenow', String(percentage(p)));
+                    progressContainer.setAttribute('aria-valuemin', '0');
+                    progressContainer.setAttribute('aria-valuemax', '100');
+                  }
+                  if (progressBar) progressBar.style.width = `${percentage(p)}%`;
+                  miniAchievements.dataset.achievementBridgeProjection = String(p.achieved_count);
                 }
 
                 const overlay = [...document.querySelectorAll('[class~="AchievementsOverlayContainer"]')]
