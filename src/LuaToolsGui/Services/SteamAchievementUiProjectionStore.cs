@@ -70,6 +70,37 @@ public sealed class SteamAchievementUiProjectionStore
         }
     }
 
+    /// <summary>
+    /// Adds one live, confirmed unlock to the existing projection. Provider events arrive one at a
+    /// time, so replacing the projection with only the newest API name would erase historical rows.
+    /// </summary>
+    public void AddConfirmed(
+        long appId,
+        IReadOnlyList<Achievement> catalog,
+        string apiName,
+        long unlockedAt)
+    {
+        lock (_gate)
+        {
+            var confirmed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            if (_projections.TryGetValue(appId, out Projection? existing))
+                confirmed.UnionWith(existing.Achievements.Select(item => item.ApiName));
+            confirmed.Add(apiName);
+
+            Achievement[] effectiveCatalog = catalog.Select(item =>
+                item.ApiName.Equals(apiName, StringComparison.OrdinalIgnoreCase)
+                    ? item with
+                    {
+                        Earned = true,
+                        EarnedTime = unlockedAt > 0
+                            ? unlockedAt
+                            : DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                    }
+                    : item).ToArray();
+            Save(appId, effectiveCatalog, confirmed);
+        }
+    }
+
     public string BuildPatchScript()
     {
         Projection[] projections;

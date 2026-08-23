@@ -17,6 +17,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     private readonly AchievementBridgeSetupService _setup;
     private readonly AchievementSteamSyncService _steamSync;
     private readonly AchievementCatalogService _catalogs;
+    private readonly SteamAchievementUiProjectionStore _uiProjection;
     private readonly AchievementBurstGate _burstGate = new(TimeSpan.FromSeconds(2), threshold: 3);
     private readonly object _gate = new();
     private readonly List<Process> _processes = [];
@@ -27,13 +28,15 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         AchievementPopupService popups,
         AchievementBridgeSetupService setup,
         AchievementSteamSyncService steamSync,
-        AchievementCatalogService catalogs)
+        AchievementCatalogService catalogs,
+        SteamAchievementUiProjectionStore uiProjection)
     {
         _settings = settings;
         _popups = popups;
         _setup = setup;
         _steamSync = steamSync;
         _catalogs = catalogs;
+        _uiProjection = uiProjection;
         _settings.AchievementSettingsChanged += OnSettingsChanged;
     }
 
@@ -147,11 +150,11 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             bool cacheConfirmed = false;
             bool steamConfirmed = false;
             bool changed = false;
+            long timestamp = achievement.Timestamp is > 0
+                ? achievement.Timestamp.Value
+                : DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             try
             {
-                long timestamp = achievement.Timestamp is > 0
-                    ? achievement.Timestamp.Value
-                    : DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 LocalSteamSyncResult result = await _steamSync.SyncOneAsync(
                     resolved.AppId,
                     resolved.Achievement.ApiName,
@@ -161,6 +164,12 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
                 cacheConfirmed = result.CacheConfirmed;
                 steamConfirmed = result.SteamConfirmed;
                 changed = result.Changed;
+                if (cacheConfirmed || steamConfirmed)
+                    _uiProjection.AddConfirmed(
+                        resolved.AppId,
+                        resolved.Catalog,
+                        resolved.Achievement.ApiName,
+                        timestamp);
             }
             catch
             {
@@ -198,7 +207,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             item = catalog.Achievements.FirstOrDefault(candidate =>
                 NumericSuffix(candidate.ApiName) == achievement.Achievement);
         }
-        return item is null ? null : new ResolvedBridgeAchievement(appId.Value, item);
+        return item is null ? null : new ResolvedBridgeAchievement(appId.Value, item, catalog.Achievements);
     }
 
     private static string? NumericSuffix(string apiName)
@@ -308,7 +317,10 @@ internal sealed record AchievementBridgeEvent(
     long? Timestamp,
     bool Recovered);
 
-internal sealed record ResolvedBridgeAchievement(long AppId, Achievement Achievement);
+internal sealed record ResolvedBridgeAchievement(
+    long AppId,
+    Achievement Achievement,
+    IReadOnlyList<Achievement> Catalog);
 
 /// <summary>Incrementally parses the bridge's stable key/value event envelope from stdout/stderr.</summary>
 internal sealed class AchievementBridgeEventParser
