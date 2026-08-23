@@ -15,9 +15,8 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     private readonly SettingsService _settings;
     private readonly AchievementPopupService _popups;
     private readonly AchievementBridgeSetupService _setup;
-    private readonly AchievementBridgeClient _client;
+    private readonly AchievementSteamSyncService _steamSync;
     private readonly AchievementCatalogService _catalogs;
-    private readonly SemaphoreSlim _syncQueue = new(1, 1);
     private readonly AchievementBurstGate _burstGate = new(TimeSpan.FromSeconds(2), threshold: 3);
     private readonly object _gate = new();
     private readonly List<Process> _processes = [];
@@ -27,13 +26,13 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         SettingsService settings,
         AchievementPopupService popups,
         AchievementBridgeSetupService setup,
-        AchievementBridgeClient client,
+        AchievementSteamSyncService steamSync,
         AchievementCatalogService catalogs)
     {
         _settings = settings;
         _popups = popups;
         _setup = setup;
-        _client = client;
+        _steamSync = steamSync;
         _catalogs = catalogs;
         _settings.AchievementSettingsChanged += OnSettingsChanged;
     }
@@ -148,13 +147,12 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             bool cacheConfirmed = false;
             bool steamConfirmed = false;
             bool changed = false;
-            await _syncQueue.WaitAsync();
             try
             {
                 long timestamp = achievement.Timestamp is > 0
                     ? achievement.Timestamp.Value
                     : DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                LocalSteamSyncResult result = await _client.SyncLocalAchievementAsync(
+                LocalSteamSyncResult result = await _steamSync.SyncOneAsync(
                     resolved.AppId,
                     resolved.Achievement.ApiName,
                     timestamp,
@@ -168,10 +166,6 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             {
                 // The provider journal remains the source of truth and the popup
                 // still completes. A later recovered event can retry local sync.
-            }
-            finally
-            {
-                _syncQueue.Release();
             }
             // A popup is a promise to the player that the achievement now exists
             // in Steam's local state. Never show one for a cache write that Steam

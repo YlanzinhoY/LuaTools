@@ -27,6 +27,7 @@ public partial class App : Application
                 services.AddSingleton<AchievementBridgeSetupService>();
                 services.AddSingleton<AchievementBridgeService>();
                 services.AddSingleton<AchievementBridgeClient>();
+                services.AddSingleton<AchievementSteamSyncService>();
                 services.AddSingleton<AchievementCatalogService>();
                 services.AddHostedService(sp => sp.GetRequiredService<AchievementBridgeService>());
                 services.AddSingleton<CacheService>();
