@@ -18,6 +18,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     private readonly AchievementBridgeClient _client;
     private readonly AchievementCatalogService _catalogs;
     private readonly SemaphoreSlim _syncQueue = new(1, 1);
+    private readonly AchievementBurstGate _burstGate = new(TimeSpan.FromSeconds(2), threshold: 3);
     private readonly object _gate = new();
     private readonly List<Process> _processes = [];
     private bool _started;
@@ -134,6 +135,8 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     {
         try
         {
+            string burstScope = $"{achievement.Provider}:{achievement.ProductId ?? achievement.AppId ?? 0}";
+            if (await _burstGate.IsBackfillAsync(burstScope)) return;
             ResolvedBridgeAchievement? resolved = await ResolveBridgeEventAsync(achievement);
             if (resolved is null) return;
 
@@ -141,13 +144,9 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             bool trySteamNotification = notificationsEnabled &&
                 _settings.ExperimentalSteamAchievementNotifications &&
                 !achievement.Recovered;
-            // The stable LuaTools popup still starts immediately when the experiment
-            // is disabled. In experimental mode it becomes a fallback after Steam
-            // reports that neither an unlock nor a progress toast was queued.
-            Task popup = notificationsEnabled && !trySteamNotification
-                ? _popups.ShowAchievementAsync(resolved.Achievement)
-                : Task.CompletedTask;
             string nativeNotification = "not_requested";
+            bool steamConfirmed = false;
+            bool changed = false;
             await _syncQueue.WaitAsync();
             try
             {
@@ -160,6 +159,8 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
                     timestamp,
                     trySteamNotification);
                 nativeNotification = result.NativeNotification;
+                steamConfirmed = result.SteamConfirmed;
+                changed = result.Changed;
             }
             catch
             {
@@ -170,10 +171,12 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             {
                 _syncQueue.Release();
             }
-            if (notificationsEnabled && trySteamNotification &&
-                !ShouldSuppressLuaToolsPopup(nativeNotification))
-                popup = _popups.ShowAchievementAsync(resolved.Achievement);
-            try { await popup; } catch { /* best-effort visual feedback */ }
+            // A popup is a promise to the player that the achievement now exists
+            // in Steam's local state. Never show one for a cache write that Steam
+            // did not read back as unlocked, or for an idempotent/replayed event.
+            if (ShouldShowLuaToolsPopup(notificationsEnabled, achievement.Recovered, changed, steamConfirmed, nativeNotification))
+                try { await _popups.ShowAchievementAsync(resolved.Achievement); }
+                catch { /* best-effort visual feedback after confirmed sync */ }
         }
         catch
         {
@@ -227,6 +230,15 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         nativeNotification.Equals("store_queued", StringComparison.OrdinalIgnoreCase) ||
         nativeNotification.Equals("progress_queued", StringComparison.OrdinalIgnoreCase);
 
+    internal static bool ShouldShowLuaToolsPopup(
+        bool notificationsEnabled,
+        bool recovered,
+        bool changed,
+        bool steamConfirmed,
+        string nativeNotification) =>
+        notificationsEnabled && !recovered && changed && steamConfirmed &&
+        !ShouldSuppressLuaToolsPopup(nativeNotification);
+
     private void StopProcessesLocked()
     {
         foreach (var process in _processes)
@@ -246,6 +258,48 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     {
         _settings.AchievementSettingsChanged -= OnSettingsChanged;
         lock (_gate) StopProcessesLocked();
+    }
+}
+
+/// <summary>
+/// Holds provider events briefly so a save-import burst can be distinguished
+/// from one or two achievements legitimately awarded together.
+/// </summary>
+internal sealed class AchievementBurstGate(TimeSpan window, int threshold)
+{
+    private sealed class BurstWindow(DateTimeOffset endsAt)
+    {
+        public DateTimeOffset EndsAt { get; } = endsAt;
+        public int Count { get; set; }
+    }
+
+    private readonly object _gate = new();
+    private readonly Dictionary<string, BurstWindow> _windows = new(StringComparer.OrdinalIgnoreCase);
+
+    public async Task<bool> IsBackfillAsync(string scope, CancellationToken cancellationToken = default)
+    {
+        BurstWindow burst;
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+        lock (_gate)
+        {
+            if (!_windows.TryGetValue(scope, out burst!) || now >= burst.EndsAt)
+            {
+                burst = new BurstWindow(now + window);
+                _windows[scope] = burst;
+            }
+            burst.Count++;
+        }
+
+        TimeSpan delay = burst.EndsAt - DateTimeOffset.UtcNow;
+        if (delay > TimeSpan.Zero) await Task.Delay(delay, cancellationToken);
+
+        lock (_gate)
+        {
+            bool isBackfill = burst.Count >= threshold;
+            if (_windows.TryGetValue(scope, out BurstWindow? current) && ReferenceEquals(current, burst))
+                _windows.Remove(scope);
+            return isBackfill;
+        }
     }
 }
 

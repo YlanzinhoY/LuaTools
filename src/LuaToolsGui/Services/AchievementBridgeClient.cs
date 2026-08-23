@@ -170,6 +170,7 @@ public sealed class AchievementBridgeClient(SteamService steam)
             dto.Timestamp,
             dto.HostStatus ?? "unknown",
             dto.SteamRefreshed,
+            dto.SteamConfirmed,
             dto.NativeNotification ?? "not_requested",
             dto.StatsPath,
             dto.BackupPath);
@@ -221,6 +222,7 @@ public sealed class AchievementBridgeClient(SteamService steam)
         [JsonPropertyName("timestamp")] public long Timestamp { get; init; }
         [JsonPropertyName("host_status")] public string? HostStatus { get; init; }
         [JsonPropertyName("steam_refreshed")] public bool SteamRefreshed { get; init; }
+        [JsonPropertyName("steam_confirmed")] public bool SteamConfirmed { get; init; }
         [JsonPropertyName("native_notification")] public string? NativeNotification { get; init; }
         [JsonPropertyName("stats_path")] public string? StatsPath { get; init; }
         [JsonPropertyName("backup_path")] public string? BackupPath { get; init; }
@@ -237,6 +239,7 @@ public sealed record LocalSteamSyncResult(
     long Timestamp,
     string HostStatus,
     bool SteamRefreshed,
+    bool SteamConfirmed,
     string NativeNotification,
     string? StatsPath,
     string? BackupPath);

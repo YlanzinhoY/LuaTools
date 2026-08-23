@@ -7,6 +7,28 @@ namespace LuaToolsGui.Tests;
 public class AchievementBridgeServiceTests
 {
     [Fact]
+    public async Task BurstGate_AllowsSingleGameplayEvent()
+    {
+        var gate = new AchievementBurstGate(TimeSpan.FromMilliseconds(20), threshold: 3);
+
+        Assert.False(await gate.IsBackfillAsync("uplay_r2:66088"));
+    }
+
+    [Fact]
+    public async Task BurstGate_SuppressesSchemaHydrationBatch()
+    {
+        var gate = new AchievementBurstGate(TimeSpan.FromMilliseconds(30), threshold: 3);
+
+        bool[] results = await Task.WhenAll(
+            gate.IsBackfillAsync("uplay_r2:66088"),
+            gate.IsBackfillAsync("uplay_r2:66088"),
+            gate.IsBackfillAsync("uplay_r2:66088"),
+            gate.IsBackfillAsync("uplay_r2:66088"));
+
+        Assert.All(results, Assert.True);
+    }
+
+    [Fact]
     public void EventParser_ReadsAnUnlockedR2Envelope()
     {
         var parser = new AchievementBridgeEventParser();
@@ -79,5 +101,24 @@ public class AchievementBridgeServiceTests
     public void NativeSteamNotification_OnlySuppressesPopupWhenNativeToastWasQueued(string status, bool expected)
     {
         Assert.Equal(expected, AchievementBridgeService.ShouldSuppressLuaToolsPopup(status));
+    }
+
+    [Theory]
+    [InlineData(true, false, true, true, "sync_unconfirmed", true)]
+    [InlineData(true, false, true, false, "sync_unconfirmed", false)]
+    [InlineData(true, false, false, true, "not_new", false)]
+    [InlineData(true, true, true, true, "not_requested", false)]
+    [InlineData(false, false, true, true, "not_requested", false)]
+    [InlineData(true, false, true, true, "progress_queued", false)]
+    public void Popup_RequiresConfirmedNewSteamState(
+        bool enabled,
+        bool recovered,
+        bool changed,
+        bool confirmed,
+        string nativeNotification,
+        bool expected)
+    {
+        Assert.Equal(expected, AchievementBridgeService.ShouldShowLuaToolsPopup(
+            enabled, recovered, changed, confirmed, nativeNotification));
     }
 }
