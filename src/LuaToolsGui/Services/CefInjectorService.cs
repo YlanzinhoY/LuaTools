@@ -11,6 +11,7 @@ namespace LuaToolsGui.Services;
 public class CefInjectorService : IHostedService
 {
     private readonly SteamService _steam;
+    private readonly SteamAchievementUiProjectionStore _achievementProjections;
     private readonly ILogger<CefInjectorService> _log;
     private CancellationTokenSource? _cts;
     private string _luatoolsJs = "";
@@ -37,9 +38,13 @@ public class CefInjectorService : IHostedService
 
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
 
-    public CefInjectorService(SteamService steam, ILogger<CefInjectorService> logger)
+    public CefInjectorService(
+        SteamService steam,
+        SteamAchievementUiProjectionStore achievementProjections,
+        ILogger<CefInjectorService> logger)
     {
         _steam = steam;
+        _achievementProjections = achievementProjections;
         _log = logger;
     }
 
@@ -123,6 +128,7 @@ public class CefInjectorService : IHostedService
                     if (!string.IsNullOrWhiteSpace(tabsJson))
                     {
                         var tabs = JsonSerializer.Deserialize<List<CefTabInfo>>(tabsJson, JsonOpts) ?? new();
+                        string achievementPatch = _achievementProjections.BuildPatchScript();
 
                         // Inject luatools.js into every store-page tab whose JS context isn't already alive.
                         // Steam reuses the same CDP tab ID across SPA-style navigation (Home <-> store pages),
@@ -154,6 +160,18 @@ public class CefInjectorService : IHostedService
                                     await EvaluateAsync(tab.Id!, tab.WebSocketDebuggerUrl!, script, ct);
 
                                 live.Add((tab.Id!, tab.WebSocketDebuggerUrl!));
+                            }
+
+                            // Steam's server response overwrites protected local achievements in
+                            // librarycache. Apply the confirmed desktop-only projection after React
+                            // renders, on every slow tick, so later server refreshes cannot revert it.
+                            if (!string.IsNullOrEmpty(achievementPatch)
+                                && tab.Title?.Equals("Steam", StringComparison.OrdinalIgnoreCase) == true
+                                && !string.IsNullOrEmpty(tab.WebSocketDebuggerUrl)
+                                && !string.IsNullOrEmpty(tab.Id))
+                            {
+                                seen.Add(tab.Id!);
+                                await EvaluateAsync(tab.Id!, tab.WebSocketDebuggerUrl!, achievementPatch, ct);
                             }
                         }
 

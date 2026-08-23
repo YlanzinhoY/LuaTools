@@ -45,7 +45,6 @@ PENDING_TRANSLATION: set[str] = {
     "Achievements_SyncSteam",
     "Achievements_SyncProgress",
     "Achievements_SyncSummary",
-    "Achievements_SyncRestarting",
     "Achievements_SyncNone",
     "Achievements_SyncFailed",
 }

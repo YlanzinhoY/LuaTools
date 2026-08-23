@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -33,8 +32,7 @@ public partial class AchievementsViewModel(
     AchievementPopupService popups,
     R2AchievementService r2,
     AchievementSteamSyncService steamSync,
-    SteamLibraryAchievementProjector libraryProjector,
-    SteamService steam) : ObservableObject
+    SteamAchievementUiProjectionStore uiProjection) : ObservableObject
 {
     private List<AchievementRowViewModel> _all = [];
 
@@ -156,24 +154,10 @@ public partial class AchievementsViewModel(
             AchievementBatchSyncResult result = await steamSync.SyncEarnedAsync(AppId, catalog, progress);
             if (result.ConfirmedApiNames.Count > 0)
             {
-                if (result.AccountId is not { } accountId)
-                    throw new InvalidOperationException("Achievement Bridge did not identify the active Steam account.");
-                SyncStatus = Resources.Strings.Achievements_SyncRestarting;
-                if (!await steam.StopSteamGracefullyAsync())
-                    throw new IOException("Steam did not close normally. Close any running game and try again.");
-                try
-                {
-                    libraryProjector.Project(
-                        AppId,
-                        accountId,
-                        catalog,
-                        result.ConfirmedApiNames.ToHashSet(StringComparer.OrdinalIgnoreCase));
-                }
-                finally
-                {
-                    steam.StartSteam();
-                }
-                await Task.Delay(TimeSpan.FromSeconds(4));
+                uiProjection.Save(
+                    AppId,
+                    catalog,
+                    result.ConfirmedApiNames.ToHashSet(StringComparer.OrdinalIgnoreCase));
                 SteamService.OpenUrl($"steam://nav/games/details/{AppId}");
             }
             SyncStatus = string.Format(

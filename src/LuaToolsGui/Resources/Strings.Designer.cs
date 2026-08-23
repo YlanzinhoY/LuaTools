@@ -293,7 +293,6 @@ public static class Strings
     public static string Achievements_SyncSteam => Get(nameof(Achievements_SyncSteam));
     public static string Achievements_SyncProgress => Get(nameof(Achievements_SyncProgress));
     public static string Achievements_SyncSummary => Get(nameof(Achievements_SyncSummary));
-    public static string Achievements_SyncRestarting => Get(nameof(Achievements_SyncRestarting));
     public static string Achievements_SyncNone => Get(nameof(Achievements_SyncNone));
     public static string Achievements_SyncFailed => Get(nameof(Achievements_SyncFailed));
     public static string Manage_RemoveFailed_Count => Get(nameof(Manage_RemoveFailed_Count));
