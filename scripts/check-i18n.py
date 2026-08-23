@@ -42,6 +42,11 @@ PENDING_TRANSLATION: set[str] = {
     "Achievements_Close",
     "Achievements_Preview",
     "Achievements_NotificationTitle",
+    "Achievements_SyncSteam",
+    "Achievements_SyncProgress",
+    "Achievements_SyncSummary",
+    "Achievements_SyncNone",
+    "Achievements_SyncFailed",
 }
 # Empty on purpose: every key is translated in all 29 languages, so the parity check above is
 # unconditional. Add a key here ONLY while its feature's UI is still moving, and clear it again

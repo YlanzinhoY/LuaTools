@@ -29,7 +29,9 @@ public sealed partial class AchievementRowViewModel(Achievement achievement) : O
 public partial class AchievementsViewModel(
     AchievementCatalogService achievements,
     AchievementIconService icons,
-    AchievementPopupService popups) : ObservableObject
+    AchievementPopupService popups,
+    R2AchievementService r2,
+    AchievementSteamSyncService steamSync) : ObservableObject
 {
     private List<AchievementRowViewModel> _all = [];
 
@@ -46,6 +48,10 @@ public partial class AchievementsViewModel(
     [ObservableProperty] private string _searchText = "";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(ProgressText))] private int _earnedCount;
     [ObservableProperty][NotifyPropertyChangedFor(nameof(ProgressText))] private int _totalCount;
+    [ObservableProperty] private bool _supportsSteamSync;
+    [ObservableProperty] private bool _canSyncToSteam;
+    [ObservableProperty] private bool _isSyncingToSteam;
+    [ObservableProperty] private string? _syncStatus;
 
     public string ProgressText =>
         string.Format(Resources.Strings.Achievements_Progress, EarnedCount, TotalCount);
@@ -77,6 +83,8 @@ public partial class AchievementsViewModel(
             StateFileExists = catalog.StateFileExists;
             EarnedCount = catalog.EarnedCount;
             TotalCount = catalog.Achievements.Count;
+            SupportsSteamSync = R2AchievementService.Supports(AppId);
+            CanSyncToSteam = SupportsSteamSync && catalog.StateFileExists && EarnedCount > 0 && !IsSyncingToSteam;
             ApplyFilter();
             _ = LoadIconsAsync(_all);
         }
@@ -86,6 +94,7 @@ public partial class AchievementsViewModel(
             Items.Clear();
             EarnedCount = 0;
             TotalCount = 0;
+            CanSyncToSteam = false;
             Error = string.Format(Resources.Strings.Achievements_LoadFailed, ex.Message);
         }
         finally
@@ -102,6 +111,62 @@ public partial class AchievementsViewModel(
     {
         AchievementRowViewModel? row = _all.FirstOrDefault(item => item.Earned) ?? _all.FirstOrDefault();
         if (row is not null) await popups.ShowAchievementAsync(row.Achievement);
+    }
+
+    [RelayCommand]
+    private async Task SyncToSteamAsync()
+    {
+        if (IsSyncingToSteam || !SupportsSteamSync) return;
+
+        IsSyncingToSteam = true;
+        CanSyncToSteam = false;
+        SyncStatus = null;
+        try
+        {
+            R2AchievementCatalog local = await Task.Run(() => r2.Load(AppId));
+            List<Achievement> earned = local.Achievements
+                .Where(item => item.Earned)
+                .Select(item => new Achievement(
+                    item.ApiName,
+                    item.DisplayName,
+                    item.Description,
+                    item.IconUrl,
+                    null,
+                    true,
+                    item.EarnedTime,
+                    "uplay_r2",
+                    false,
+                    null))
+                .ToList();
+            if (earned.Count == 0)
+            {
+                SyncStatus = Resources.Strings.Achievements_SyncNone;
+                return;
+            }
+
+            var progress = new Progress<AchievementBatchSyncProgress>(item =>
+                SyncStatus = string.Format(
+                    Resources.Strings.Achievements_SyncProgress,
+                    item.Current,
+                    item.Total,
+                    item.DisplayName));
+            AchievementBatchSyncResult result = await steamSync.SyncEarnedAsync(AppId, earned, progress);
+            SyncStatus = string.Format(
+                Resources.Strings.Achievements_SyncSummary,
+                result.Updated,
+                result.AlreadyPresent,
+                result.Failed);
+            await RefreshAsync();
+        }
+        catch (Exception ex)
+        {
+            SyncStatus = string.Format(Resources.Strings.Achievements_SyncFailed, ex.Message);
+        }
+        finally
+        {
+            IsSyncingToSteam = false;
+            CanSyncToSteam = SupportsSteamSync && StateFileExists && EarnedCount > 0;
+        }
     }
 
     private void ApplyFilter()

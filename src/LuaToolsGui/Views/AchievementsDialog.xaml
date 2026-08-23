@@ -73,6 +73,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <ProgressBar
                     Height="6"
@@ -83,6 +84,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <ui:TextBox
                         Icon="{ui:SymbolIcon Search24}"
@@ -91,16 +93,32 @@
                     <ui:Button
                         Grid.Column="1"
                         Margin="10,0,0,0"
+                        Command="{Binding SyncToSteamCommand}"
+                        Content="{x:Static res:Strings.Achievements_SyncSteam}"
+                        Icon="{ui:SymbolIcon CloudArrowUp24}"
+                        IsEnabled="{Binding CanSyncToSteam}"
+                        Visibility="{Binding SupportsSteamSync, Converter={StaticResource BoolToVis}}" />
+                    <ui:Button
+                        Grid.Column="2"
+                        Margin="8,0,0,0"
                         Command="{Binding PreviewCommand}"
                         Content="{x:Static res:Strings.Achievements_Preview}"
                         Icon="{ui:SymbolIcon Star24}" />
                     <ui:Button
-                        Grid.Column="2"
+                        Grid.Column="3"
                         Margin="8,0,0,0"
                         Command="{Binding RefreshCommand}"
                         Content="{x:Static res:Strings.Manage_Refresh}"
                         Icon="{ui:SymbolIcon ArrowSync24}" />
                 </Grid>
+                <TextBlock
+                    Grid.Row="2"
+                    Margin="0,8,0,0"
+                    FontSize="11.5"
+                    Foreground="#a78bfa"
+                    Text="{Binding SyncStatus}"
+                    TextWrapping="Wrap"
+                    Visibility="{Binding SyncStatus, Converter={StaticResource NullToCollapsed}}" />
             </Grid>
 
             <Grid Grid.Row="2">

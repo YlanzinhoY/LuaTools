@@ -546,4 +546,9 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="Achievements_Close" xml:space="preserve"><value>Fechar</value></data>
   <data name="Achievements_Preview" xml:space="preserve"><value>Ver popup</value></data>
   <data name="Achievements_NotificationTitle" xml:space="preserve"><value>CONQUISTA DESBLOQUEADA</value></data>
+  <data name="Achievements_SyncSteam" xml:space="preserve"><value>Sincronizar com a Steam</value></data>
+  <data name="Achievements_SyncProgress" xml:space="preserve"><value>Sincronizando {0} de {1}: {2}</value></data>
+  <data name="Achievements_SyncSummary" xml:space="preserve"><value>Sincronização concluída: {0} atualizadas, {1} já presentes, {2} falharam.</value></data>
+  <data name="Achievements_SyncNone" xml:space="preserve"><value>Não há conquistas R2 desbloqueadas para sincronizar.</value></data>
+  <data name="Achievements_SyncFailed" xml:space="preserve"><value>Falha ao sincronizar com a Steam. {0}</value></data>
 </root>
