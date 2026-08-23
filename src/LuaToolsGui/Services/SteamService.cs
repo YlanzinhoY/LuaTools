@@ -74,6 +74,48 @@ public class SteamService(SettingsService settings)
         }
     }
 
+    /// <summary>
+    /// Requests the client's normal shutdown and waits for steam.exe to leave. Achievement cache
+    /// projection deliberately does not fall back to killing Steam: if a game prevents shutdown,
+    /// the caller must leave the user's session untouched and report the failure.
+    /// </summary>
+    public async Task<bool> StopSteamGracefullyAsync(
+        TimeSpan? timeout = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (!IsSteamRunning()) return true;
+        string? root = EffectivePath;
+        if (root is null) return false;
+        string executable = SteamExePathFor(root);
+        if (!File.Exists(executable)) return false;
+
+        try
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = executable,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+            };
+            startInfo.ArgumentList.Add("-shutdown");
+            using Process? request = Process.Start(startInfo);
+        }
+        catch
+        {
+            return false;
+        }
+
+        DateTime deadline = DateTime.UtcNow + (timeout ?? TimeSpan.FromSeconds(30));
+        while (DateTime.UtcNow < deadline)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (!IsSteamRunning()) return true;
+            await Task.Delay(250, cancellationToken);
+        }
+        return !IsSteamRunning();
+    }
+
     /// <summary>Launch Steam from the effective path. Returns false if it can't be located/launched.</summary>
     public bool StartSteam()
     {
