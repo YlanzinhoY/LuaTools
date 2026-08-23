@@ -31,6 +31,11 @@ public sealed class SteamAchievementUiProjectionStoreTests
             Assert.Contains("ACH_2", script);
             Assert.DoesNotContain("ACH_1", script);
             Assert.Contains("AchievementProgress", script);
+            Assert.Contains("AchievementsOverlayContainer", script);
+            Assert.Contains("AchievementListItemBase", script);
+            Assert.Contains("__reactFiber$", script);
+            Assert.Contains("UnlockDate", script);
+            Assert.Contains("achievementBridgeHidden", script);
         }
         finally
         {
@@ -44,6 +49,25 @@ public sealed class SteamAchievementUiProjectionStoreTests
         string path = Path.Combine(Path.GetTempPath(), $"missing-{Guid.NewGuid():N}", "projections.json");
         var store = new SteamAchievementUiProjectionStore(path);
         Assert.Equal("", store.BuildPatchScript());
+    }
+
+    [Fact]
+    public void Save_UsesProjectionTimeWhenSourceHasNoUnlockTime()
+    {
+        string root = Path.Combine(Path.GetTempPath(), $"luatools-ui-projection-{Guid.NewGuid():N}");
+        string path = Path.Combine(root, "projections.json");
+        try
+        {
+            var store = new SteamAchievementUiProjectionStore(path);
+            store.Save(99, [Item("ACH_1", earned: true, time: 0)], new HashSet<string>(["ACH_1"]));
+
+            string json = File.ReadAllText(path);
+            Assert.DoesNotContain("\"unlocked_at\":0", json);
+        }
+        finally
+        {
+            if (Directory.Exists(root)) Directory.Delete(root, recursive: true);
+        }
     }
 
     private static Achievement Item(string id, bool earned, long? time) => new(
