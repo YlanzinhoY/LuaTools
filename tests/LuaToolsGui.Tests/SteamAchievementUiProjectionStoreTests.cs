@@ -31,6 +31,8 @@ public sealed class SteamAchievementUiProjectionStoreTests
             Assert.Contains("ACH_2", script);
             Assert.DoesNotContain("ACH_1", script);
             Assert.Contains("AchievementProgress", script);
+            Assert.Contains("DetailsProgressBar", script);
+            Assert.Contains("aria-valuenow", script);
             Assert.Contains("AchievementsOverlayContainer", script);
             Assert.Contains("AchievementListItemBase", script);
             Assert.Contains("__reactFiber$", script);
