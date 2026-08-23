@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -31,7 +32,9 @@ public partial class AchievementsViewModel(
     AchievementIconService icons,
     AchievementPopupService popups,
     R2AchievementService r2,
-    AchievementSteamSyncService steamSync) : ObservableObject
+    AchievementSteamSyncService steamSync,
+    SteamLibraryAchievementProjector libraryProjector,
+    SteamService steam) : ObservableObject
 {
     private List<AchievementRowViewModel> _all = [];
 
@@ -124,8 +127,7 @@ public partial class AchievementsViewModel(
         try
         {
             R2AchievementCatalog local = await Task.Run(() => r2.Load(AppId));
-            List<Achievement> earned = local.Achievements
-                .Where(item => item.Earned)
+            List<Achievement> catalog = local.Achievements
                 .Select(item => new Achievement(
                     item.ApiName,
                     item.DisplayName,
@@ -138,6 +140,7 @@ public partial class AchievementsViewModel(
                     false,
                     null))
                 .ToList();
+            List<Achievement> earned = catalog.Where(item => item.Earned).ToList();
             if (earned.Count == 0)
             {
                 SyncStatus = Resources.Strings.Achievements_SyncNone;
@@ -150,7 +153,29 @@ public partial class AchievementsViewModel(
                     item.Current,
                     item.Total,
                     item.DisplayName));
-            AchievementBatchSyncResult result = await steamSync.SyncEarnedAsync(AppId, earned, progress);
+            AchievementBatchSyncResult result = await steamSync.SyncEarnedAsync(AppId, catalog, progress);
+            if (result.ConfirmedApiNames.Count > 0)
+            {
+                if (result.AccountId is not { } accountId)
+                    throw new InvalidOperationException("Achievement Bridge did not identify the active Steam account.");
+                SyncStatus = Resources.Strings.Achievements_SyncRestarting;
+                if (!await steam.StopSteamGracefullyAsync())
+                    throw new IOException("Steam did not close normally. Close any running game and try again.");
+                try
+                {
+                    libraryProjector.Project(
+                        AppId,
+                        accountId,
+                        catalog,
+                        result.ConfirmedApiNames.ToHashSet(StringComparer.OrdinalIgnoreCase));
+                }
+                finally
+                {
+                    steam.StartSteam();
+                }
+                await Task.Delay(TimeSpan.FromSeconds(4));
+                SteamService.OpenUrl($"steam://nav/games/details/{AppId}");
+            }
             SyncStatus = string.Format(
                 Resources.Strings.Achievements_SyncSummary,
                 result.Updated,

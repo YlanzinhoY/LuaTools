@@ -584,6 +584,7 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="Achievements_SyncSteam" xml:space="preserve"><value>Sync to Steam</value></data>
   <data name="Achievements_SyncProgress" xml:space="preserve"><value>Syncing {0} of {1}: {2}</value></data>
   <data name="Achievements_SyncSummary" xml:space="preserve"><value>Steam sync complete: {0} updated, {1} already present, {2} failed.</value></data>
+  <data name="Achievements_SyncRestarting" xml:space="preserve"><value>Updating the Steam library and restarting the client…</value></data>
   <data name="Achievements_SyncNone" xml:space="preserve"><value>No unlocked R2 achievements are available to sync.</value></data>
   <data name="Achievements_SyncFailed" xml:space="preserve"><value>Steam sync failed. {0}</value></data>
 </root>
