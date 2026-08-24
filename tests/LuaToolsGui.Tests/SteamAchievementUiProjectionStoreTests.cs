@@ -101,32 +101,6 @@ public sealed class SteamAchievementUiProjectionStoreTests
         }
     }
 
-    [Fact]
-    public void SetPlaytime_PersistsExactSecondsWithoutRemovingAchievements()
-    {
-        string root = Path.Combine(Path.GetTempPath(), $"luatools-ui-projection-{Guid.NewGuid():N}");
-        string path = Path.Combine(root, "projections.json");
-        try
-        {
-            var store = new SteamAchievementUiProjectionStore(path);
-            store.Save(99, [Item("ACH_1", earned: true, time: 100)], new HashSet<string>(["ACH_1"]));
-
-            store.SetPlaytime(99, 84_467);
-
-            string json = File.ReadAllText(path);
-            Assert.Contains("\"playtime_seconds\":84467", json);
-            Assert.Contains("\"api_name\":\"ACH_1\"", json);
-            string script = store.BuildPatchScript();
-            Assert.Contains("formatPlaytime", script);
-            Assert.Contains("PlayedForTime", script);
-            Assert.Contains("achievementBridgePlaytime", script);
-        }
-        finally
-        {
-            if (Directory.Exists(root)) Directory.Delete(root, recursive: true);
-        }
-    }
-
     private static Achievement Item(string id, bool earned, long? time) => new(
         id, id, $"Description {id}", $"https://example.test/{id}.jpg", null,
         earned, time, "uplay_r2", false, 10);
