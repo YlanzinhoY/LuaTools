@@ -6,6 +6,17 @@ namespace LuaToolsGui.Tests;
 
 public class AchievementBridgeServiceTests
 {
+    [Theory]
+    [InlineData("Steam", true)]
+    [InlineData("Steam — Modo Big Picture", true)]
+    [InlineData("Steam — Big Picture Mode", true)]
+    [InlineData("Steam Root Menu", false)]
+    [InlineData(null, false)]
+    public void CefProjection_RecognizesDesktopAndBigPictureLibraryTabs(string? title, bool expected)
+    {
+        Assert.Equal(expected, CefInjectorService.IsSteamLibraryTab(title));
+    }
+
     [Fact]
     public async Task BurstGate_AllowsSingleGameplayEvent()
     {
