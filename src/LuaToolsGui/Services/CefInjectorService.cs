@@ -166,7 +166,7 @@ public class CefInjectorService : IHostedService
                             // librarycache. Apply the confirmed desktop-only projection after React
                             // renders, on every slow tick, so later server refreshes cannot revert it.
                             if (!string.IsNullOrEmpty(achievementPatch)
-                                && tab.Title?.Equals("Steam", StringComparison.OrdinalIgnoreCase) == true
+                                && IsSteamLibraryTab(tab.Title)
                                 && !string.IsNullOrEmpty(tab.WebSocketDebuggerUrl)
                                 && !string.IsNullOrEmpty(tab.Id))
                             {
@@ -197,6 +197,11 @@ public class CefInjectorService : IHostedService
             }
         }
     }
+
+    internal static bool IsSteamLibraryTab(string? title) =>
+        title?.Equals("Steam", StringComparison.OrdinalIgnoreCase) == true ||
+        title?.Contains("Modo Big Picture", StringComparison.OrdinalIgnoreCase) == true ||
+        title?.Contains("Big Picture Mode", StringComparison.OrdinalIgnoreCase) == true;
 
     private async Task ProcessSingleTab(string tabId, string wsUrl, CancellationToken ct)
     {

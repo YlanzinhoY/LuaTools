@@ -48,6 +48,8 @@ public sealed class SteamAchievementUiProjectionStore
         IReadOnlySet<string> confirmedApiNames)
     {
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        long playtimeSeconds;
+        lock (_gate) playtimeSeconds = _projections.GetValueOrDefault(appId)?.PlaytimeSeconds ?? 0;
         Projection projection = new(
             appId,
             catalog.Count,
@@ -61,11 +63,26 @@ public sealed class SteamAchievementUiProjectionStore
                     item.Description,
                     item.IconUrl,
                     item.EarnedTime is > 0 ? item.EarnedTime.Value : now))
-                .ToArray());
+                .ToArray(),
+            playtimeSeconds);
 
         lock (_gate)
         {
             _projections[appId] = projection;
+            WriteAtomic(_path, _projections.Values.OrderBy(item => item.AppId).ToArray());
+        }
+    }
+
+    public void SetPlaytime(long appId, long totalSeconds)
+    {
+        if (appId <= 0) throw new ArgumentOutOfRangeException(nameof(appId));
+        if (totalSeconds < 0) throw new ArgumentOutOfRangeException(nameof(totalSeconds));
+
+        lock (_gate)
+        {
+            Projection projection = _projections.GetValueOrDefault(appId) ??
+                new Projection(appId, 0, 0, [], 0);
+            _projections[appId] = projection with { PlaytimeSeconds = totalSeconds };
             WriteAtomic(_path, _projections.Values.OrderBy(item => item.AppId).ToArray());
         }
     }
@@ -137,6 +154,12 @@ public sealed class SteamAchievementUiProjectionStore
               const formatDate = unixTime => new Intl.DateTimeFormat(undefined, {
                 day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
               }).format(new Date(unixTime * 1000));
+              const formatPlaytime = totalSeconds => {
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor(totalSeconds % 3600 / 60);
+                const seconds = totalSeconds % 60;
+                return `${hours}h ${minutes}min ${seconds}s`;
+              };
               const renderUnlockedRow = (row, achievement, steamAchievement) => {
                 row.dataset.achievementBridgeUnlocked = achievement.api_name;
                 const image = row.querySelector('img');
@@ -205,6 +228,29 @@ public sealed class SteamAchievementUiProjectionStore
                   .map(img => img.closest('[class~="AppDetailsSection"]'))
                   .find(node => node && node.querySelector('[class*="AchievementProgress"]'));
                 const ratio = `${p.achieved_count}/${p.total_count}`;
+                const playBarImageForTime = [...document.images].find(img => {
+                  const status = img.closest('[class~="StatusAndStats"]');
+                  return (img.src || '').includes(`/assets/${p.app_id}/`) &&
+                    status && status.querySelector('[class~="Playtime"]');
+                });
+                const playtimeStatus = playBarImageForTime?.closest('[class~="StatusAndStats"]');
+                if (p.playtime_seconds > 0 && playtimeStatus) {
+                  const formattedPlaytime = formatPlaytime(p.playtime_seconds);
+                  playtimeStatus.querySelectorAll('[class~="Playtime"] [class~="PlayBarDetailLabel"]')
+                    .forEach(node => {
+                      node.textContent = formattedPlaytime;
+                      node.dataset.achievementBridgePlaytime = String(p.playtime_seconds);
+                    });
+                  document.querySelectorAll('[class~="PlayedForTime"]').forEach(node => {
+                    const text = node.textContent || '';
+                    node.textContent = /^\s*Jogado por\b/i.test(text)
+                      ? `Jogado por ${formattedPlaytime}`
+                      : /^\s*Played for\b/i.test(text)
+                        ? `Played for ${formattedPlaytime}`
+                        : formattedPlaytime;
+                    node.dataset.achievementBridgePlaytime = String(p.playtime_seconds);
+                  });
+                }
                 if (section) {
                   section.querySelectorAll('[class*="UnlockedLabel"] span:first-child').forEach(node => {
                     node.textContent = (node.textContent || '').replace(/^\s*\d+\/\d+/, ` ${ratio}`);
@@ -377,7 +423,8 @@ public sealed class SteamAchievementUiProjectionStore
         [property: JsonPropertyName("app_id")] long AppId,
         [property: JsonPropertyName("total_count")] int TotalCount,
         [property: JsonPropertyName("achieved_count")] int AchievedCount,
-        [property: JsonPropertyName("achievements")] ProjectionAchievement[] Achievements);
+        [property: JsonPropertyName("achievements")] ProjectionAchievement[] Achievements,
+        [property: JsonPropertyName("playtime_seconds")] long PlaytimeSeconds = 0);
 
     internal sealed record ProjectionAchievement(
         [property: JsonPropertyName("api_name")] string ApiName,
