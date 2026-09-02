@@ -52,6 +52,28 @@ public class AchievementBridgeServiceTests
     }
 
     [Fact]
+    public void EventParser_ReadsAnUnlockedRuneEnvelope()
+    {
+        var parser = new AchievementBridgeEventParser();
+        Assert.Null(parser.PushLine("[AchievementBridge]"));
+        Assert.Null(parser.PushLine("provider=rune"));
+        Assert.Null(parser.PushLine("appid=3046600"));
+        Assert.Null(parser.PushLine("achievement=ACHIEVEMENT_03"));
+        Assert.Null(parser.PushLine("state=unlocked"));
+        Assert.Null(parser.PushLine("timestamp=1788325557"));
+        Assert.Null(parser.PushLine("recovered=false"));
+
+        AchievementBridgeEvent? achievement = parser.PushLine("");
+
+        Assert.NotNull(achievement);
+        Assert.Equal("rune", achievement.Provider);
+        Assert.Equal(3046600, achievement.AppId);
+        Assert.Equal("ACHIEVEMENT_03", achievement.Achievement);
+        Assert.Equal(1788325557, achievement.Timestamp);
+        Assert.False(achievement.Recovered);
+    }
+
+    [Fact]
     public void FindExecutable_PrefersDevelopmentOverride()
     {
         string tempFile = Path.Combine(Path.GetTempPath(), $"achievement-bridge-{Guid.NewGuid():N}.exe");
