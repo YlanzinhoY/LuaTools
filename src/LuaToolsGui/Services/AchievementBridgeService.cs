@@ -16,6 +16,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     private readonly AchievementPopupService _popups;
     private readonly AchievementBridgeSetupService _setup;
     private readonly AchievementSteamSyncService _steamSync;
+    private readonly AchievementBridgeClient _bridge;
     private readonly AchievementCatalogService _catalogs;
     private readonly SteamAchievementUiProjectionStore _uiProjection;
     private readonly AchievementBurstGate _burstGate = new(TimeSpan.FromSeconds(2), threshold: 3);
@@ -28,6 +29,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         AchievementPopupService popups,
         AchievementBridgeSetupService setup,
         AchievementSteamSyncService steamSync,
+        AchievementBridgeClient bridge,
         AchievementCatalogService catalogs,
         SteamAchievementUiProjectionStore uiProjection)
     {
@@ -35,6 +37,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         _popups = popups;
         _setup = setup;
         _steamSync = steamSync;
+        _bridge = bridge;
         _catalogs = catalogs;
         _uiProjection = uiProjection;
         _settings.AchievementSettingsChanged += OnSettingsChanged;
@@ -153,6 +156,16 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             long timestamp = achievement.Timestamp is > 0
                 ? achievement.Timestamp.Value
                 : DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            if (achievement.Provider.Equals("rune", StringComparison.OrdinalIgnoreCase))
+            {
+                try { await _bridge.SyncVerifiedRuneAchievementAsync(resolved.AppId, resolved.Achievement.ApiName); }
+                catch
+                {
+                    // Protected schemas and transient Steam failures still use
+                    // the durable local sync below. The command itself verifies
+                    // Achieved=1 in RUNE before any server write is attempted.
+                }
+            }
             try
             {
                 LocalSteamSyncResult result = await _steamSync.SyncOneAsync(
