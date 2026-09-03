@@ -20,6 +20,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     private readonly AchievementBridgeClient _bridge;
     private readonly AchievementCatalogService _catalogs;
     private readonly SteamAchievementUiProjectionStore _uiProjection;
+    private readonly AchievementBridgeLogService _activityLog;
     private readonly ILogger<AchievementBridgeService> _logger;
     private readonly AchievementBurstGate _burstGate = new(TimeSpan.FromSeconds(2), threshold: 3);
     private readonly object _gate = new();
@@ -37,6 +38,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         AchievementBridgeClient bridge,
         AchievementCatalogService catalogs,
         SteamAchievementUiProjectionStore uiProjection,
+        AchievementBridgeLogService activityLog,
         ILogger<AchievementBridgeService> logger)
     {
         _settings = settings;
@@ -46,6 +48,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         _bridge = bridge;
         _catalogs = catalogs;
         _uiProjection = uiProjection;
+        _activityLog = activityLog;
         _logger = logger;
         _settings.AchievementSettingsChanged += OnSettingsChanged;
     }
@@ -99,6 +102,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         }
         catch (Exception exception)
         {
+            _activityLog.Error("Setup", $"setup failed: {exception.Message}");
             _logger.LogWarning(exception, "Achievement Bridge setup failed; retrying in the background");
             ScheduleRestartLocked(generation);
             return;
@@ -107,6 +111,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         string? executable = FindExecutable();
         if (executable is null)
         {
+            _activityLog.Error("Setup", "achievement-bridge.exe was not found");
             _logger.LogWarning("Achievement Bridge executable was not found; retrying in the background");
             ScheduleRestartLocked(generation);
             return;
@@ -159,11 +164,13 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
             _processes.Add(process);
+            _activityLog.BridgeStarted(process.Id);
             _logger.LogInformation("Achievement Bridge started with process id {ProcessId}", process.Id);
             return true;
         }
         catch (Exception exception)
         {
+            _activityLog.Error("Bridge", $"could not start: {exception.Message}");
             // Optional integration: a missing dependency or blocked process must never prevent LuaTools startup.
             _logger.LogWarning(exception, "Achievement Bridge could not be started");
             return false;
@@ -193,6 +200,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             _logger.LogWarning(
                 "Achievement Bridge process exited unexpectedly with code {ExitCode}; scheduling restart",
                 exitCode);
+            _activityLog.BridgeStopped(process.Id, $"unexpected exit code {exitCode?.ToString() ?? "unknown"}");
             ScheduleRestartLocked(generation);
         }
     }
@@ -232,6 +240,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
 
     private void HandleBridgeLine(AchievementBridgeEventParser parser, string? line)
     {
+        _activityLog.CaptureBridgeLine(line);
         AchievementBridgeEvent? achievement = parser.PushLine(line);
         if (achievement is not null) _ = HandleBridgeEventAsync(achievement);
     }
@@ -240,10 +249,19 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     {
         try
         {
+            _activityLog.AchievementDetected(achievement);
             string burstScope = $"{achievement.Provider}:{achievement.ProductId ?? achievement.AppId ?? 0}";
-            if (await _burstGate.IsBackfillAsync(burstScope)) return;
+            if (await _burstGate.IsBackfillAsync(burstScope))
+            {
+                _activityLog.Warning("Achievement", $"backfill burst suppressed ({burstScope})");
+                return;
+            }
             ResolvedBridgeAchievement? resolved = await ResolveBridgeEventAsync(achievement);
-            if (resolved is null) return;
+            if (resolved is null)
+            {
+                _activityLog.Warning("Catalog", $"no mapping for provider={achievement.Provider} id={achievement.Achievement}");
+                return;
+            }
 
             bool notificationsEnabled = _settings.AchievementNotifications;
             bool trySteamNotification = notificationsEnabled &&
@@ -259,11 +277,12 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             if (achievement.Provider.Equals("rune", StringComparison.OrdinalIgnoreCase))
             {
                 try { await _bridge.SyncVerifiedRuneAchievementAsync(resolved.AppId, resolved.Achievement.ApiName); }
-                catch
+                catch (Exception exception)
                 {
                     // Protected schemas and transient Steam failures still use
                     // the durable local sync below. The command itself verifies
                     // Achieved=1 in RUNE before any server write is attempted.
+                    _activityLog.Warning("RUNE", $"verified Steam write was unavailable: {exception.Message}");
                 }
             }
             try
@@ -273,6 +292,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
                     resolved.Achievement.ApiName,
                     timestamp,
                     trySteamNotification);
+                _activityLog.SteamSyncCompleted(resolved.AppId, resolved.Achievement.ApiName, result);
                 nativeNotification = result.NativeNotification;
                 cacheConfirmed = result.CacheConfirmed;
                 steamConfirmed = result.SteamConfirmed;
@@ -284,10 +304,11 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
                         resolved.Achievement.ApiName,
                         timestamp);
             }
-            catch
+            catch (Exception exception)
             {
                 // The provider journal remains the source of truth and the popup
                 // still completes. A later recovered event can retry local sync.
+                _activityLog.Error("Steam", $"sync failed appid={resolved.AppId} id={resolved.Achievement.ApiName}: {exception.Message}");
             }
             // A popup is a promise to the player that the achievement now exists
             // in Steam's local state. Never show one for a cache write that Steam
@@ -296,10 +317,11 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
                 try { await _popups.ShowAchievementAsync(resolved.Achievement); }
                 catch { /* best-effort visual feedback after confirmed sync */ }
         }
-        catch
+        catch (Exception exception)
         {
             // Provider readers must survive missing schemas, Steam updates, and
             // incomplete mappings for games that are not supported yet.
+            _activityLog.Error("Bridge", $"event handling failed: {exception.Message}");
         }
     }
 
@@ -362,13 +384,18 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     {
         foreach (var process in _processes)
         {
+            int processId = process.Id;
             try
             {
                 if (!process.HasExited) process.Kill(entireProcessTree: true);
                 process.WaitForExit(2000);
             }
             catch { /* process already gone / access denied */ }
-            finally { process.Dispose(); }
+            finally
+            {
+                process.Dispose();
+                _activityLog.BridgeStopped(processId, "service stopped");
+            }
         }
         _processes.Clear();
     }

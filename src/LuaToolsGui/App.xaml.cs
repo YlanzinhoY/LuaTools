@@ -24,6 +24,7 @@ public partial class App : Application
             {
                 services.AddSingleton<SettingsService>();
                 services.AddSingleton<AchievementPopupService>();
+                services.AddSingleton<AchievementBridgeLogService>();
                 services.AddSingleton<AchievementBridgeSetupService>();
                 services.AddSingleton<AchievementBridgeService>();
                 services.AddSingleton<AchievementBridgeClient>();
@@ -79,6 +80,7 @@ public partial class App : Application
                 services.AddSingleton<ModeViewModel>();
                 services.AddSingleton<FixesViewModel>();
                 services.AddSingleton<PluginViewModel>();
+                services.AddSingleton<AchievementBridgeLogViewModel>();
                 services.AddSingleton<OnboardingViewModel>();
                 services.AddSingleton<MainViewModel>();
                 // Pages resolved by NavigationView via the DI service provider.
@@ -89,6 +91,7 @@ public partial class App : Application
                 services.AddSingleton<ModeView>();
                 services.AddSingleton<FixesView>();
                 services.AddSingleton<PluginView>();
+                services.AddSingleton<AchievementBridgeLogView>();
                 services.AddSingleton<SettingsView>();
                 services.AddSingleton<MainWindow>();
             })

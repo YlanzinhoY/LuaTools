@@ -26,6 +26,7 @@ public static class Strings
     public static string Nav_Builds => Get(nameof(Nav_Builds));
     public static string Nav_Mode => Get(nameof(Nav_Mode));
     public static string Nav_Fixes => Get(nameof(Nav_Fixes));
+    public static string Nav_BridgeLogs => Get(nameof(Nav_BridgeLogs));
     public static string Nav_RestartSteam => Get(nameof(Nav_RestartSteam));
     public static string Nav_Settings => Get(nameof(Nav_Settings));
     public static string Nav_SignInDiscord => Get(nameof(Nav_SignInDiscord));
@@ -33,6 +34,18 @@ public static class Strings
     public static string Nav_Footer_Guest => Get(nameof(Nav_Footer_Guest));
     public static string Nav_Footer_LoggedIn => Get(nameof(Nav_Footer_LoggedIn));
     public static string Main_RestartSteam_Ask => Get(nameof(Main_RestartSteam_Ask));
+
+    // ── Achievement Bridge logs ──
+    public static string BridgeLogs_Title => Get(nameof(BridgeLogs_Title));
+    public static string BridgeLogs_Subtitle => Get(nameof(BridgeLogs_Subtitle));
+    public static string BridgeLogs_Status_Running => Get(nameof(BridgeLogs_Status_Running));
+    public static string BridgeLogs_Status_Stopped => Get(nameof(BridgeLogs_Status_Stopped));
+    public static string BridgeLogs_Process => Get(nameof(BridgeLogs_Process));
+    public static string BridgeLogs_Process_None => Get(nameof(BridgeLogs_Process_None));
+    public static string BridgeLogs_ActiveGames => Get(nameof(BridgeLogs_ActiveGames));
+    public static string BridgeLogs_OpenFolder => Get(nameof(BridgeLogs_OpenFolder));
+    public static string BridgeLogs_Clear => Get(nameof(BridgeLogs_Clear));
+    public static string BridgeLogs_Empty => Get(nameof(BridgeLogs_Empty));
 
     // ── Settings ──
     public static string Settings_Title => Get(nameof(Settings_Title));

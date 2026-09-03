@@ -650,4 +650,15 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="Achievements_SyncSummary" xml:space="preserve"><value>Steam sync complete: {0} updated, {1} already present, {2} failed.</value></data>
   <data name="Achievements_SyncNone" xml:space="preserve"><value>No unlocked R2 achievements are available to sync.</value></data>
   <data name="Achievements_SyncFailed" xml:space="preserve"><value>Steam sync failed. {0}</value></data>
+  <data name="Nav_BridgeLogs" xml:space="preserve"><value>Bridge logs</value></data>
+  <data name="BridgeLogs_Title" xml:space="preserve"><value>Achievement Bridge logs</value></data>
+  <data name="BridgeLogs_Subtitle" xml:space="preserve"><value>See active games, detected providers, achievement events, Steam synchronization and errors in real time.</value></data>
+  <data name="BridgeLogs_Status_Running" xml:space="preserve"><value>Bridge running</value></data>
+  <data name="BridgeLogs_Status_Stopped" xml:space="preserve"><value>Bridge stopped</value></data>
+  <data name="BridgeLogs_Process" xml:space="preserve"><value>Process {0}</value></data>
+  <data name="BridgeLogs_Process_None" xml:space="preserve"><value>No active process</value></data>
+  <data name="BridgeLogs_ActiveGames" xml:space="preserve"><value>{0} active game(s)</value></data>
+  <data name="BridgeLogs_OpenFolder" xml:space="preserve"><value>Open log folder</value></data>
+  <data name="BridgeLogs_Clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="BridgeLogs_Empty" xml:space="preserve"><value>No Bridge activity recorded in this session.</value></data>
 </root>

@@ -614,4 +614,15 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="Achievements_SyncSummary" xml:space="preserve"><value>Sincronização concluída: {0} atualizadas, {1} já presentes, {2} falharam.</value></data>
   <data name="Achievements_SyncNone" xml:space="preserve"><value>Não há conquistas R2 desbloqueadas para sincronizar.</value></data>
   <data name="Achievements_SyncFailed" xml:space="preserve"><value>Falha ao sincronizar com a Steam. {0}</value></data>
+  <data name="Nav_BridgeLogs" xml:space="preserve"><value>Logs do Bridge</value></data>
+  <data name="BridgeLogs_Title" xml:space="preserve"><value>Logs do Achievement Bridge</value></data>
+  <data name="BridgeLogs_Subtitle" xml:space="preserve"><value>Veja jogos ativos, providers detectados, conquistas registradas, sincronização com a Steam e erros em tempo real.</value></data>
+  <data name="BridgeLogs_Status_Running" xml:space="preserve"><value>Bridge em execução</value></data>
+  <data name="BridgeLogs_Status_Stopped" xml:space="preserve"><value>Bridge parado</value></data>
+  <data name="BridgeLogs_Process" xml:space="preserve"><value>Processo {0}</value></data>
+  <data name="BridgeLogs_Process_None" xml:space="preserve"><value>Nenhum processo ativo</value></data>
+  <data name="BridgeLogs_ActiveGames" xml:space="preserve"><value>{0} jogo(s) ativo(s)</value></data>
+  <data name="BridgeLogs_OpenFolder" xml:space="preserve"><value>Abrir pasta dos logs</value></data>
+  <data name="BridgeLogs_Clear" xml:space="preserve"><value>Limpar</value></data>
+  <data name="BridgeLogs_Empty" xml:space="preserve"><value>Nenhuma atividade do Bridge foi registrada nesta sessão.</value></data>
 </root>

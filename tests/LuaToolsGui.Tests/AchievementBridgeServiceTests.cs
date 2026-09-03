@@ -7,6 +7,54 @@ namespace LuaToolsGui.Tests;
 public class AchievementBridgeServiceTests
 {
     [Fact]
+    public void ActivityLog_TracksBridgeAndActiveGameStateInUtf8()
+    {
+        string path = Path.Combine(Path.GetTempPath(), $"achievement-bridge-log-{Guid.NewGuid():N}.log");
+        try
+        {
+            var logs = new AchievementBridgeLogService(path);
+            logs.BridgeStarted(321);
+            logs.CaptureBridgeLine("[GameSession] pid=42 appid=3046600 name=Onimusha 2: Samurai's Destiny state=watching");
+            logs.CaptureBridgeLine("  provider=rune confidence=100 active=true");
+            logs.CaptureBridgeLine("[AchievementBridge] active_game_sessions=1");
+            logs.Warning("Teste", "Conquista não sincronizada");
+
+            Assert.True(logs.IsRunning);
+            Assert.Equal(321, logs.ProcessId);
+            Assert.Equal(1, logs.ActiveGameCount);
+            Assert.Contains(logs.Snapshot(), entry =>
+                entry.Category == "Game" && entry.Message.Contains("Onimusha 2", StringComparison.Ordinal));
+            Assert.Contains(logs.Snapshot(), entry =>
+                entry.Category == "Provider" && entry.Message.Contains("provider=rune", StringComparison.Ordinal));
+            Assert.Contains("Conquista não sincronizada", File.ReadAllText(path, System.Text.Encoding.UTF8));
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void ActivityLog_DoesNotRenderStructuredEventEnvelopeAsNoise()
+    {
+        string path = Path.Combine(Path.GetTempPath(), $"achievement-bridge-log-{Guid.NewGuid():N}.log");
+        try
+        {
+            var logs = new AchievementBridgeLogService(path);
+            logs.CaptureBridgeLine("[AchievementBridge]");
+            logs.CaptureBridgeLine("provider=rune");
+            logs.CaptureBridgeLine("appid=3046600");
+            logs.CaptureBridgeLine("achievement=ACHIEVEMENT_03");
+
+            Assert.Empty(logs.Snapshot());
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
     public async Task BurstGate_AllowsSingleGameplayEvent()
     {
         var gate = new AchievementBurstGate(TimeSpan.FromMilliseconds(20), threshold: 3);
