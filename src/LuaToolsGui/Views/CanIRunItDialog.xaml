@@ -267,7 +267,7 @@
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding Status}" Value="exceeds"><Setter Property="Foreground" Value="#34d399" /></DataTrigger>
                                                         <DataTrigger Binding="{Binding Status}" Value="meets"><Setter Property="Foreground" Value="#a3e635" /></DataTrigger>
-                                                        <DataTrigger Binding="{Binding Status}" Value="below"><Setter Property="Foreground" Value="#fb923c" /></DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="below"><Setter Property="Foreground" Value="#f87171" /></DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </TextBlock.Style>

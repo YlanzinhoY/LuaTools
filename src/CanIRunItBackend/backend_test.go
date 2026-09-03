@@ -48,6 +48,59 @@ func TestParseRequirementsCleansSteamHTML(t *testing.T) {
 	}
 }
 
+func TestMinimumStorageGBParsesPublishedUnits(t *testing.T) {
+	tests := []struct {
+		requirements string
+		want         float64
+	}{
+		{"Storage: 75 GB available space", 75},
+		{"Hard Drive: 1.5 TB available space", 1536},
+		{"Disk Space: 512 MB", 0.5},
+		{"Storage: 2,5 GB", 2.5},
+	}
+	for _, test := range tests {
+		got, ok := minimumStorageGB(test.requirements)
+		if !ok || got != test.want {
+			t.Errorf("minimumStorageGB(%q) = %v, %v; want %v, true", test.requirements, got, ok, test.want)
+		}
+	}
+}
+
+func TestDeterministicStorageCheckMarksInsufficientSpaceBelow(t *testing.T) {
+	result, err := parseModelAnalysis(validAnalysisJSON("minimum", "medium"))
+	if err != nil {
+		t.Fatalf("parse fixture: %+v", err)
+	}
+	result.Components[4].Status = "unknown"
+
+	applyDeterministicChecks(&result,
+		hardwareInfo{SystemDriveFreeGB: 72.9},
+		gameRequirements{Minimum: "Storage: 75 GB available space"})
+
+	if result.Verdict != "poor" {
+		t.Fatalf("below-minimum storage must make the verdict poor, got %q", result.Verdict)
+	}
+	if result.Components[4].Component != "Storage" || result.Components[4].Status != "below" {
+		t.Fatalf("below-minimum storage must be marked below: %+v", result.Components[4])
+	}
+}
+
+func TestDeterministicStorageCheckDoesNotFailAtMinimum(t *testing.T) {
+	result, err := parseModelAnalysis(validAnalysisJSON("minimum", "medium"))
+	if err != nil {
+		t.Fatalf("parse fixture: %+v", err)
+	}
+	result.Components[4].Status = "unknown"
+
+	applyDeterministicChecks(&result,
+		hardwareInfo{SystemDriveFreeGB: 75},
+		gameRequirements{Minimum: "Storage: 75 GB available space"})
+
+	if result.Verdict != "minimum" || result.Components[4].Status != "unknown" {
+		t.Fatalf("space at the minimum must not be forced below: %+v", result)
+	}
+}
+
 func TestParseModelAnalysisNormalizesUnknownValues(t *testing.T) {
 	content := strings.Replace(validAnalysisJSON("minimum", "certain"), `"status":"meets"`, `"status":"maybe"`, 1)
 	result, err := parseModelAnalysis("```json\n" + content + "\n```")

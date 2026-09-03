@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Text.Json;
 using LuaToolsGui.Models;
 
@@ -24,14 +25,7 @@ public sealed class CanIRunItService
         if (executable is null)
             throw new CanIRunItException("backend_missing", "The Can I Run It backend is not installed.");
 
-        var start = new ProcessStartInfo(executable)
-        {
-            UseShellExecute = false,
-            CreateNoWindow = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            WorkingDirectory = Path.GetDirectoryName(executable) ?? AppContext.BaseDirectory,
-        };
+        var start = CreateStartInfo(executable);
         start.ArgumentList.Add("--appid");
         start.ArgumentList.Add(appId.ToString(CultureInfo.InvariantCulture));
         start.ArgumentList.Add("--game-name");
@@ -82,6 +76,17 @@ public sealed class CanIRunItService
             throw new CanIRunItException(output.Error.Code, output.Error.Message);
         throw new CanIRunItException("backend_failed", "The Can I Run It backend did not return an analysis.");
     }
+
+    internal static ProcessStartInfo CreateStartInfo(string executable) => new(executable)
+    {
+        UseShellExecute = false,
+        CreateNoWindow = true,
+        RedirectStandardOutput = true,
+        RedirectStandardError = true,
+        StandardOutputEncoding = Encoding.UTF8,
+        StandardErrorEncoding = Encoding.UTF8,
+        WorkingDirectory = Path.GetDirectoryName(executable) ?? AppContext.BaseDirectory,
+    };
 
     internal static string? FindExecutable()
     {
