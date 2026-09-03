@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using LuaToolsGui.Models;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace LuaToolsGui.Services;
 
@@ -19,10 +20,14 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     private readonly AchievementBridgeClient _bridge;
     private readonly AchievementCatalogService _catalogs;
     private readonly SteamAchievementUiProjectionStore _uiProjection;
+    private readonly ILogger<AchievementBridgeService> _logger;
     private readonly AchievementBurstGate _burstGate = new(TimeSpan.FromSeconds(2), threshold: 3);
     private readonly object _gate = new();
     private readonly List<Process> _processes = [];
     private bool _started;
+    private int _processGeneration;
+    private int _restartAttempt;
+    private bool _restartPending;
 
     public AchievementBridgeService(
         SettingsService settings,
@@ -31,7 +36,8 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         AchievementSteamSyncService steamSync,
         AchievementBridgeClient bridge,
         AchievementCatalogService catalogs,
-        SteamAchievementUiProjectionStore uiProjection)
+        SteamAchievementUiProjectionStore uiProjection,
+        ILogger<AchievementBridgeService> logger)
     {
         _settings = settings;
         _popups = popups;
@@ -40,6 +46,7 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         _bridge = bridge;
         _catalogs = catalogs;
         _uiProjection = uiProjection;
+        _logger = logger;
         _settings.AchievementSettingsChanged += OnSettingsChanged;
     }
 
@@ -58,6 +65,8 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
         lock (_gate)
         {
             _started = false;
+            _processGeneration++;
+            _restartPending = false;
             StopProcessesLocked();
         }
         return Task.CompletedTask;
@@ -73,18 +82,43 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
 
     private void ApplySettingsLocked()
     {
+        int generation = ++_processGeneration;
+        _restartAttempt = 0;
+        _restartPending = false;
         StopProcessesLocked();
         if (!_settings.AchievementsEnabled) return;
-        _setup.EnsureInstalled();
+
+        StartBridgeLocked(generation);
+    }
+
+    private void StartBridgeLocked(int generation)
+    {
+        try
+        {
+            _setup.EnsureInstalled();
+        }
+        catch (Exception exception)
+        {
+            _logger.LogWarning(exception, "Achievement Bridge setup failed; retrying in the background");
+            ScheduleRestartLocked(generation);
+            return;
+        }
+
         string? executable = FindExecutable();
-        if (executable is null) return;
+        if (executable is null)
+        {
+            _logger.LogWarning("Achievement Bridge executable was not found; retrying in the background");
+            ScheduleRestartLocked(generation);
+            return;
+        }
 
         // The Zig host owns isolated concurrent provider workers while LuaTools
         // keeps a single child process and one ordered event stream.
-        StartReader(executable, "watch-all");
+        if (!StartReader(executable, "watch-all", generation))
+            ScheduleRestartLocked(generation);
     }
 
-    private void StartReader(string executable, string command)
+    private bool StartReader(string executable, string command, int generation)
     {
         // LuaTools owns the image-rich R2 notification. Other providers keep the bridge's legacy
         // notification until their events can be enriched with artwork as well.
@@ -118,16 +152,82 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
             if (!process.Start())
             {
                 process.Dispose();
-                return;
+                return false;
             }
+            DateTimeOffset startedAt = DateTimeOffset.UtcNow;
+            process.Exited += (_, _) => HandleUnexpectedExit(process, executable, command, generation, startedAt);
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
             _processes.Add(process);
+            _logger.LogInformation("Achievement Bridge started with process id {ProcessId}", process.Id);
+            return true;
         }
-        catch
+        catch (Exception exception)
         {
             // Optional integration: a missing dependency or blocked process must never prevent LuaTools startup.
+            _logger.LogWarning(exception, "Achievement Bridge could not be started");
+            return false;
         }
+    }
+
+    private void HandleUnexpectedExit(
+        Process process,
+        string executable,
+        string command,
+        int generation,
+        DateTimeOffset startedAt)
+    {
+        lock (_gate)
+        {
+            _processes.Remove(process);
+            int? exitCode = null;
+            try { exitCode = process.ExitCode; }
+            catch { /* process may already have been disposed during shutdown */ }
+            finally { process.Dispose(); }
+
+            if (!ShouldRestartBridge(_started, _settings.AchievementsEnabled, generation, _processGeneration))
+                return;
+
+            if (DateTimeOffset.UtcNow - startedAt >= TimeSpan.FromSeconds(30))
+                _restartAttempt = 0;
+            _logger.LogWarning(
+                "Achievement Bridge process exited unexpectedly with code {ExitCode}; scheduling restart",
+                exitCode);
+            ScheduleRestartLocked(generation);
+        }
+    }
+
+    private void ScheduleRestartLocked(int generation)
+    {
+        if (_restartPending ||
+            !ShouldRestartBridge(_started, _settings.AchievementsEnabled, generation, _processGeneration))
+            return;
+
+        _restartPending = true;
+        TimeSpan delay = RestartDelay(++_restartAttempt);
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(delay);
+            lock (_gate)
+            {
+                _restartPending = false;
+                if (ShouldRestartBridge(_started, _settings.AchievementsEnabled, generation, _processGeneration))
+                    StartBridgeLocked(generation);
+            }
+        });
+    }
+
+    internal static bool ShouldRestartBridge(
+        bool serviceStarted,
+        bool achievementsEnabled,
+        int processGeneration,
+        int currentGeneration) =>
+        serviceStarted && achievementsEnabled && processGeneration == currentGeneration;
+
+    internal static TimeSpan RestartDelay(int attempt)
+    {
+        int exponent = Math.Clamp(attempt - 1, 0, 5);
+        return TimeSpan.FromSeconds(Math.Min(30, 1 << exponent));
     }
 
     private void HandleBridgeLine(AchievementBridgeEventParser parser, string? line)
@@ -276,7 +376,13 @@ public sealed class AchievementBridgeService : IHostedService, IDisposable
     public void Dispose()
     {
         _settings.AchievementSettingsChanged -= OnSettingsChanged;
-        lock (_gate) StopProcessesLocked();
+        lock (_gate)
+        {
+            _started = false;
+            _processGeneration++;
+            _restartPending = false;
+            StopProcessesLocked();
+        }
     }
 }
 

@@ -91,6 +91,33 @@ public class AchievementBridgeServiceTests
         }
     }
 
+    [Theory]
+    [InlineData(true, true, 3, 3, true)]
+    [InlineData(false, true, 3, 3, false)]
+    [InlineData(true, false, 3, 3, false)]
+    [InlineData(true, true, 2, 3, false)]
+    public void Watchdog_OnlyRestartsTheCurrentEnabledGeneration(
+        bool serviceStarted,
+        bool achievementsEnabled,
+        int processGeneration,
+        int currentGeneration,
+        bool expected)
+    {
+        Assert.Equal(expected, AchievementBridgeService.ShouldRestartBridge(
+            serviceStarted, achievementsEnabled, processGeneration, currentGeneration));
+    }
+
+    [Theory]
+    [InlineData(1, 1)]
+    [InlineData(2, 2)]
+    [InlineData(3, 4)]
+    [InlineData(6, 30)]
+    [InlineData(20, 30)]
+    public void Watchdog_UsesBoundedExponentialBackoff(int attempt, int expectedSeconds)
+    {
+        Assert.Equal(TimeSpan.FromSeconds(expectedSeconds), AchievementBridgeService.RestartDelay(attempt));
+    }
+
     [Fact]
     public void CloudHostConfig_EnablesStandaloneProxyAndPreservesOtherTables()
     {
