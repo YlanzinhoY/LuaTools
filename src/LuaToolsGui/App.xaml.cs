@@ -49,6 +49,8 @@ public partial class App : Application
                 services.AddSingleton<AnalyticsService>();
                 services.AddSingleton<GithubProxy>();
                 services.AddSingleton<HardwareAppIdService>();
+                services.AddSingleton<OpenRouterKeyStore>();
+                services.AddSingleton<CanIRunItService>();
                 services.AddSingleton<SteamlessService>();
                 services.AddSingleton<CloudRedirectService>();
                 services.AddSingleton<UnlockerService>();
@@ -72,6 +74,7 @@ public partial class App : Application
                 services.AddSingleton<BuildsViewModel>();
                 services.AddTransient<LaunchOptionsViewModel>(); // one per dialog
                 services.AddTransient<AchievementsViewModel>(); // one per dialog
+                services.AddTransient<CanIRunItViewModel>(); // one independent analysis per dialog
                 services.AddSingleton<HomeViewModel>();
                 services.AddSingleton<ModeViewModel>();
                 services.AddSingleton<FixesViewModel>();
@@ -351,6 +354,15 @@ public partial class App : Application
         {
             var dialog = new AchievementsDialog(
                 _host.Services.GetRequiredService<AchievementsViewModel>(), appId, name)
+            { Owner = window };
+            dialog.ShowDialog();
+        });
+
+        // Manage flyout "Can I Run It?" → local hardware scan + Steam requirements + OpenRouter analysis.
+        manage.OpenCanIRunIt = (appId, name) => Dispatcher.Invoke(() =>
+        {
+            var dialog = new CanIRunItDialog(
+                _host.Services.GetRequiredService<CanIRunItViewModel>(), appId, name)
             { Owner = window };
             dialog.ShowDialog();
         });

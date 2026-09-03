@@ -12,12 +12,16 @@ namespace LuaToolsGui.ViewModels;
 /// "follow the system display language".</summary>
 public record LanguageOption(string Display, string? Tag);
 
+/// <summary>A supported free OpenRouter model for the Can I Run It analysis.</summary>
+public record OpenRouterModelOption(string Display, string Id);
+
 public partial class SettingsViewModel : ObservableObject
 {
     private readonly SettingsService _settings;
     private readonly AuthService _auth;
     private readonly SteamService _steam;
     private readonly HubcapService _hubcap;
+    private readonly OpenRouterKeyStore _openRouterKeys;
 
     [ObservableProperty] private string? _displayName;
     [ObservableProperty] private string? _email;
@@ -225,6 +229,24 @@ public partial class SettingsViewModel : ObservableObject
     /// <summary>Placeholder text shown until real stats load.</summary>
     public string HubcapStatsText => HubcapStatsDisplay ?? Resources.Strings.Common_Loading;
 
+    // ── OpenRouter API key ──────────────────────────────────────────
+    [ObservableProperty] private bool _openRouterKeyConfigured;
+    [ObservableProperty] private string? _openRouterKeyStatus;
+    [ObservableProperty] private string _openRouterKeyStatusColor = "#22c55e";
+
+    public ObservableCollection<OpenRouterModelOption> OpenRouterModelOptions { get; } =
+    [
+        new("Ling 3.0 Flash Fin (Free)", SettingsService.DefaultOpenRouterModel),
+        new("DeepSeek V4 Flash (Free)", SettingsService.DeepSeekOpenRouterModel),
+    ];
+
+    [ObservableProperty] private OpenRouterModelOption _selectedOpenRouterModel = null!;
+
+    partial void OnSelectedOpenRouterModelChanged(OpenRouterModelOption value)
+    {
+        if (value is not null) _settings.OpenRouterModel = value.Id;
+    }
+
     /// <summary>Set by App so the guest "Sign in" button can run the Discord flow.</summary>
     public Func<Task>? RequestSignIn { get; set; }
 
@@ -235,12 +257,14 @@ public partial class SettingsViewModel : ObservableObject
     /// App provides the toast + restart action.</summary>
     public Action? RequestRestartPrompt { get; set; }
 
-    public SettingsViewModel(SettingsService settings, AuthService auth, SteamService steam, HubcapService hubcap)
+    public SettingsViewModel(SettingsService settings, AuthService auth, SteamService steam, HubcapService hubcap,
+        OpenRouterKeyStore openRouterKeys)
     {
         _settings = settings;
         _auth = auth;
         _steam = steam;
         _hubcap = hubcap;
+        _openRouterKeys = openRouterKeys;
         _auth.AuthStateChanged += RefreshAccount;
         RefreshAccount();
         RefreshSteam();
@@ -254,6 +278,10 @@ public partial class SettingsViewModel : ObservableObject
         _startWithWindows = settings.StartWithWindows; // default OFF. Init without triggering the registry write
         _minimizeToTray = settings.MinimizeToTray;
         _hubcapIsKeyConfigured = !string.IsNullOrEmpty(settings.HubcapApiKey);
+        _openRouterKeyConfigured = openRouterKeys.Load() is not null;
+        _selectedOpenRouterModel = OpenRouterModelOptions.FirstOrDefault(option =>
+            option.Id.Equals(settings.OpenRouterModel, StringComparison.OrdinalIgnoreCase))
+            ?? OpenRouterModelOptions[0];
 
         // Select the saved language (or "System default") without firing the restart prompt.
         _suppressLanguagePrompt = true;
@@ -370,6 +398,10 @@ public partial class SettingsViewModel : ObservableObject
         Process.Start(new ProcessStartInfo(AppConfig.HubcapBaseUrl) { UseShellExecute = true });
 
     [RelayCommand]
+    private void OpenOpenRouterKeys() =>
+        Process.Start(new ProcessStartInfo("https://openrouter.ai/settings/keys") { UseShellExecute = true });
+
+    [RelayCommand]
     private void SignOut() => _auth.SignOut();
 
     // ── Hubcap key management ───────────────────────────────────────
@@ -467,5 +499,53 @@ public partial class SettingsViewModel : ObservableObject
             return string.Format(Resources.Strings.Settings_HubcapKeyOkExpiry, stats.DailyUsage, stats.DailyLimit,
                 expiry.ToString("yyyy-MM-dd"));
         return usage;
+    }
+
+    /// <summary>Encrypt and save a replacement OpenRouter key. The clear-text value is never echoed.</summary>
+    public bool SaveOpenRouterKey(string key)
+    {
+        key = key.Trim();
+        if (key.Length < 16)
+        {
+            ShowOpenRouterStatus(Resources.Strings.Settings_OpenRouterKeyBad, isError: true);
+            return false;
+        }
+        if (_openRouterKeys.IsManagedByEnvironment)
+        {
+            ShowOpenRouterStatus(Resources.Strings.Settings_OpenRouterEnvironment, isError: false);
+            OpenRouterKeyConfigured = true;
+            return false;
+        }
+
+        try
+        {
+            _openRouterKeys.Save(key);
+            OpenRouterKeyConfigured = true;
+            ShowOpenRouterStatus(Resources.Strings.Settings_OpenRouterSaved, isError: false);
+            return true;
+        }
+        catch
+        {
+            ShowOpenRouterStatus(Resources.Strings.Settings_OpenRouterSaveFailed, isError: true);
+            return false;
+        }
+    }
+
+    [RelayCommand]
+    private void ClearOpenRouterKey()
+    {
+        _openRouterKeys.Clear();
+        OpenRouterKeyConfigured = _openRouterKeys.Load() is not null;
+        ShowOpenRouterStatus(
+            OpenRouterKeyConfigured
+                ? Resources.Strings.Settings_OpenRouterEnvironment
+                : Resources.Strings.Settings_OpenRouterCleared,
+            isError: false);
+    }
+
+    private void ShowOpenRouterStatus(string text, bool isError)
+    {
+        OpenRouterKeyStatus = text;
+        OpenRouterKeyStatusColor = isError ? "#f87171" : "#22c55e";
     }
 }

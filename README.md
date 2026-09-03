@@ -24,6 +24,22 @@ The Achievement Bridge settings include an opt-in **Steam notification (Experime
 
 The protected-achievement fallback was manually reproduced twice with Assassin's Creed IV Black Flag (`ACObsidian_Ach_10`, `permission=2`): Steam rejected `SetAchievement`, returned `progress_queued`, and visibly displayed the localized native progress toast while the Bridge completed its local sync.
 
+## Can I Run It?
+
+The **Can I Run It?** action on a game's Manage panel uses a small Go sidecar. It detects the local
+Windows CPU, GPU, RAM, OS and free system-drive space, loads the publisher's requirements from the
+Steam Store by App ID, and asks the selected free OpenRouter model for a structured compatibility
+estimate. `inclusionai/ling-3.0-flash-fin:free` is the default, with
+`deepseek/deepseek-v4-flash:free` available as an alternative in Settings.
+
+The OpenRouter key is entered when the action is first used. If the user chooses to remember it, it is
+encrypted with Windows DPAPI for that Windows account. It is passed to the sidecar through its process
+environment, never as a command-line argument. Developers and managed installs can provide
+`OPENROUTER_API_KEY` instead; `OPENROUTER_MODEL` and `OPENROUTER_BASE_URL` are optional overrides.
+
+Go 1.24 or newer is required when building the app from source. Run the backend tests independently
+with `go -C src/CanIRunItBackend test ./...`.
+
 ## Statistics
 <div>
   <img src="https://img.shields.io/github/downloads/madoiscool/luatools/LuaTools-win-Setup.exe?displayAssetName=true&style=for-the-badge" />

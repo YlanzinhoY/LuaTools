@@ -1,3 +1,4 @@
+using System.Windows;
 using System.Windows.Controls;
 using LuaToolsGui.ViewModels;
 
@@ -13,5 +14,11 @@ public partial class SettingsView : UserControl
         DataContext = viewModel;
         _vm = viewModel;
         Loaded += (_, _) => _vm.OnViewLoaded();
+    }
+
+    private void SaveOpenRouterKey_Click(object sender, RoutedEventArgs e)
+    {
+        string key = OpenRouterKeyBox.Password;
+        if (_vm.SaveOpenRouterKey(key)) OpenRouterKeyBox.Clear();
     }
 }

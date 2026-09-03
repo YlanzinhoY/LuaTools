@@ -749,6 +749,13 @@
                         <ui:Button
                             Margin="0,8,0,0"
                             HorizontalAlignment="Stretch"
+                            Command="{Binding DataContext.ShowCanIRunItCommand, ElementName=Root}"
+                            CommandParameter="{Binding}"
+                            Content="{x:Static res:Strings.Manage_Action_CanIRunIt}"
+                            Icon="{ui:SymbolIcon Desktop24}" />
+                        <ui:Button
+                            Margin="0,8,0,0"
+                            HorizontalAlignment="Stretch"
                             Command="{Binding DataContext.RemoveDrmCommand, ElementName=Root}"
                             CommandParameter="{Binding}"
                             Content="{x:Static res:Strings.Manage_Action_RemoveDrm}"

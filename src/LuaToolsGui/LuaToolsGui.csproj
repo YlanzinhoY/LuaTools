@@ -17,6 +17,9 @@
     <BuildAchievementBridge Condition="'$(BuildAchievementBridge)' == ''">true</BuildAchievementBridge>
     <AchievementBridgeSource>$(MSBuildProjectDirectory)\..\AchievementBridge</AchievementBridgeSource>
     <AchievementBridgeBuildScript>$(MSBuildProjectDirectory)\..\..\scripts\build-achievement-bridge.ps1</AchievementBridgeBuildScript>
+    <BuildCanIRunIt Condition="'$(BuildCanIRunIt)' == ''">true</BuildCanIRunIt>
+    <CanIRunItSource>$(MSBuildProjectDirectory)\..\CanIRunItBackend</CanIRunItSource>
+    <CanIRunItBuildScript>$(MSBuildProjectDirectory)\..\..\scripts\build-can-i-run-it.ps1</CanIRunItBuildScript>
   </PropertyGroup>
 
   <!-- UseWindowsForms (for the tray NotifyIcon) injects WinForms into the implicit global usings, which
@@ -60,6 +63,20 @@
           AfterTargets="Publish"
           Condition="'$(BuildAchievementBridge)' == 'true' and '$(OS)' == 'Windows_NT' and '$(PublishDir)' != '' and Exists('$(AchievementBridgeSource)\build.zig')">
     <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(AchievementBridgeBuildScript)&quot; -ProjectDir &quot;$(AchievementBridgeSource)&quot; -OutputDir &quot;$(PublishDir)AchievementBridge&quot; -Configuration &quot;$(Configuration)&quot;" />
+  </Target>
+
+  <!-- The hardware/AI analysis is an isolated Go sidecar. The OpenRouter key is supplied only at
+       runtime and is never compiled into either binary. -->
+  <Target Name="CompileCanIRunIt"
+          AfterTargets="Build"
+          Condition="'$(BuildCanIRunIt)' == 'true' and '$(OS)' == 'Windows_NT' and Exists('$(CanIRunItSource)\go.mod')">
+    <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(CanIRunItBuildScript)&quot; -ProjectDir &quot;$(CanIRunItSource)&quot; -OutputDir &quot;$(TargetDir)CanIRunIt&quot;" />
+  </Target>
+
+  <Target Name="PublishCanIRunIt"
+          AfterTargets="Publish"
+          Condition="'$(BuildCanIRunIt)' == 'true' and '$(OS)' == 'Windows_NT' and '$(PublishDir)' != '' and Exists('$(CanIRunItSource)\go.mod')">
+    <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(CanIRunItBuildScript)&quot; -ProjectDir &quot;$(CanIRunItSource)&quot; -OutputDir &quot;$(PublishDir)CanIRunIt&quot;" />
   </Target>
 
   <!-- Built-in metadata for game-specific local achievement viewers. It enriches the minimal R2

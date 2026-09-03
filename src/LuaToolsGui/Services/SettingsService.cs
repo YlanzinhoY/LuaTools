@@ -59,6 +59,10 @@ public class AppSettings
     public bool? AchievementAutoInstallProviders { get; set; }
     public bool? AchievementNotifications { get; set; }
     public bool? ExperimentalSteamAchievementNotifications { get; set; }
+
+    // OpenRouter model used by Can I Run It. The API key is deliberately not stored here; see
+    // OpenRouterKeyStore, which protects it with Windows DPAPI.
+    public string? OpenRouterModel { get; set; }
 }
 
 public class SettingsService
@@ -185,6 +189,23 @@ public class SettingsService
         set { _settings.ExperimentalSteamAchievementNotifications = value; Save(); AchievementSettingsChanged?.Invoke(); }
     }
 
+    public const string DefaultOpenRouterModel = "inclusionai/ling-3.0-flash-fin:free";
+    public const string DeepSeekOpenRouterModel = "deepseek/deepseek-v4-flash:free";
+
+    public string OpenRouterModel
+    {
+        get => string.IsNullOrWhiteSpace(_settings.OpenRouterModel)
+            ? DefaultOpenRouterModel
+            : _settings.OpenRouterModel;
+        set
+        {
+            _settings.OpenRouterModel = string.IsNullOrWhiteSpace(value) || value == DefaultOpenRouterModel
+                ? null
+                : value;
+            Save();
+        }
+    }
+
     private static readonly string TmpPath = FilePath + ".tmp";
     private static readonly string BakPath = FilePath + ".bak";
 
@@ -247,7 +268,8 @@ public class SettingsService
             && _settings.AchievementsEnabled is null
             && _settings.AchievementAutoInstallProviders is null
             && _settings.AchievementNotifications is null
-            && _settings.ExperimentalSteamAchievementNotifications is null;
+            && _settings.ExperimentalSteamAchievementNotifications is null
+            && _settings.OpenRouterModel is null;
         if (empty)
         {
             foreach (var p in new[] { FilePath, BakPath, TmpPath })

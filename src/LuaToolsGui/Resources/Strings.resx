@@ -108,6 +108,20 @@
   <data name="Settings_HubcapKeyError" xml:space="preserve"><value>Couldn't verify the key. It may be invalid, expired, or Hubcap is unreachable.</value></data>
   <data name="Settings_HubcapActive" xml:space="preserve"><value>Active</value></data>
   <data name="Settings_HubcapRefresh" xml:space="preserve"><value>Refresh</value></data>
+  <data name="Settings_Section_OpenRouter" xml:space="preserve"><value>AI COMPATIBILITY ANALYSIS</value></data>
+  <data name="Settings_OpenRouterKey" xml:space="preserve"><value>OpenRouter API key</value></data>
+  <data name="Settings_OpenRouterKey_Hint" xml:space="preserve"><value>Used by Can I Run It with your selected free OpenRouter model. The key is encrypted for your Windows account and is not stored in settings.json.</value></data>
+  <data name="Settings_OpenRouterModel" xml:space="preserve"><value>AI model</value></data>
+  <data name="Settings_OpenRouterKeyPlaceholder" xml:space="preserve"><value>Paste your OpenRouter key (sk-or-v1-…)</value></data>
+  <data name="Settings_OpenRouterConfigured" xml:space="preserve"><value>Configured</value></data>
+  <data name="Settings_OpenRouterSave" xml:space="preserve"><value>Save key</value></data>
+  <data name="Settings_OpenRouterClear" xml:space="preserve"><value>Remove</value></data>
+  <data name="Settings_OpenRouterGetKey" xml:space="preserve"><value>Get a key at </value></data>
+  <data name="Settings_OpenRouterKeyBad" xml:space="preserve"><value>Paste a valid OpenRouter API key.</value></data>
+  <data name="Settings_OpenRouterSaved" xml:space="preserve"><value>OpenRouter key saved securely.</value></data>
+  <data name="Settings_OpenRouterCleared" xml:space="preserve"><value>OpenRouter key removed.</value></data>
+  <data name="Settings_OpenRouterSaveFailed" xml:space="preserve"><value>Windows could not encrypt and save the key.</value></data>
+  <data name="Settings_OpenRouterEnvironment" xml:space="preserve"><value>The OPENROUTER_API_KEY environment variable is active and takes priority.</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Language</value></data>
   <data name="Settings_Language_Hint" xml:space="preserve"><value>Choose the app's display language. Applies after a restart.</value></data>
   <data name="Settings_Language_SystemDefault" xml:space="preserve"><value>System default</value></data>
@@ -261,6 +275,7 @@
   <data name="Manage_Action_CopyAppId" xml:space="preserve"><value>Copy App ID</value></data>
   <data name="Manage_Action_RemoveDrm" xml:space="preserve"><value>Remove Steam DRM</value></data>
   <data name="Manage_Action_ManageBuild" xml:space="preserve"><value>Manage Depots</value></data>
+  <data name="Manage_Action_CanIRunIt" xml:space="preserve"><value>Can I Run It?</value></data>
   <data name="Manage_AboutHeader" xml:space="preserve"><value>About</value></data>
   <data name="Manage_Info_Developer" xml:space="preserve"><value>Developer</value></data>
   <data name="Manage_Info_Publisher" xml:space="preserve"><value>Publisher</value></data>
@@ -323,6 +338,52 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="Manage_RestartSteam_Title" xml:space="preserve"><value>Restart Steam</value></data>
   <data name="Manage_RestartSteam_Ask" xml:space="preserve"><value>Restart Steam now so the changes take effect?</value></data>
   <data name="Manage_RestartSteam_Failed" xml:space="preserve"><value>Couldn't find or launch Steam. Set its location in Settings.</value></data>
+
+  <!-- ── Can I Run It ── -->
+  <data name="CanIRunIt_Title" xml:space="preserve"><value>Can I Run It?</value></data>
+  <data name="CanIRunIt_KeyTitle" xml:space="preserve"><value>Connect OpenRouter</value></data>
+  <data name="CanIRunIt_KeyHint" xml:space="preserve"><value>Paste an OpenRouter API key to analyze this PC with the free model selected in LuaTools Settings. LuaTools sends the key only to the local Go backend and OpenRouter.</value></data>
+  <data name="CanIRunIt_RememberKey" xml:space="preserve"><value>Remember encrypted for my Windows account</value></data>
+  <data name="CanIRunIt_GetKey" xml:space="preserve"><value>Get an OpenRouter key</value></data>
+  <data name="CanIRunIt_Analyze" xml:space="preserve"><value>Analyze this PC</value></data>
+  <data name="CanIRunIt_KeyRequired" xml:space="preserve"><value>Paste your OpenRouter API key first.</value></data>
+  <data name="CanIRunIt_Analyzing" xml:space="preserve"><value>Comparing your PC with the game…</value></data>
+  <data name="CanIRunIt_AnalyzingHint" xml:space="preserve"><value>Detecting hardware, loading Steam requirements, and asking DeepSeek.</value></data>
+  <data name="CanIRunIt_Retry" xml:space="preserve"><value>Try again</value></data>
+  <data name="CanIRunIt_Close" xml:space="preserve"><value>Close</value></data>
+  <data name="CanIRunIt_Verdict_Recommended" xml:space="preserve"><value>Meets recommended requirements</value></data>
+  <data name="CanIRunIt_Verdict_Minimum" xml:space="preserve"><value>Meets minimum requirements</value></data>
+  <data name="CanIRunIt_Verdict_Poor" xml:space="preserve"><value>May run poorly</value></data>
+  <data name="CanIRunIt_Verdict_Unsupported" xml:space="preserve"><value>Unlikely to run</value></data>
+  <data name="CanIRunIt_Confidence" xml:space="preserve"><value>{0} confidence</value></data>
+  <data name="CanIRunIt_Confidence_High" xml:space="preserve"><value>High</value></data>
+  <data name="CanIRunIt_Confidence_Medium" xml:space="preserve"><value>Medium</value></data>
+  <data name="CanIRunIt_Confidence_Low" xml:space="preserve"><value>Low</value></data>
+  <data name="CanIRunIt_YourHardware" xml:space="preserve"><value>Your detected hardware</value></data>
+  <data name="CanIRunIt_Hardware_UnknownGpu" xml:space="preserve"><value>Unknown GPU</value></data>
+  <data name="CanIRunIt_LogicalProcessors" xml:space="preserve"><value>{0} logical processors</value></data>
+  <data name="CanIRunIt_GpuVram" xml:space="preserve"><value>{0:0.#} GB VRAM</value></data>
+  <data name="CanIRunIt_StorageFree" xml:space="preserve"><value>Free space</value></data>
+  <data name="CanIRunIt_ComponentCheck" xml:space="preserve"><value>Component check</value></data>
+  <data name="CanIRunIt_Status_Exceeds" xml:space="preserve"><value>Exceeds</value></data>
+  <data name="CanIRunIt_Status_Meets" xml:space="preserve"><value>Meets</value></data>
+  <data name="CanIRunIt_Status_Below" xml:space="preserve"><value>Below</value></data>
+  <data name="CanIRunIt_Status_Unknown" xml:space="preserve"><value>Uncertain</value></data>
+  <data name="CanIRunIt_Recommendations" xml:space="preserve"><value>Recommended upgrades</value></data>
+  <data name="CanIRunIt_Caveats" xml:space="preserve"><value>What to keep in mind</value></data>
+  <data name="CanIRunIt_PublishedRequirements" xml:space="preserve"><value>Requirements published on Steam</value></data>
+  <data name="CanIRunIt_Minimum" xml:space="preserve"><value>Minimum</value></data>
+  <data name="CanIRunIt_Recommended" xml:space="preserve"><value>Recommended</value></data>
+  <data name="CanIRunIt_Requirements_NotPublished" xml:space="preserve"><value>Not published</value></data>
+  <data name="CanIRunIt_Disclaimer" xml:space="preserve"><value>This is an AI-assisted estimate based on the publisher's requirements, not a benchmark. Actual performance also depends on drivers, thermals, game updates, resolution, and graphics settings.</value></data>
+  <data name="CanIRunIt_Error_InvalidKey" xml:space="preserve"><value>OpenRouter rejected this key. Check it and try again.</value></data>
+  <data name="CanIRunIt_Error_RateLimit" xml:space="preserve"><value>The OpenRouter free-model limit was reached. Try again later.</value></data>
+  <data name="CanIRunIt_Error_NoRequirements" xml:space="preserve"><value>The publisher has not provided Windows system requirements for this game on Steam, so a reliable comparison is not possible.</value></data>
+  <data name="CanIRunIt_Error_Hardware" xml:space="preserve"><value>Windows could not detect this PC's hardware. Try reopening LuaTools as your normal user.</value></data>
+  <data name="CanIRunIt_Error_BackendMissing" xml:space="preserve"><value>The Can I Run It backend is missing from this LuaTools build.</value></data>
+  <data name="CanIRunIt_Error_Steam" xml:space="preserve"><value>Steam's store API could not provide the game requirements. Check your connection and try again.</value></data>
+  <data name="CanIRunIt_Error_OpenRouter" xml:space="preserve"><value>OpenRouter could not be reached. Check your connection and try again.</value></data>
+  <data name="CanIRunIt_Error_Generic" xml:space="preserve"><value>The analysis could not be completed. {0}</value></data>
 
   <!-- ── Fixes ── -->
   <data name="Fixes_Title" xml:space="preserve"><value>Fixes</value></data>

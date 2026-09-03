@@ -106,6 +106,20 @@
   <data name="Settings_HubcapKeyError" xml:space="preserve"><value>Não foi possível verificar a chave — ela pode ser inválida, expirada, ou o Hubcap está indisponível.</value></data>
   <data name="Settings_HubcapActive" xml:space="preserve"><value>Ativo</value></data>
   <data name="Settings_HubcapRefresh" xml:space="preserve"><value>Atualizar</value></data>
+  <data name="Settings_Section_OpenRouter" xml:space="preserve"><value>ANÁLISE DE COMPATIBILIDADE COM IA</value></data>
+  <data name="Settings_OpenRouterKey" xml:space="preserve"><value>Chave de API do OpenRouter</value></data>
+  <data name="Settings_OpenRouterKey_Hint" xml:space="preserve"><value>Usada pelo Meu PC roda? com o modelo gratuito selecionado do OpenRouter. A chave é criptografada para sua conta do Windows e não fica no settings.json.</value></data>
+  <data name="Settings_OpenRouterModel" xml:space="preserve"><value>Modelo de IA</value></data>
+  <data name="Settings_OpenRouterKeyPlaceholder" xml:space="preserve"><value>Cole sua chave do OpenRouter (sk-or-v1-…)</value></data>
+  <data name="Settings_OpenRouterConfigured" xml:space="preserve"><value>Configurada</value></data>
+  <data name="Settings_OpenRouterSave" xml:space="preserve"><value>Salvar chave</value></data>
+  <data name="Settings_OpenRouterClear" xml:space="preserve"><value>Remover</value></data>
+  <data name="Settings_OpenRouterGetKey" xml:space="preserve"><value>Obtenha uma chave em </value></data>
+  <data name="Settings_OpenRouterKeyBad" xml:space="preserve"><value>Cole uma chave de API válida do OpenRouter.</value></data>
+  <data name="Settings_OpenRouterSaved" xml:space="preserve"><value>Chave do OpenRouter salva com segurança.</value></data>
+  <data name="Settings_OpenRouterCleared" xml:space="preserve"><value>Chave do OpenRouter removida.</value></data>
+  <data name="Settings_OpenRouterSaveFailed" xml:space="preserve"><value>O Windows não conseguiu criptografar e salvar a chave.</value></data>
+  <data name="Settings_OpenRouterEnvironment" xml:space="preserve"><value>A variável de ambiente OPENROUTER_API_KEY está ativa e tem prioridade.</value></data>
   <data name="Settings_Language" xml:space="preserve"><value>Idioma</value></data>
   <data name="Settings_Language_Hint" xml:space="preserve"><value>Escolha o idioma de exibição do app. Aplicado após reiniciar.</value></data>
   <data name="Settings_Language_SystemDefault" xml:space="preserve"><value>Padrão do sistema</value></data>
@@ -235,6 +249,7 @@
   <data name="Manage_Action_Reveal" xml:space="preserve"><value>Mostrar .lua</value></data>
   <data name="Manage_Action_CopyAppId" xml:space="preserve"><value>Copiar App ID</value></data>
   <data name="Manage_Action_RemoveDrm" xml:space="preserve"><value>Remover DRM da Steam</value></data>
+  <data name="Manage_Action_CanIRunIt" xml:space="preserve"><value>Meu PC roda?</value></data>
   <data name="Manage_ActionsHeader" xml:space="preserve"><value>Ações</value></data>
   <data name="Manage_Steamless_Confirm_Title" xml:space="preserve"><value>Remover o DRM da Steam?</value></data>
   <data name="Manage_Steamless_Confirm_Body" xml:space="preserve"><value>Isso executa o Steamless no executável do jogo para remover o DRM SteamStub. O .exe original é salvo como .bak antes. Alguns jogos podem precisar de uma verificação de arquivos na Steam depois. Continuar?</value></data>
@@ -292,6 +307,51 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="Manage_RestartSteam_Title" xml:space="preserve"><value>Reiniciar Steam</value></data>
   <data name="Manage_RestartSteam_Ask" xml:space="preserve"><value>Reiniciar o Steam agora para que as alterações tenham efeito?</value></data>
   <data name="Manage_RestartSteam_Failed" xml:space="preserve"><value>Não foi possível encontrar ou iniciar o Steam. Defina o local nas Configurações.</value></data>
+  <!-- ── Meu PC roda? ── -->
+  <data name="CanIRunIt_Title" xml:space="preserve"><value>Meu PC roda?</value></data>
+  <data name="CanIRunIt_KeyTitle" xml:space="preserve"><value>Conectar ao OpenRouter</value></data>
+  <data name="CanIRunIt_KeyHint" xml:space="preserve"><value>Cole uma chave de API do OpenRouter para analisar este PC com o modelo gratuito escolhido nas Configurações do LuaTools. O LuaTools envia a chave somente ao backend Go local e ao OpenRouter.</value></data>
+  <data name="CanIRunIt_RememberKey" xml:space="preserve"><value>Lembrar criptografada para minha conta do Windows</value></data>
+  <data name="CanIRunIt_GetKey" xml:space="preserve"><value>Obter chave do OpenRouter</value></data>
+  <data name="CanIRunIt_Analyze" xml:space="preserve"><value>Analisar este PC</value></data>
+  <data name="CanIRunIt_KeyRequired" xml:space="preserve"><value>Cole primeiro sua chave de API do OpenRouter.</value></data>
+  <data name="CanIRunIt_Analyzing" xml:space="preserve"><value>Comparando seu PC com o jogo…</value></data>
+  <data name="CanIRunIt_AnalyzingHint" xml:space="preserve"><value>Detectando o hardware, carregando os requisitos da Steam e consultando o DeepSeek.</value></data>
+  <data name="CanIRunIt_Retry" xml:space="preserve"><value>Tentar novamente</value></data>
+  <data name="CanIRunIt_Close" xml:space="preserve"><value>Fechar</value></data>
+  <data name="CanIRunIt_Verdict_Recommended" xml:space="preserve"><value>Atende aos requisitos recomendados</value></data>
+  <data name="CanIRunIt_Verdict_Minimum" xml:space="preserve"><value>Atende aos requisitos mínimos</value></data>
+  <data name="CanIRunIt_Verdict_Poor" xml:space="preserve"><value>Pode rodar mal</value></data>
+  <data name="CanIRunIt_Verdict_Unsupported" xml:space="preserve"><value>Provavelmente não roda</value></data>
+  <data name="CanIRunIt_Confidence" xml:space="preserve"><value>Confiança {0}</value></data>
+  <data name="CanIRunIt_Confidence_High" xml:space="preserve"><value>alta</value></data>
+  <data name="CanIRunIt_Confidence_Medium" xml:space="preserve"><value>média</value></data>
+  <data name="CanIRunIt_Confidence_Low" xml:space="preserve"><value>baixa</value></data>
+  <data name="CanIRunIt_YourHardware" xml:space="preserve"><value>Hardware detectado</value></data>
+  <data name="CanIRunIt_Hardware_UnknownGpu" xml:space="preserve"><value>GPU desconhecida</value></data>
+  <data name="CanIRunIt_LogicalProcessors" xml:space="preserve"><value>{0} processadores lógicos</value></data>
+  <data name="CanIRunIt_GpuVram" xml:space="preserve"><value>{0:0.#} GB de VRAM</value></data>
+  <data name="CanIRunIt_StorageFree" xml:space="preserve"><value>Espaço livre</value></data>
+  <data name="CanIRunIt_ComponentCheck" xml:space="preserve"><value>Análise por componente</value></data>
+  <data name="CanIRunIt_Status_Exceeds" xml:space="preserve"><value>Supera</value></data>
+  <data name="CanIRunIt_Status_Meets" xml:space="preserve"><value>Atende</value></data>
+  <data name="CanIRunIt_Status_Below" xml:space="preserve"><value>Abaixo</value></data>
+  <data name="CanIRunIt_Status_Unknown" xml:space="preserve"><value>Incerto</value></data>
+  <data name="CanIRunIt_Recommendations" xml:space="preserve"><value>Upgrades recomendados</value></data>
+  <data name="CanIRunIt_Caveats" xml:space="preserve"><value>O que considerar</value></data>
+  <data name="CanIRunIt_PublishedRequirements" xml:space="preserve"><value>Requisitos publicados na Steam</value></data>
+  <data name="CanIRunIt_Minimum" xml:space="preserve"><value>Mínimo</value></data>
+  <data name="CanIRunIt_Recommended" xml:space="preserve"><value>Recomendado</value></data>
+  <data name="CanIRunIt_Requirements_NotPublished" xml:space="preserve"><value>Não publicado</value></data>
+  <data name="CanIRunIt_Disclaimer" xml:space="preserve"><value>Esta é uma estimativa auxiliada por IA com base nos requisitos da publicadora, não um benchmark. O desempenho real também depende de drivers, temperatura, atualizações do jogo, resolução e qualidade gráfica.</value></data>
+  <data name="CanIRunIt_Error_InvalidKey" xml:space="preserve"><value>O OpenRouter recusou esta chave. Confira e tente novamente.</value></data>
+  <data name="CanIRunIt_Error_RateLimit" xml:space="preserve"><value>O limite gratuito do OpenRouter foi atingido. Tente novamente mais tarde.</value></data>
+  <data name="CanIRunIt_Error_NoRequirements" xml:space="preserve"><value>A publicadora não informou os requisitos de sistema para Windows deste jogo na Steam, então não é possível fazer uma comparação confiável.</value></data>
+  <data name="CanIRunIt_Error_Hardware" xml:space="preserve"><value>O Windows não conseguiu detectar o hardware deste PC. Tente reabrir o LuaTools com seu usuário normal.</value></data>
+  <data name="CanIRunIt_Error_BackendMissing" xml:space="preserve"><value>O backend do Meu PC roda? não está presente nesta build do LuaTools.</value></data>
+  <data name="CanIRunIt_Error_Steam" xml:space="preserve"><value>A API da loja Steam não forneceu os requisitos do jogo. Confira sua conexão e tente novamente.</value></data>
+  <data name="CanIRunIt_Error_OpenRouter" xml:space="preserve"><value>Não foi possível acessar o OpenRouter. Confira sua conexão e tente novamente.</value></data>
+  <data name="CanIRunIt_Error_Generic" xml:space="preserve"><value>Não foi possível concluir a análise. {0}</value></data>
   <data name="Fixes_Title" xml:space="preserve"><value>Correções</value></data>
   <data name="Fixes_Loading" xml:space="preserve"><value>Carregando correções…</value></data>
   <data name="Fixes_Build" xml:space="preserve"><value>Build {0}</value></data>

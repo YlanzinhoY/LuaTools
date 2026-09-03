@@ -352,6 +352,9 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
     /// <summary>Set by App. Opens the provider-neutral achievement viewer (appid, name).</summary>
     public Action<long, string>? OpenAchievements { get; set; }
 
+    /// <summary>Set by App. Opens the hardware compatibility analysis for this Steam AppID.</summary>
+    public Action<long, string>? OpenCanIRunIt { get; set; }
+
     /// <summary>Edit this game's Steam launch options (the entries behind the Play button).</summary>
     [RelayCommand]
     private void EditLaunchOptions(LuaTileViewModel tile) => OpenLaunchOptions?.Invoke(tile.AppId, tile.Name);
@@ -361,6 +364,9 @@ public partial class ManageViewModel : PagedListViewModel<LuaTileViewModel>
     {
         OpenAchievements?.Invoke(tile.AppId, tile.Name);
     }
+
+    [RelayCommand]
+    private void ShowCanIRunIt(LuaTileViewModel tile) => OpenCanIRunIt?.Invoke(tile.AppId, tile.Name);
 
     [RelayCommand]
     private static void OpenStorePage(LuaTileViewModel tile) =>
