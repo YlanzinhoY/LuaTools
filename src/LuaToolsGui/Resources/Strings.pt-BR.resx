@@ -321,7 +321,7 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="CanIRunIt_Close" xml:space="preserve"><value>Fechar</value></data>
   <data name="CanIRunIt_Verdict_Recommended" xml:space="preserve"><value>Atende aos requisitos recomendados</value></data>
   <data name="CanIRunIt_Verdict_Minimum" xml:space="preserve"><value>Atende aos requisitos mínimos</value></data>
-  <data name="CanIRunIt_Verdict_Poor" xml:space="preserve"><value>Pode rodar mal</value></data>
+  <data name="CanIRunIt_Verdict_Poor" xml:space="preserve"><value>Abaixo dos requisitos mínimos de desempenho</value></data>
   <data name="CanIRunIt_Verdict_Unsupported" xml:space="preserve"><value>Provavelmente não roda</value></data>
 	<data name="CanIRunIt_Verdict_Inconclusive" xml:space="preserve"><value>Resultado inconclusivo</value></data>
 	<data name="CanIRunIt_FallbackSummary" xml:space="preserve"><value>O provedor de IA não devolveu uma análise estruturada completa após duas tentativas. O hardware detectado e os requisitos da publicadora aparecem abaixo sem inventar um resultado de compatibilidade.</value></data>
@@ -340,7 +340,7 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="CanIRunIt_Status_Meets" xml:space="preserve"><value>Atende</value></data>
   <data name="CanIRunIt_Status_Below" xml:space="preserve"><value>Abaixo</value></data>
   <data name="CanIRunIt_Status_Unknown" xml:space="preserve"><value>Incerto</value></data>
-  <data name="CanIRunIt_Recommendations" xml:space="preserve"><value>Upgrades recomendados</value></data>
+  <data name="CanIRunIt_Recommendations" xml:space="preserve"><value>Recomendações</value></data>
   <data name="CanIRunIt_Caveats" xml:space="preserve"><value>O que considerar</value></data>
   <data name="CanIRunIt_PublishedRequirements" xml:space="preserve"><value>Requisitos publicados na Steam</value></data>
   <data name="CanIRunIt_Minimum" xml:space="preserve"><value>Mínimo</value></data>

@@ -66,7 +66,7 @@ func TestMinimumStorageGBParsesPublishedUnits(t *testing.T) {
 	}
 }
 
-func TestDeterministicStorageCheckMarksInsufficientSpaceBelow(t *testing.T) {
+func TestDeterministicStorageCheckMarksInsufficientSpaceBelowWithoutChangingPerformance(t *testing.T) {
 	result, err := parseModelAnalysis(validAnalysisJSON("minimum", "medium"))
 	if err != nil {
 		t.Fatalf("parse fixture: %+v", err)
@@ -77,11 +77,22 @@ func TestDeterministicStorageCheckMarksInsufficientSpaceBelow(t *testing.T) {
 		hardwareInfo{SystemDriveFreeGB: 72.9},
 		gameRequirements{Minimum: "Storage: 75 GB available space"})
 
-	if result.Verdict != "poor" {
-		t.Fatalf("below-minimum storage must make the verdict poor, got %q", result.Verdict)
+	if result.Verdict != "minimum" {
+		t.Fatalf("storage must not change the runtime-performance verdict, got %q", result.Verdict)
 	}
 	if result.Components[4].Component != "Storage" || result.Components[4].Status != "below" {
 		t.Fatalf("below-minimum storage must be marked below: %+v", result.Components[4])
+	}
+}
+
+func TestVerifiedFactsDescribeInstallationShortfall(t *testing.T) {
+	facts := buildVerifiedFacts(
+		hardwareInfo{SystemDriveFreeGB: 72.4},
+		gameRequirements{Minimum: "Storage: 75 GB available space"})
+
+	if !facts.SystemDriveBelowMinimum || facts.SystemDriveMissingGB != 2.6 ||
+		!facts.StorageAffectsInstallation {
+		t.Fatalf("unexpected verified facts: %+v", facts)
 	}
 }
 
@@ -200,9 +211,23 @@ func TestAnalyzeUsesOpenRouterFreeLingAndKeepsAuthoritativeData(t *testing.T) {
 	if !strings.Contains(userPrompt, "required tool") {
 		t.Fatal("request did not require the structured analysis tool")
 	}
+	if !strings.Contains(userPrompt, `"storage_affects_installation_not_runtime_performance":true`) {
+		t.Fatal("request did not include the deterministic storage/performance distinction")
+	}
 	if !strings.Contains(systemPrompt, `Portuguese (Brazil) (BCP-47 "pt-BR")`) ||
-		!strings.Contains(systemPrompt, "Do not write those fields in English") {
+		!strings.Contains(systemPrompt, "Do not mix English prose") ||
+		!strings.Contains(systemPrompt, "Translate ordinary terms such as publisher, runtime, storage") {
 		t.Fatalf("selected UI language is not a trusted system instruction: %q", systemPrompt)
+	}
+	for _, instruction := range []string{
+		"top-level verdict describes expected RUNTIME PERFORMANCE",
+		"summary must be 3 to 5 concise sentences",
+		"Do not invent exact FPS",
+		"do not judge GPUs from VRAM alone",
+	} {
+		if !strings.Contains(systemPrompt, instruction) {
+			t.Fatalf("missing response-quality instruction %q", instruction)
+		}
 	}
 	for _, character := range systemPrompt {
 		if character > 127 {
@@ -272,6 +297,32 @@ func TestAnalyzeRetriesMalformedProviderOutput(t *testing.T) {
 		"Game", hardwareInfo{}, gameRequirements{Minimum: "RAM: 8 GB"})
 	if err != nil || result.Verdict != "minimum" || requests != 2 {
 		t.Fatalf("retry failed: result=%+v err=%+v requests=%d", result, err, requests)
+	}
+}
+
+func TestAnalyzeRetriesResponseWrittenInWrongLanguage(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		var result modelAnalysis
+		_ = json.Unmarshal([]byte(validAnalysisJSON("recommended", "high")), &result)
+		if requests == 1 {
+			result.Summary = "The detected hardware meets the recommended performance requirements, but the system storage is below the minimum requirement and may block installation on this drive."
+		} else {
+			result.Summary = "O hardware deve oferecer uma boa experiencia; a falta de espaco afeta somente a instalacao."
+		}
+		arguments, _ := json.Marshal(result)
+		writeToolCompletion(w, string(arguments))
+	}))
+	defer server.Close()
+
+	b := newBackend(server.Client())
+	b.openRouterURL = server.URL
+	result, err := b.askOpenRouter(context.Background(), analyzeInput{
+		APIKey: "secret", Language: "pt-BR", LanguageName: "Portuguese (Brazil)",
+	}, "Game", hardwareInfo{}, gameRequirements{Minimum: "RAM: 8 GB"})
+	if err != nil || requests != 2 || !strings.HasPrefix(result.Summary, "O hardware") {
+		t.Fatalf("wrong-language retry failed: result=%+v err=%+v requests=%d", result, err, requests)
 	}
 }
 

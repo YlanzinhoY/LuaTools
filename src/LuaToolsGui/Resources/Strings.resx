@@ -353,7 +353,7 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="CanIRunIt_Close" xml:space="preserve"><value>Close</value></data>
   <data name="CanIRunIt_Verdict_Recommended" xml:space="preserve"><value>Meets recommended requirements</value></data>
   <data name="CanIRunIt_Verdict_Minimum" xml:space="preserve"><value>Meets minimum requirements</value></data>
-  <data name="CanIRunIt_Verdict_Poor" xml:space="preserve"><value>May run poorly</value></data>
+  <data name="CanIRunIt_Verdict_Poor" xml:space="preserve"><value>Below minimum performance requirements</value></data>
   <data name="CanIRunIt_Verdict_Unsupported" xml:space="preserve"><value>Unlikely to run</value></data>
 	<data name="CanIRunIt_Verdict_Inconclusive" xml:space="preserve"><value>Inconclusive result</value></data>
 	<data name="CanIRunIt_FallbackSummary" xml:space="preserve"><value>The AI provider did not return a complete structured assessment after two attempts. Your detected hardware and the publisher's requirements are shown below without inventing a compatibility verdict.</value></data>
@@ -372,7 +372,7 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="CanIRunIt_Status_Meets" xml:space="preserve"><value>Meets</value></data>
   <data name="CanIRunIt_Status_Below" xml:space="preserve"><value>Below</value></data>
   <data name="CanIRunIt_Status_Unknown" xml:space="preserve"><value>Uncertain</value></data>
-  <data name="CanIRunIt_Recommendations" xml:space="preserve"><value>Recommended upgrades</value></data>
+  <data name="CanIRunIt_Recommendations" xml:space="preserve"><value>Recommendations</value></data>
   <data name="CanIRunIt_Caveats" xml:space="preserve"><value>What to keep in mind</value></data>
   <data name="CanIRunIt_PublishedRequirements" xml:space="preserve"><value>Requirements published on Steam</value></data>
   <data name="CanIRunIt_Minimum" xml:space="preserve"><value>Minimum</value></data>
