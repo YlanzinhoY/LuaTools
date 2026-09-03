@@ -28,9 +28,10 @@ The protected-achievement fallback was manually reproduced twice with Assassin's
 
 The **Can I Run It?** action on a game's Manage panel uses a small Go sidecar. It detects the local
 Windows CPU, GPU, RAM, OS and free system-drive space, loads the publisher's requirements from the
-Steam Store by App ID, and asks the selected free OpenRouter model for a structured compatibility
-estimate. `inclusionai/ling-3.0-flash-fin:free` is the default, with
-`deepseek/deepseek-v4-flash:free` available as an alternative in Settings.
+Steam Store by App ID, and asks the free OpenRouter model
+`inclusionai/ling-3.0-flash-fin:free` for a structured compatibility estimate. Its tool-call schema is
+validated before any model text reaches the UI. Validated results are cached by
+game requirements, hardware, model and UI language so identical inputs stay stable.
 
 The OpenRouter key is entered when the action is first used. If the user chooses to remember it, it is
 encrypted with Windows DPAPI for that Windows account. It is passed to the sidecar through its process

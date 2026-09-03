@@ -195,6 +195,10 @@
                                         <Setter Property="Background" Value="#14ef4444" />
                                         <Setter Property="BorderBrush" Value="#55f87171" />
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding Verdict}" Value="inconclusive">
+                                        <Setter Property="Background" Value="#141F2937" />
+                                        <Setter Property="BorderBrush" Value="#556B7280" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
@@ -212,7 +216,7 @@
                                 Margin="0,8,0,0"
                                 FontSize="13"
                                 LineHeight="19"
-                                Text="{Binding Summary}"
+                                Text="{Binding SummaryDisplay}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
                     </Border>
@@ -268,7 +272,7 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                        <TextBlock Grid.Column="2" Foreground="#d1d5db" Text="{Binding Explanation}" TextWrapping="Wrap" />
+                                        <TextBlock Grid.Column="2" Foreground="#d1d5db" Text="{Binding ExplanationDisplay}" TextWrapping="Wrap" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>

@@ -331,6 +331,9 @@ public static class Strings
     public static string CanIRunIt_Verdict_Minimum => Get(nameof(CanIRunIt_Verdict_Minimum));
     public static string CanIRunIt_Verdict_Poor => Get(nameof(CanIRunIt_Verdict_Poor));
     public static string CanIRunIt_Verdict_Unsupported => Get(nameof(CanIRunIt_Verdict_Unsupported));
+    public static string CanIRunIt_Verdict_Inconclusive => Get(nameof(CanIRunIt_Verdict_Inconclusive));
+    public static string CanIRunIt_FallbackSummary => Get(nameof(CanIRunIt_FallbackSummary));
+    public static string CanIRunIt_FallbackComponent => Get(nameof(CanIRunIt_FallbackComponent));
     public static string CanIRunIt_Confidence => Get(nameof(CanIRunIt_Confidence));
     public static string CanIRunIt_Confidence_High => Get(nameof(CanIRunIt_Confidence_High));
     public static string CanIRunIt_Confidence_Medium => Get(nameof(CanIRunIt_Confidence_Medium));

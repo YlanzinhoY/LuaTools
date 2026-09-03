@@ -36,10 +36,13 @@ public sealed class CanIRunItService
         start.ArgumentList.Add(appId.ToString(CultureInfo.InvariantCulture));
         start.ArgumentList.Add("--game-name");
         start.ArgumentList.Add(gameName);
-        start.ArgumentList.Add("--language");
-        start.ArgumentList.Add(string.IsNullOrWhiteSpace(_settings.Language)
+        string responseLanguage = string.IsNullOrWhiteSpace(_settings.Language)
             ? CultureInfo.CurrentUICulture.Name
-            : _settings.Language);
+            : _settings.Language;
+        start.ArgumentList.Add("--language");
+        start.ArgumentList.Add(responseLanguage);
+        start.ArgumentList.Add("--language-name");
+        start.ArgumentList.Add(CultureInfo.GetCultureInfo(responseLanguage).EnglishName);
         start.Environment["OPENROUTER_API_KEY"] = apiKey.Trim();
         start.Environment["OPENROUTER_MODEL"] = _settings.OpenRouterModel;
 

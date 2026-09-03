@@ -237,7 +237,6 @@ public partial class SettingsViewModel : ObservableObject
     public ObservableCollection<OpenRouterModelOption> OpenRouterModelOptions { get; } =
     [
         new("Ling 3.0 Flash Fin (Free)", SettingsService.DefaultOpenRouterModel),
-        new("DeepSeek V4 Flash (Free)", SettingsService.DeepSeekOpenRouterModel),
     ];
 
     [ObservableProperty] private OpenRouterModelOption _selectedOpenRouterModel = null!;

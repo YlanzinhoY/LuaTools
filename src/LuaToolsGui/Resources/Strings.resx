@@ -348,13 +348,16 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="CanIRunIt_Analyze" xml:space="preserve"><value>Analyze this PC</value></data>
   <data name="CanIRunIt_KeyRequired" xml:space="preserve"><value>Paste your OpenRouter API key first.</value></data>
   <data name="CanIRunIt_Analyzing" xml:space="preserve"><value>Comparing your PC with the game…</value></data>
-  <data name="CanIRunIt_AnalyzingHint" xml:space="preserve"><value>Detecting hardware, loading Steam requirements, and asking DeepSeek.</value></data>
+  <data name="CanIRunIt_AnalyzingHint" xml:space="preserve"><value>Detecting hardware, loading Steam requirements, and consulting the AI model.</value></data>
   <data name="CanIRunIt_Retry" xml:space="preserve"><value>Try again</value></data>
   <data name="CanIRunIt_Close" xml:space="preserve"><value>Close</value></data>
   <data name="CanIRunIt_Verdict_Recommended" xml:space="preserve"><value>Meets recommended requirements</value></data>
   <data name="CanIRunIt_Verdict_Minimum" xml:space="preserve"><value>Meets minimum requirements</value></data>
   <data name="CanIRunIt_Verdict_Poor" xml:space="preserve"><value>May run poorly</value></data>
   <data name="CanIRunIt_Verdict_Unsupported" xml:space="preserve"><value>Unlikely to run</value></data>
+	<data name="CanIRunIt_Verdict_Inconclusive" xml:space="preserve"><value>Inconclusive result</value></data>
+	<data name="CanIRunIt_FallbackSummary" xml:space="preserve"><value>The AI provider did not return a complete structured assessment after two attempts. Your detected hardware and the publisher's requirements are shown below without inventing a compatibility verdict.</value></data>
+	<data name="CanIRunIt_FallbackComponent" xml:space="preserve"><value>This component could not be compared reliably.</value></data>
   <data name="CanIRunIt_Confidence" xml:space="preserve"><value>{0} confidence</value></data>
   <data name="CanIRunIt_Confidence_High" xml:space="preserve"><value>High</value></data>
   <data name="CanIRunIt_Confidence_Medium" xml:space="preserve"><value>Medium</value></data>

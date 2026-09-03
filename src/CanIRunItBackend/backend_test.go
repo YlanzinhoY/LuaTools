@@ -9,6 +9,34 @@ import (
 	"testing"
 )
 
+func validAnalysisJSON(verdict, confidence string) string {
+	components := make([]componentAssessment, 0, 5)
+	for _, component := range []string{"CPU", "GPU", "RAM", "OS", "Storage"} {
+		components = append(components, componentAssessment{
+			Component: component, Status: "meets", Explanation: component + " is suitable.",
+		})
+	}
+	value, _ := json.Marshal(modelAnalysis{
+		Verdict: verdict, Confidence: confidence, Summary: "Playable.", Components: components,
+		Recommendations: []string{}, Caveats: []string{},
+	})
+	return string(value)
+}
+
+func writeToolCompletion(w http.ResponseWriter, arguments string) {
+	_ = json.NewEncoder(w).Encode(map[string]any{
+		"choices": []any{map[string]any{
+			"finish_reason": "tool_calls",
+			"message": map[string]any{
+				"content": nil,
+				"tool_calls": []any{map[string]any{
+					"function": map[string]any{"name": analysisToolName, "arguments": arguments},
+				}},
+			},
+		}},
+	})
+}
+
 func TestParseRequirementsCleansSteamHTML(t *testing.T) {
 	raw := json.RawMessage(`{"minimum":"<strong>Minimum:</strong><br>OS: Windows 11<br>RAM: 8 GB &amp; up","recommended":"<b>Recommended:</b><br>RAM: 16 GB"}`)
 	result := parseRequirements(raw)
@@ -21,7 +49,8 @@ func TestParseRequirementsCleansSteamHTML(t *testing.T) {
 }
 
 func TestParseModelAnalysisNormalizesUnknownValues(t *testing.T) {
-	result, err := parseModelAnalysis("```json\n" + `{"verdict":"minimum","confidence":"certain","summary":"Runs.","components":[{"component":"GPU","status":"maybe","explanation":"Unclear"}]}` + "\n```")
+	content := strings.Replace(validAnalysisJSON("minimum", "certain"), `"status":"meets"`, `"status":"maybe"`, 1)
+	result, err := parseModelAnalysis("```json\n" + content + "\n```")
 	if err != nil {
 		t.Fatalf("parse failed: %+v", err)
 	}
@@ -36,7 +65,7 @@ func TestParseModelAnalysisNormalizesUnknownValues(t *testing.T) {
 func TestParseModelAnalysisExtractsJSONFromLingResponse(t *testing.T) {
 	content := `<think>I should compare the components. A scratch object such as {not JSON} is not the answer.</think>
 Here is the requested result:
-` + "```json\n" + `{"verdict":"Recommended","confidence":"HIGH","summary":"It should run well.","components":[{"component":"GPU","status":"MEETS","explanation":"Suitable."}],"recommendations":[],"caveats":["This is an estimate."]}` + "\n```\nDone."
+` + "```json\n" + validAnalysisJSON("Recommended", "HIGH") + "\n```\nDone."
 
 	result, err := parseModelAnalysis(content)
 	if err != nil {
@@ -48,14 +77,14 @@ Here is the requested result:
 }
 
 func TestParseModelAnalysisSkipsUnrelatedJSONObject(t *testing.T) {
-	content := `Debug metadata: {"elapsed": 2}. Final: {"verdict":"minimum","confidence":"medium","summary":"Playable.","components":[]}`
+	content := `Debug metadata: {"elapsed": 2}. Final: ` + validAnalysisJSON("minimum", "medium")
 	result, err := parseModelAnalysis(content)
 	if err != nil || result.Verdict != "minimum" {
 		t.Fatalf("did not find schema-compatible object: result=%+v err=%+v", result, err)
 	}
 }
 
-func TestAnalyzeUsesOpenRouterFreeDeepSeekAndKeepsAuthoritativeData(t *testing.T) {
+func TestAnalyzeUsesOpenRouterFreeLingAndKeepsAuthoritativeData(t *testing.T) {
 	var authorization string
 	var requestedModel string
 	var reasoningExcluded bool
@@ -83,7 +112,9 @@ func TestAnalyzeUsesOpenRouterFreeDeepSeekAndKeepsAuthoritativeData(t *testing.T
 				reasoningExcluded, _ = reasoning["exclude"].(bool)
 			}
 			maxTokens, _ = request["max_tokens"].(float64)
-			_, _ = w.Write([]byte(`{"choices":[{"message":{"content":"{\"verdict\":\"recommended\",\"confidence\":\"high\",\"summary\":\"Good fit.\",\"components\":[],\"recommendations\":[],\"caveats\":[]}"}}]}`))
+			_ = json.NewEncoder(w).Encode(map[string]any{
+				"choices": []any{map[string]any{"message": map[string]any{"content": validAnalysisJSON("recommended", "high")}}},
+			})
 		default:
 			http.NotFound(w, r)
 		}
@@ -91,12 +122,13 @@ func TestAnalyzeUsesOpenRouterFreeDeepSeekAndKeepsAuthoritativeData(t *testing.T
 	defer server.Close()
 
 	b := newBackend(server.Client())
+	b.cacheDir = t.TempDir()
 	b.steamURL = server.URL + "/steam"
 	b.openRouterURL = server.URL + "/openrouter"
 	b.detect = func(context.Context) (hardwareInfo, *backendError) {
 		return hardwareInfo{CPU: "Test CPU", MemoryGB: 32, GPUs: []gpuInfo{{Name: "Test GPU"}}, OS: "Windows 11"}, nil
 	}
-	result, err := b.analyze(context.Background(), analyzeInput{AppID: 42, GameName: "Lua Name", Language: "pt-BR", APIKey: "secret"})
+	result, err := b.analyze(context.Background(), analyzeInput{AppID: 42, GameName: "Lua Name", Language: "pt-BR", LanguageName: "Portuguese (Brazil)", APIKey: "secret"})
 	if err != nil {
 		t.Fatalf("analysis failed: %+v", err)
 	}
@@ -112,9 +144,17 @@ func TestAnalyzeUsesOpenRouterFreeDeepSeekAndKeepsAuthoritativeData(t *testing.T
 	if maxTokens < 4000 {
 		t.Fatalf("completion budget is too small: %.0f", maxTokens)
 	}
-	if !strings.Contains(systemPrompt, `Brazilian Portuguese (português do Brasil) (BCP-47 "pt-BR")`) ||
+	if !strings.Contains(userPrompt, "required tool") {
+		t.Fatal("request did not require the structured analysis tool")
+	}
+	if !strings.Contains(systemPrompt, `Portuguese (Brazil) (BCP-47 "pt-BR")`) ||
 		!strings.Contains(systemPrompt, "Do not write those fields in English") {
 		t.Fatalf("selected UI language is not a trusted system instruction: %q", systemPrompt)
+	}
+	for _, character := range systemPrompt {
+		if character > 127 {
+			t.Fatalf("system instructions must remain English/ASCII, found %q", character)
+		}
 	}
 	if strings.Contains(userPrompt, "response_language") {
 		t.Fatal("response language must not be embedded in the untrusted data payload")
@@ -124,20 +164,115 @@ func TestAnalyzeUsesOpenRouterFreeDeepSeekAndKeepsAuthoritativeData(t *testing.T
 	}
 }
 
-func TestLanguageDisplayNameCoversSupportedVariants(t *testing.T) {
-	tests := map[string]string{
-		"pt-BR":   "Brazilian Portuguese (português do Brasil)",
-		"pt-PT":   "European Portuguese (português de Portugal)",
-		"es-419":  "Latin American Spanish (español latinoamericano)",
-		"zh-Hans": "Simplified Chinese (简体中文)",
-	}
-	for tag, expected := range tests {
-		if actual := languageDisplayName(tag); actual != expected {
-			t.Errorf("languageDisplayName(%q) = %q, want %q", tag, actual, expected)
+func TestParseToolAnalysisAcceptsStringAndObjectArguments(t *testing.T) {
+	content := validAnalysisJSON("recommended", "high")
+	encoded, _ := json.Marshal(content)
+	for _, raw := range []json.RawMessage{json.RawMessage(content), encoded} {
+		result, err := parseToolAnalysis(raw)
+		if err != nil || result.Verdict != "recommended" || len(result.Components) != 5 {
+			t.Fatalf("tool arguments failed: result=%+v err=%+v", result, err)
 		}
 	}
-	if actual := languageDisplayName("x-custom"); actual != "x-custom" {
-		t.Fatalf("unknown language tag changed: %q", actual)
+}
+
+func TestPromptUsesLanguageSelectedByLuaTools(t *testing.T) {
+	var systemPrompt string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var request map[string]any
+		_ = json.NewDecoder(r.Body).Decode(&request)
+		messages, _ := request["messages"].([]any)
+		message, _ := messages[0].(map[string]any)
+		systemPrompt, _ = message["content"].(string)
+		writeToolCompletion(w, validAnalysisJSON("recommended", "high"))
+	}))
+	defer server.Close()
+
+	b := newBackend(server.Client())
+	b.openRouterURL = server.URL
+	_, err := b.askOpenRouter(context.Background(), analyzeInput{
+		APIKey: "secret", Language: "pl", LanguageName: "Polish (Poland)",
+	}, "Game", hardwareInfo{}, gameRequirements{Minimum: "RAM: 8 GB"})
+	if err != nil || !strings.Contains(systemPrompt, `TARGET OUTPUT LANGUAGE: Polish (Poland) (BCP-47 "pl")`) {
+		t.Fatalf("LuaTools language was not used dynamically: prompt=%q err=%+v", systemPrompt, err)
+	}
+	if strings.Contains(systemPrompt, "Brazil") {
+		t.Fatal("prompt leaked a hardcoded Brazilian language choice")
+	}
+}
+
+func TestAnalyzeRetriesMalformedProviderOutput(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if requests == 1 {
+			_, _ = w.Write([]byte(`{"choices":[{"finish_reason":"length","message":{"content":"{cut"}}]}`))
+			return
+		}
+		writeToolCompletion(w, validAnalysisJSON("minimum", "high"))
+	}))
+	defer server.Close()
+
+	b := newBackend(server.Client())
+	b.cacheDir = t.TempDir()
+	b.openRouterURL = server.URL
+	result, err := b.askOpenRouter(context.Background(), analyzeInput{APIKey: "secret", Language: "en"},
+		"Game", hardwareInfo{}, gameRequirements{Minimum: "RAM: 8 GB"})
+	if err != nil || result.Verdict != "minimum" || requests != 2 {
+		t.Fatalf("retry failed: result=%+v err=%+v requests=%d", result, err, requests)
+	}
+}
+
+func TestAnalyzeReturnsInconclusiveFallbackAfterMalformedOutputs(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/steam":
+			_, _ = w.Write([]byte(`{"42":{"success":true,"data":{"name":"Game","pc_requirements":{"minimum":"RAM: 8 GB"}}}}`))
+		case "/openrouter":
+			requests++
+			_, _ = w.Write([]byte(`{"choices":[{"message":{"content":"not structured"}}]}`))
+		}
+	}))
+	defer server.Close()
+
+	b := newBackend(server.Client())
+	b.cacheDir = t.TempDir()
+	b.steamURL = server.URL + "/steam"
+	b.openRouterURL = server.URL + "/openrouter"
+	b.detect = func(context.Context) (hardwareInfo, *backendError) {
+		return hardwareInfo{CPU: "CPU", MemoryGB: 16}, nil
+	}
+	result, err := b.analyze(context.Background(), analyzeInput{AppID: 42, APIKey: "secret", Language: "en"})
+	if err != nil || !result.Degraded || result.Verdict != "inconclusive" || len(result.Components) != 5 || requests != 2 {
+		t.Fatalf("fallback failed: result=%+v err=%+v requests=%d", result, err, requests)
+	}
+}
+
+func TestAnalyzeCachesValidatedResultForIdenticalInputs(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/steam":
+			_, _ = w.Write([]byte(`{"42":{"success":true,"data":{"name":"Game","pc_requirements":{"minimum":"RAM: 8 GB"}}}}`))
+		case "/openrouter":
+			requests++
+			writeToolCompletion(w, validAnalysisJSON("recommended", "high"))
+		}
+	}))
+	defer server.Close()
+
+	b := newBackend(server.Client())
+	b.cacheDir = t.TempDir()
+	b.steamURL = server.URL + "/steam"
+	b.openRouterURL = server.URL + "/openrouter"
+	b.detect = func(context.Context) (hardwareInfo, *backendError) {
+		return hardwareInfo{CPU: "CPU", MemoryGB: 16, SystemDriveFreeGB: 75.8}, nil
+	}
+	input := analyzeInput{AppID: 42, APIKey: "secret", Language: "pt-BR"}
+	first, firstErr := b.analyze(context.Background(), input)
+	second, secondErr := b.analyze(context.Background(), input)
+	if firstErr != nil || secondErr != nil || requests != 1 || first.Verdict != second.Verdict {
+		t.Fatalf("stable cache failed: firstErr=%+v secondErr=%+v requests=%d", firstErr, secondErr, requests)
 	}
 }
 

@@ -190,18 +190,15 @@ public class SettingsService
     }
 
     public const string DefaultOpenRouterModel = "inclusionai/ling-3.0-flash-fin:free";
-    public const string DeepSeekOpenRouterModel = "deepseek/deepseek-v4-flash:free";
 
     public string OpenRouterModel
     {
-        get => string.IsNullOrWhiteSpace(_settings.OpenRouterModel)
-            ? DefaultOpenRouterModel
-            : _settings.OpenRouterModel;
+        // The retired DeepSeek free slug may still exist in settings.json from
+        // older builds. Never send an unavailable or unvalidated model.
+        get => DefaultOpenRouterModel;
         set
         {
-            _settings.OpenRouterModel = string.IsNullOrWhiteSpace(value) || value == DefaultOpenRouterModel
-                ? null
-                : value;
+            _settings.OpenRouterModel = null;
             Save();
         }
     }

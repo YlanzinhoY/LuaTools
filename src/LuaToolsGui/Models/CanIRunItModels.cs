@@ -29,6 +29,7 @@ public sealed class CanIRunItAnalysis
     [JsonPropertyName("components")] public List<CanIRunItComponent> Components { get; set; } = [];
     [JsonPropertyName("recommendations")] public List<string> Recommendations { get; set; } = [];
     [JsonPropertyName("caveats")] public List<string> Caveats { get; set; } = [];
+    [JsonPropertyName("degraded")] public bool Degraded { get; set; }
 
     [JsonIgnore]
     public string VerdictLabel => Verdict switch
@@ -37,8 +38,14 @@ public sealed class CanIRunItAnalysis
         "minimum" => Strings.CanIRunIt_Verdict_Minimum,
         "poor" => Strings.CanIRunIt_Verdict_Poor,
         "unsupported" => Strings.CanIRunIt_Verdict_Unsupported,
+        "inconclusive" => Strings.CanIRunIt_Verdict_Inconclusive,
         _ => Verdict,
     };
+
+    [JsonIgnore]
+    public string SummaryDisplay => Degraded || string.IsNullOrWhiteSpace(Summary)
+        ? Strings.CanIRunIt_FallbackSummary
+        : Summary;
 
     [JsonIgnore]
     public string ConfidenceLabel => string.Format(Strings.CanIRunIt_Confidence, Confidence switch
@@ -109,4 +116,9 @@ public sealed class CanIRunItComponent
         "below" => Strings.CanIRunIt_Status_Below,
         _ => Strings.CanIRunIt_Status_Unknown,
     };
+
+    [JsonIgnore]
+    public string ExplanationDisplay => string.IsNullOrWhiteSpace(Explanation)
+        ? Strings.CanIRunIt_FallbackComponent
+        : Explanation;
 }

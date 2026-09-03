@@ -15,6 +15,7 @@ func main() {
 	appID := flag.Int64("appid", 0, "Steam App ID")
 	gameName := flag.String("game-name", "", "game name shown by LuaTools")
 	language := flag.String("language", "en", "BCP-47 response language")
+	languageName := flag.String("language-name", "", "English name of the response language")
 	flag.Parse()
 
 	if *appID <= 0 {
@@ -33,10 +34,11 @@ func main() {
 
 	backend := newBackend(&http.Client{Timeout: 90 * time.Second})
 	result, err := backend.analyze(ctx, analyzeInput{
-		AppID:    *appID,
-		GameName: strings.TrimSpace(*gameName),
-		Language: normalizedLanguage(*language),
-		APIKey:   apiKey,
+		AppID:        *appID,
+		GameName:     strings.TrimSpace(*gameName),
+		Language:     normalizedLanguage(*language),
+		LanguageName: strings.TrimSpace(*languageName),
+		APIKey:       apiKey,
 	})
 	if err != nil {
 		writeOutput(commandOutput{Success: false, Error: &outputError{Code: err.Code, Message: err.Message}})

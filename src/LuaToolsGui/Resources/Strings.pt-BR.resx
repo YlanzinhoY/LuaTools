@@ -316,13 +316,16 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="CanIRunIt_Analyze" xml:space="preserve"><value>Analisar este PC</value></data>
   <data name="CanIRunIt_KeyRequired" xml:space="preserve"><value>Cole primeiro sua chave de API do OpenRouter.</value></data>
   <data name="CanIRunIt_Analyzing" xml:space="preserve"><value>Comparando seu PC com o jogo…</value></data>
-  <data name="CanIRunIt_AnalyzingHint" xml:space="preserve"><value>Detectando o hardware, carregando os requisitos da Steam e consultando o DeepSeek.</value></data>
+  <data name="CanIRunIt_AnalyzingHint" xml:space="preserve"><value>Detectando o hardware, carregando os requisitos da Steam e consultando o modelo de IA.</value></data>
   <data name="CanIRunIt_Retry" xml:space="preserve"><value>Tentar novamente</value></data>
   <data name="CanIRunIt_Close" xml:space="preserve"><value>Fechar</value></data>
   <data name="CanIRunIt_Verdict_Recommended" xml:space="preserve"><value>Atende aos requisitos recomendados</value></data>
   <data name="CanIRunIt_Verdict_Minimum" xml:space="preserve"><value>Atende aos requisitos mínimos</value></data>
   <data name="CanIRunIt_Verdict_Poor" xml:space="preserve"><value>Pode rodar mal</value></data>
   <data name="CanIRunIt_Verdict_Unsupported" xml:space="preserve"><value>Provavelmente não roda</value></data>
+	<data name="CanIRunIt_Verdict_Inconclusive" xml:space="preserve"><value>Resultado inconclusivo</value></data>
+	<data name="CanIRunIt_FallbackSummary" xml:space="preserve"><value>O provedor de IA não devolveu uma análise estruturada completa após duas tentativas. O hardware detectado e os requisitos da publicadora aparecem abaixo sem inventar um resultado de compatibilidade.</value></data>
+	<data name="CanIRunIt_FallbackComponent" xml:space="preserve"><value>Não foi possível comparar este componente com segurança.</value></data>
   <data name="CanIRunIt_Confidence" xml:space="preserve"><value>Confiança {0}</value></data>
   <data name="CanIRunIt_Confidence_High" xml:space="preserve"><value>alta</value></data>
   <data name="CanIRunIt_Confidence_Medium" xml:space="preserve"><value>média</value></data>

@@ -32,6 +32,7 @@ $gpus = @(Get-CimInstance Win32_VideoController | Where-Object { $_.Name -and $_
 })
 $computer = Get-CimInstance Win32_ComputerSystem
 $os = Get-CimInstance Win32_OperatingSystem
+$architecture = if ([Environment]::Is64BitOperatingSystem) { '64-bit' } else { '32-bit' }
 $drive = Get-CimInstance Win32_LogicalDisk -Filter ("DeviceID='" + $env:SystemDrive + "'")
 [pscustomobject]@{
   cpu=[string]$cpu.Name
@@ -39,7 +40,7 @@ $drive = Get-CimInstance Win32_LogicalDisk -Filter ("DeviceID='" + $env:SystemDr
   max_clock_mhz=[int]$cpu.MaxClockSpeed
   memory_bytes=[int64]$computer.TotalPhysicalMemory
   gpus=$gpus
-  os=(([string]$os.Caption) + ' ' + ([string]$os.Version) + ' ' + ([string]$os.OSArchitecture)).Trim()
+  os=(([string]$os.Caption) + ' ' + ([string]$os.Version) + ' ' + $architecture).Trim()
   system_drive_free_bytes=[int64]$drive.FreeSpace
 } | ConvertTo-Json -Depth 4 -Compress`
 
