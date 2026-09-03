@@ -224,6 +224,9 @@ func TestAnalyzeUsesOpenRouterFreeLingAndKeepsAuthoritativeData(t *testing.T) {
 		"summary must be 3 to 5 concise sentences",
 		"Do not invent exact FPS",
 		"do not judge GPUs from VRAM alone",
+		"Product numbers and nominal tiers are not comparable across generations or vendors",
+		"Prefer a cautious unknown over a confident false hardware ranking",
+		"never recommend reducing graphics or replacing hardware based on an uncertain comparison",
 	} {
 		if !strings.Contains(systemPrompt, instruction) {
 			t.Fatalf("missing response-quality instruction %q", instruction)
