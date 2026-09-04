@@ -62,6 +62,7 @@ public partial class App : Application
                 services.AddSingleton<HubcapService>();
                 services.AddSingleton<KazumiCatalogService>();
                 services.AddSingleton<TorrentDownloadService>();
+                services.AddSingleton<ExternalTorrentClientService>();
                 services.AddSingleton<UpdateService>();
                 // Hook loader infrastructure
                 services.AddSingleton<PluginAddService>();

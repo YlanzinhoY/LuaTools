@@ -132,6 +132,7 @@ public partial class DownloadViewModel : ObservableObject
     private readonly HardwareAppIdService _hardware;
     private readonly KazumiCatalogService _kazumiCatalog;
     private readonly TorrentDownloadService _torrent;
+    private readonly ExternalTorrentClientService _externalTorrent;
     private CancellationTokenSource? _searchCts;
     private CancellationTokenSource? _detailsCts;
     private CancellationTokenSource? _kazumiCts;
@@ -375,7 +376,8 @@ public partial class DownloadViewModel : ObservableObject
         AuthService auth, ToastService toast, LuaInstaller installer,
         SteamAppListCache appList, SteamAppInfoCache appInfo, SteamDepotInfo depotInfo,
         HardwareAppIdService hardware, KazumiCatalogService kazumiCatalog,
-        TorrentDownloadService torrent, DropInstallViewModel drop)
+        TorrentDownloadService torrent, ExternalTorrentClientService externalTorrent,
+        DropInstallViewModel drop)
     {
         _api = api;
         _hubcap = hubcap;
@@ -389,6 +391,7 @@ public partial class DownloadViewModel : ObservableObject
         _hardware = hardware;
         _kazumiCatalog = kazumiCatalog;
         _torrent = torrent;
+        _externalTorrent = externalTorrent;
         Drop = drop;
         _fastFetch = settings.FastFetch;
         _kazumiEnabled = settings.KazumiEnabled;
@@ -758,15 +761,9 @@ public partial class DownloadViewModel : ObservableObject
 
         if (_settings.KazumiUseExternalTorrentClient)
         {
-            try
-            {
-                Process.Start(new ProcessStartInfo(source.Url) { UseShellExecute = true });
-                source.StatusText = Resources.Strings.Add_Kazumi_OpenedExternal;
-            }
-            catch
-            {
-                source.StatusText = Resources.Strings.Add_Kazumi_Err_ExternalClient;
-            }
+            source.StatusText = _externalTorrent.TryOpenMagnet(source.Url, out string clientName)
+                ? string.Format(Resources.Strings.Add_Kazumi_OpenedExternal, clientName)
+                : Resources.Strings.Add_Kazumi_Err_ExternalClient;
             return;
         }
 

@@ -469,9 +469,9 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="Add_Kazumi_SelectFolder" xml:space="preserve"><value>Choose where the torrent files will be downloaded</value></data>
   <data name="Add_Kazumi_Progress" xml:space="preserve"><value>{3} · {0:F1}% · {1}/s · {2} peers · {4} DHT nodes</value></data>
   <data name="Add_Kazumi_ExternalClient" xml:space="preserve"><value>Use the default torrent client</value></data>
-  <data name="Add_Kazumi_ExternalClient_Hint" xml:space="preserve"><value>Open magnet links in an installed app such as qBittorrent instead of the LuaTools client</value></data>
-  <data name="Add_Kazumi_OpenedExternal" xml:space="preserve"><value>Magnet sent to the default torrent client</value></data>
-  <data name="Add_Kazumi_Err_ExternalClient" xml:space="preserve"><value>No default torrent client could be opened</value></data>
+  <data name="Add_Kazumi_ExternalClient_Hint" xml:space="preserve"><value>Open magnets in the registered app, or qBittorrent when the Windows association is broken</value></data>
+  <data name="Add_Kazumi_OpenedExternal" xml:space="preserve"><value>Magnet sent to {0}</value></data>
+  <data name="Add_Kazumi_Err_ExternalClient" xml:space="preserve"><value>No working external torrent client was found</value></data>
   <data name="Add_Kazumi_State_Metadata" xml:space="preserve"><value>Fetching metadata</value></data>
   <data name="Add_Kazumi_State_Starting" xml:space="preserve"><value>Starting</value></data>
   <data name="Add_Kazumi_State_Checking" xml:space="preserve"><value>Checking files</value></data>
