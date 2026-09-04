@@ -444,7 +444,15 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="Add_Kazumi_OpenLink" xml:space="preserve"><value>Abrir link</value></data>
   <data name="Add_Kazumi_Cancel" xml:space="preserve"><value>Cancelar</value></data>
   <data name="Add_Kazumi_SelectFolder" xml:space="preserve"><value>Escolha onde os arquivos do torrent serão baixados</value></data>
-  <data name="Add_Kazumi_Progress" xml:space="preserve"><value>{0:F1}% · {1}/s · {2} peers</value></data>
+  <data name="Add_Kazumi_Progress" xml:space="preserve"><value>{3} · {0:F1}% · {1}/s · {2} peers · {4} nós DHT</value></data>
+  <data name="Add_Kazumi_ExternalClient" xml:space="preserve"><value>Usar o cliente torrent padrão</value></data>
+  <data name="Add_Kazumi_ExternalClient_Hint" xml:space="preserve"><value>Abrir magnets em um aplicativo instalado, como o qBittorrent, em vez do cliente do LuaTools</value></data>
+  <data name="Add_Kazumi_OpenedExternal" xml:space="preserve"><value>Magnet enviado ao cliente torrent padrão</value></data>
+  <data name="Add_Kazumi_Err_ExternalClient" xml:space="preserve"><value>Não foi possível abrir um cliente torrent padrão</value></data>
+  <data name="Add_Kazumi_State_Metadata" xml:space="preserve"><value>Buscando metadados</value></data>
+  <data name="Add_Kazumi_State_Starting" xml:space="preserve"><value>Iniciando</value></data>
+  <data name="Add_Kazumi_State_Checking" xml:space="preserve"><value>Verificando arquivos</value></data>
+  <data name="Add_Kazumi_State_Downloading" xml:space="preserve"><value>Baixando</value></data>
   <data name="Add_Kazumi_Complete" xml:space="preserve"><value>Download concluído</value></data>
   <data name="Add_Kazumi_Cancelled" xml:space="preserve"><value>Download cancelado</value></data>
   <data name="Add_Kazumi_Err_Torrent" xml:space="preserve"><value>Falha no download do torrent</value></data>

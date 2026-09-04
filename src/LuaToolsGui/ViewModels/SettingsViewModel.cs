@@ -75,6 +75,11 @@ public partial class SettingsViewModel : ObservableObject
 
     partial void OnKazumiEnabledChanged(bool value) => _settings.KazumiEnabled = value;
 
+    [ObservableProperty] private bool _kazumiUseExternalTorrentClient;
+
+    partial void OnKazumiUseExternalTorrentClientChanged(bool value) =>
+        _settings.KazumiUseExternalTorrentClient = value;
+
     // ── Achievement Bridge ──────────────────────────────────────────
     [ObservableProperty] private bool _achievementsEnabled;
     partial void OnAchievementsEnabledChanged(bool value) => _settings.AchievementsEnabled = value;
@@ -274,6 +279,7 @@ public partial class SettingsViewModel : ObservableObject
         _autoUpdateApps = settings.AutoUpdateApps; // init from saved value (default ON) without triggering Save
         _fastFetch = settings.FastFetch;
         _kazumiEnabled = settings.KazumiEnabled;
+        _kazumiUseExternalTorrentClient = settings.KazumiUseExternalTorrentClient;
         _achievementsEnabled = settings.AchievementsEnabled;
         _achievementAutoInstallProviders = settings.AchievementAutoInstallProviders;
         _achievementNotifications = settings.AchievementNotifications;
@@ -420,6 +426,7 @@ public partial class SettingsViewModel : ObservableObject
         // same value, so no feedback loop.
         FastFetch = _settings.FastFetch;
         KazumiEnabled = _settings.KazumiEnabled;
+        KazumiUseExternalTorrentClient = _settings.KazumiUseExternalTorrentClient;
     }
 
     /// <summary>Re-fetch usage stats for the saved key. Silent no-op if no key is saved.</summary>

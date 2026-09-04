@@ -102,7 +102,9 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="Markdig.Wpf" Version="0.5.0.1" />
-    <PackageReference Include="MonoTorrent" Version="3.0.2" />
+    <!-- 3.9 widens the DHT bootstrap-router set. The 3.0.2 stable build could remain indefinitely in
+         Metadata/0-peers on a cold cache when its legacy bootstrap routers were unavailable. -->
+    <PackageReference Include="MonoTorrent" Version="3.9.0-alpha.unstable.rev0000" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.9" />
     <PackageReference Include="Velopack" Version="1.2.0" />

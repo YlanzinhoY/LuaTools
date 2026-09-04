@@ -51,14 +51,15 @@ public sealed class TorrentDownloadService : IDisposable
                     manager.Progress,
                     manager.Monitor.DownloadRate,
                     manager.Peers.Available + manager.Peers.Leechs + manager.Peers.Seeds,
-                    manager.State.ToString()));
+                    manager.State.ToString(),
+                    _engine.Dht.NodeCount));
                 await Task.Delay(750, ct);
             }
 
             if (manager.State == TorrentState.Error)
                 throw new IOException("The torrent client reported an error.");
 
-            progress?.Report(new TorrentDownloadProgress(100, 0, manager.Peers.Available, "Complete"));
+            progress?.Report(new TorrentDownloadProgress(100, 0, manager.Peers.Available, "Complete", _engine.Dht.NodeCount));
         }
         finally
         {

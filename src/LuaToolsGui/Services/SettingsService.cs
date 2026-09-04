@@ -56,6 +56,9 @@ public class AppSettings
     // When enabled, show matching entries from the bundled Kazumi catalog on the Add page.
     public bool? KazumiEnabled { get; set; }
 
+    // When true, hand magnet links to the Windows default torrent application instead of MonoTorrent.
+    public bool? KazumiUseExternalTorrentClient { get; set; }
+
     // Achievement Bridge integration. Nullable fields preserve the intended default-ON behavior for
     // users whose settings file predates the feature.
     public bool? AchievementsEnabled { get; set; }
@@ -175,6 +178,13 @@ public class SettingsService
         set { _settings.KazumiEnabled = value; Save(); }
     }
 
+    /// <summary>Open Kazumi magnets in the user's default torrent client (default OFF).</summary>
+    public bool KazumiUseExternalTorrentClient
+    {
+        get => _settings.KazumiUseExternalTorrentClient ?? false;
+        set { _settings.KazumiUseExternalTorrentClient = value; Save(); }
+    }
+
     public bool AchievementsEnabled
     {
         get => _settings.AchievementsEnabled ?? true;
@@ -273,6 +283,7 @@ public class SettingsService
             && _settings.MinimizeToTray is null
             && _settings.FastFetch is null
             && _settings.KazumiEnabled is null
+            && _settings.KazumiUseExternalTorrentClient is null
             && _settings.AchievementsEnabled is null
             && _settings.AchievementAutoInstallProviders is null
             && _settings.AchievementNotifications is null

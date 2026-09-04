@@ -756,6 +756,20 @@ public partial class DownloadViewModel : ObservableObject
             return;
         }
 
+        if (_settings.KazumiUseExternalTorrentClient)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(source.Url) { UseShellExecute = true });
+                source.StatusText = Resources.Strings.Add_Kazumi_OpenedExternal;
+            }
+            catch
+            {
+                source.StatusText = Resources.Strings.Add_Kazumi_Err_ExternalClient;
+            }
+            return;
+        }
+
         using var picker = new System.Windows.Forms.FolderBrowserDialog
         {
             Description = Resources.Strings.Add_Kazumi_SelectFolder,
@@ -775,7 +789,9 @@ public partial class DownloadViewModel : ObservableObject
                     Resources.Strings.Add_Kazumi_Progress,
                     value.Percent,
                     FormatBytes(value.DownloadRate),
-                    value.Peers);
+                    value.Peers,
+                    FormatTorrentState(value.State),
+                    value.DhtNodes);
             });
             await _torrent.DownloadMagnetAsync(source.Url, picker.SelectedPath, progress, token);
             source.Progress = 100;
@@ -1135,6 +1151,15 @@ public partial class DownloadViewModel : ObservableObject
         }
         return $"{value:0.#} {units[unit]}";
     }
+
+    private static string FormatTorrentState(string state) => state switch
+    {
+        "Metadata" => Resources.Strings.Add_Kazumi_State_Metadata,
+        "Starting" => Resources.Strings.Add_Kazumi_State_Starting,
+        "Hashing" or "HashingPaused" => Resources.Strings.Add_Kazumi_State_Checking,
+        "Downloading" => Resources.Strings.Add_Kazumi_State_Downloading,
+        _ => state,
+    };
 
     /// <summary>
     /// Extract an appid from a Steam/SteamDB store URL (…/app/&lt;id&gt;), or from a bare number of 5+
