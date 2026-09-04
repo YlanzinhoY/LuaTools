@@ -8,24 +8,30 @@ namespace LuaToolsGui.Services;
 /// <summary>Small in-process BitTorrent client used by Kazumi magnet entries.</summary>
 public sealed class TorrentDownloadService : IDisposable
 {
-    private readonly ClientEngine _engine;
+    private readonly object _engineGate = new();
+    private ClientEngine? _engine;
 
-    public TorrentDownloadService()
+    private ClientEngine GetEngine()
     {
-        string cache = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "LuaToolsGui", "torrent-cache");
-        Directory.CreateDirectory(cache);
-
-        var settings = new EngineSettingsBuilder
+        lock (_engineGate)
         {
-            AllowPortForwarding = true,
-            AutoSaveLoadDhtCache = true,
-            AutoSaveLoadFastResume = true,
-            AutoSaveLoadMagnetLinkMetadata = true,
-            CacheDirectory = cache,
-        };
-        _engine = new ClientEngine(settings.ToSettings());
+            if (_engine is not null) return _engine;
+
+            string cache = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "LuaToolsGui", "torrent-cache");
+            Directory.CreateDirectory(cache);
+
+            var settings = new EngineSettingsBuilder
+            {
+                AllowPortForwarding = true,
+                AutoSaveLoadDhtCache = true,
+                AutoSaveLoadFastResume = true,
+                AutoSaveLoadMagnetLinkMetadata = true,
+                CacheDirectory = cache,
+            };
+            return _engine = new ClientEngine(settings.ToSettings());
+        }
     }
 
     public async Task DownloadMagnetAsync(
@@ -37,11 +43,12 @@ public sealed class TorrentDownloadService : IDisposable
         if (!MagnetLink.TryParse(magnetUri, out var magnet))
             throw new ArgumentException("Invalid magnet URI.", nameof(magnetUri));
 
+        ClientEngine engine = GetEngine();
         Directory.CreateDirectory(destinationFolder);
         TorrentManager? manager = null;
         try
         {
-            manager = await _engine.AddAsync(magnet, destinationFolder);
+            manager = await engine.AddAsync(magnet, destinationFolder);
             await manager.StartAsync();
 
             while (manager.Progress < 100 && manager.State != TorrentState.Error)
@@ -52,24 +59,31 @@ public sealed class TorrentDownloadService : IDisposable
                     manager.Monitor.DownloadRate,
                     manager.Peers.Available + manager.Peers.Leechs + manager.Peers.Seeds,
                     manager.State.ToString(),
-                    _engine.Dht.NodeCount));
+                    engine.Dht.NodeCount));
                 await Task.Delay(750, ct);
             }
 
             if (manager.State == TorrentState.Error)
                 throw new IOException("The torrent client reported an error.");
 
-            progress?.Report(new TorrentDownloadProgress(100, 0, manager.Peers.Available, "Complete", _engine.Dht.NodeCount));
+            progress?.Report(new TorrentDownloadProgress(100, 0, manager.Peers.Available, "Complete", engine.Dht.NodeCount));
         }
         finally
         {
             if (manager is not null)
             {
                 try { await manager.StopAsync(TimeSpan.FromSeconds(2)); } catch { /* best effort */ }
-                try { await _engine.RemoveAsync(manager); } catch { /* best effort */ }
+                try { await engine.RemoveAsync(manager); } catch { /* best effort */ }
             }
         }
     }
 
-    public void Dispose() => _engine.Dispose();
+    public void Dispose()
+    {
+        lock (_engineGate)
+        {
+            _engine?.Dispose();
+            _engine = null;
+        }
+    }
 }
