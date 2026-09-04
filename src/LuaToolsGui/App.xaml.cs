@@ -60,6 +60,8 @@ public partial class App : Application
                 services.AddSingleton<AuthService>();
                 services.AddSingleton<LuaToolsApiClient>();
                 services.AddSingleton<HubcapService>();
+                services.AddSingleton<KazumiCatalogService>();
+                services.AddSingleton<TorrentDownloadService>();
                 services.AddSingleton<UpdateService>();
                 // Hook loader infrastructure
                 services.AddSingleton<PluginAddService>();

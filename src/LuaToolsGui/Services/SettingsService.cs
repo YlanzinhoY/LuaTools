@@ -53,6 +53,9 @@ public class AppSettings
     // Nullable so "never set" (→ default OFF) is distinguishable from an explicit choice.
     public bool? FastFetch { get; set; }
 
+    // When enabled, show matching entries from the bundled Kazumi catalog on the Add page.
+    public bool? KazumiEnabled { get; set; }
+
     // Achievement Bridge integration. Nullable fields preserve the intended default-ON behavior for
     // users whose settings file predates the feature.
     public bool? AchievementsEnabled { get; set; }
@@ -165,6 +168,13 @@ public class SettingsService
         set { _settings.FastFetch = value; Save(); }
     }
 
+    /// <summary>When true, matching Kazumi downloads are shown on the Add page (default OFF).</summary>
+    public bool KazumiEnabled
+    {
+        get => _settings.KazumiEnabled ?? false;
+        set { _settings.KazumiEnabled = value; Save(); }
+    }
+
     public bool AchievementsEnabled
     {
         get => _settings.AchievementsEnabled ?? true;
@@ -262,6 +272,7 @@ public class SettingsService
             && _settings.StartWithWindows is null
             && _settings.MinimizeToTray is null
             && _settings.FastFetch is null
+            && _settings.KazumiEnabled is null
             && _settings.AchievementsEnabled is null
             && _settings.AchievementAutoInstallProviders is null
             && _settings.AchievementNotifications is null

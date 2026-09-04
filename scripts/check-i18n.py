@@ -29,6 +29,18 @@ PLACEHOLDER_RE = re.compile(r'\{(\d+)\}')
 # across every Strings.<tag>.resx, clear them from here, and this check goes back to demanding full
 # parity. Anything left here is untranslated in all 29 languages.
 PENDING_TRANSLATION: set[str] = {
+    "Add_Kazumi",
+    "Add_Kazumi_Hint",
+    "Add_Kazumi_Available",
+    "Add_Kazumi_Download",
+    "Add_Kazumi_OpenLink",
+    "Add_Kazumi_Cancel",
+    "Add_Kazumi_SelectFolder",
+    "Add_Kazumi_Progress",
+    "Add_Kazumi_Complete",
+    "Add_Kazumi_Cancelled",
+    "Add_Kazumi_Err_Torrent",
+    "Add_Kazumi_Err_OpenLink",
     "Manage_Action_Achievements",
     "Achievements_Title",
     "Achievements_Progress",

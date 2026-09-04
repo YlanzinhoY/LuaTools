@@ -437,6 +437,18 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="Add_FastFetch_Hint" xml:space="preserve"><value>Baixar automaticamente da primeira fonte disponível</value></data>
   <data name="Add_FastFetch_NoSource" xml:space="preserve"><value>Nenhuma fonte disponível encontrada para este jogo</value></data>
   <data name="Add_FastFetch_Via" xml:space="preserve"><value>· via {0}</value></data>
+  <data name="Add_Kazumi" xml:space="preserve"><value>Kazumi</value></data>
+  <data name="Add_Kazumi_Hint" xml:space="preserve"><value>Mostrar downloads do Kazumi quando o jogo existir no catálogo</value></data>
+  <data name="Add_Kazumi_Available" xml:space="preserve"><value>Disponível no Kazumi</value></data>
+  <data name="Add_Kazumi_Download" xml:space="preserve"><value>Baixar</value></data>
+  <data name="Add_Kazumi_OpenLink" xml:space="preserve"><value>Abrir link</value></data>
+  <data name="Add_Kazumi_Cancel" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="Add_Kazumi_SelectFolder" xml:space="preserve"><value>Escolha onde os arquivos do torrent serão baixados</value></data>
+  <data name="Add_Kazumi_Progress" xml:space="preserve"><value>{0:F1}% · {1}/s · {2} peers</value></data>
+  <data name="Add_Kazumi_Complete" xml:space="preserve"><value>Download concluído</value></data>
+  <data name="Add_Kazumi_Cancelled" xml:space="preserve"><value>Download cancelado</value></data>
+  <data name="Add_Kazumi_Err_Torrent" xml:space="preserve"><value>Falha no download do torrent</value></data>
+  <data name="Add_Kazumi_Err_OpenLink" xml:space="preserve"><value>Não foi possível abrir este link de download</value></data>
   <data name="Plugin_Title" xml:space="preserve"><value>Plugin LuaTools</value></data>
   <data name="Plugin_Subtitle" xml:space="preserve"><value>O plugin LuaTools para Steam! — Agora usando LuaLoader em vez de Shittenium</value></data>
   <data name="Plugin_CardTitle" xml:space="preserve"><value>Status</value></data>

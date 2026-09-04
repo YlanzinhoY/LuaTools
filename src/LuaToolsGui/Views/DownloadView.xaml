@@ -340,6 +340,30 @@
                     IsChecked="{Binding FastFetch, Mode=TwoWay}" />
             </Grid>
 
+            <!-- Kazumi catalog toggle -->
+            <Grid
+                Margin="0,12,0,0"
+                Visibility="{Binding HasDetails, Converter={StaticResource BoolToVis}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock
+                        FontSize="13"
+                        FontWeight="Medium"
+                        Text="{x:Static res:Strings.Add_Kazumi}" />
+                    <TextBlock
+                        FontSize="11"
+                        Foreground="#6b7280"
+                        Text="{x:Static res:Strings.Add_Kazumi_Hint}" />
+                </StackPanel>
+                <ui:ToggleSwitch
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    IsChecked="{Binding KazumiEnabled, Mode=TwoWay}" />
+            </Grid>
+
             <!-- Fetch button -->
             <ui:Button
                 Margin="0,14,0,0"
@@ -559,6 +583,85 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
+            <!-- Kazumi full-game downloads. Torrent rows are handled inside LuaTools; normal links open
+                 in the browser because most hosts use an interstitial download page. -->
+            <Border
+                Margin="0,12,0,0"
+                Padding="12"
+                Background="#0DFFFFFF"
+                BorderBrush="#40a78bfa"
+                BorderThickness="1"
+                CornerRadius="8"
+                Visibility="{Binding HasKazumiDownloads, Converter={StaticResource BoolToVis}}">
+                <StackPanel>
+                    <TextBlock
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Foreground="#a78bfa"
+                        Text="{x:Static res:Strings.Add_Kazumi_Available}" />
+                    <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding KazumiDownloads}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Margin="0,0,0,8"
+                                    Padding="10,8"
+                                    Background="#08FFFFFF"
+                                    CornerRadius="6">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                                <TextBlock FontSize="13" FontWeight="Medium" Text="{Binding Host}" />
+                                                <Border
+                                                    Margin="7,0,0,0"
+                                                    Padding="5,1"
+                                                    Background="#20a78bfa"
+                                                    CornerRadius="4">
+                                                    <TextBlock
+                                                        FontSize="9.5"
+                                                        FontWeight="SemiBold"
+                                                        Foreground="#a78bfa"
+                                                        Text="{Binding KindLabel}" />
+                                                </Border>
+                                            </StackPanel>
+                                            <ui:Button
+                                                Grid.Column="1"
+                                                Appearance="Primary"
+                                                Command="{Binding DownloadCommand}"
+                                                Content="{Binding ActionLabel}"
+                                                Icon="{ui:SymbolIcon ArrowDownload24}"
+                                                Visibility="{Binding IsDownloading, Converter={StaticResource InverseBoolToVis}}" />
+                                            <ui:Button
+                                                Grid.Column="2"
+                                                Margin="8,0,0,0"
+                                                Command="{Binding CancelCommand}"
+                                                Content="{x:Static res:Strings.Add_Kazumi_Cancel}"
+                                                Icon="{ui:SymbolIcon DismissCircle24}"
+                                                Visibility="{Binding IsDownloading, Converter={StaticResource BoolToVis}}" />
+                                        </Grid>
+                                        <ProgressBar
+                                            Margin="0,8,0,0"
+                                            Maximum="100"
+                                            Value="{Binding Progress, Mode=OneWay}"
+                                            Visibility="{Binding IsDownloading, Converter={StaticResource BoolToVis}}" />
+                                        <TextBlock
+                                            Margin="0,5,0,0"
+                                            FontSize="11"
+                                            Foreground="#9ca3af"
+                                            Text="{Binding StatusText}"
+                                            Visibility="{Binding StatusText, Converter={StaticResource NullToCollapsed}}" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
 
             <!-- DLC info -->
             <StackPanel Margin="0,12,0,0" Visibility="{Binding HasDlcInfo, Converter={StaticResource BoolToVis}}">

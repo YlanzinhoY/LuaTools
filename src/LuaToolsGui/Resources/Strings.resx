@@ -460,6 +460,18 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="Add_FastFetch_Hint" xml:space="preserve"><value>Auto-download from the first available source</value></data>
   <data name="Add_FastFetch_NoSource" xml:space="preserve"><value>No available sources found for this game</value></data>
   <data name="Add_FastFetch_Via" xml:space="preserve"><value>· via {0}</value></data>
+  <data name="Add_Kazumi" xml:space="preserve"><value>Kazumi</value></data>
+  <data name="Add_Kazumi_Hint" xml:space="preserve"><value>Show Kazumi downloads when this game is available in the catalog</value></data>
+  <data name="Add_Kazumi_Available" xml:space="preserve"><value>Available on Kazumi</value></data>
+  <data name="Add_Kazumi_Download" xml:space="preserve"><value>Download</value></data>
+  <data name="Add_Kazumi_OpenLink" xml:space="preserve"><value>Open link</value></data>
+  <data name="Add_Kazumi_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Add_Kazumi_SelectFolder" xml:space="preserve"><value>Choose where the torrent files will be downloaded</value></data>
+  <data name="Add_Kazumi_Progress" xml:space="preserve"><value>{0:F1}% · {1}/s · {2} peers</value></data>
+  <data name="Add_Kazumi_Complete" xml:space="preserve"><value>Download complete</value></data>
+  <data name="Add_Kazumi_Cancelled" xml:space="preserve"><value>Download cancelled</value></data>
+  <data name="Add_Kazumi_Err_Torrent" xml:space="preserve"><value>The torrent download failed</value></data>
+  <data name="Add_Kazumi_Err_OpenLink" xml:space="preserve"><value>Could not open this download link</value></data>
 
   <!-- ── Confirm overlay (overwrite diff) ── -->
   <data name="Confirm_OpenSteamDb" xml:space="preserve"><value>Open on SteamDB</value></data>

@@ -447,6 +447,18 @@ public static class Strings
     public static string Add_FastFetch_Hint => Get(nameof(Add_FastFetch_Hint));
     public static string Add_FastFetch_NoSource => Get(nameof(Add_FastFetch_NoSource));
     public static string Add_FastFetch_Via => Get(nameof(Add_FastFetch_Via));
+    public static string Add_Kazumi => Get(nameof(Add_Kazumi));
+    public static string Add_Kazumi_Hint => Get(nameof(Add_Kazumi_Hint));
+    public static string Add_Kazumi_Available => Get(nameof(Add_Kazumi_Available));
+    public static string Add_Kazumi_Download => Get(nameof(Add_Kazumi_Download));
+    public static string Add_Kazumi_OpenLink => Get(nameof(Add_Kazumi_OpenLink));
+    public static string Add_Kazumi_Cancel => Get(nameof(Add_Kazumi_Cancel));
+    public static string Add_Kazumi_SelectFolder => Get(nameof(Add_Kazumi_SelectFolder));
+    public static string Add_Kazumi_Progress => Get(nameof(Add_Kazumi_Progress));
+    public static string Add_Kazumi_Complete => Get(nameof(Add_Kazumi_Complete));
+    public static string Add_Kazumi_Cancelled => Get(nameof(Add_Kazumi_Cancelled));
+    public static string Add_Kazumi_Err_Torrent => Get(nameof(Add_Kazumi_Err_Torrent));
+    public static string Add_Kazumi_Err_OpenLink => Get(nameof(Add_Kazumi_Err_OpenLink));
 
     // ── Confirm overlay ──
     public static string Confirm_OpenSteamDb => Get(nameof(Confirm_OpenSteamDb));

@@ -12,8 +12,8 @@ public partial class DownloadView : UserControl
         DataContext = viewModel;
         // Warm the featured strips in the background (best-effort; no-op if already loaded).
         _ = viewModel.LoadFeaturedAsync();
-        // Pull the latest FastFetch value each time the view appears (it's also toggleable in Settings).
-        Loaded += (_, _) => viewModel.SyncFastFetch();
+        // Pull the latest persisted download options each time the view appears.
+        Loaded += (_, _) => viewModel.SyncDownloadOptions();
     }
 
     /// <summary>The featured strips scroll horizontally, but they're nested inside the page's vertical

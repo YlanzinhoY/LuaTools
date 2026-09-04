@@ -71,6 +71,10 @@ public partial class SettingsViewModel : ObservableObject
 
     partial void OnFastFetchChanged(bool value) => _settings.FastFetch = value;
 
+    [ObservableProperty] private bool _kazumiEnabled;
+
+    partial void OnKazumiEnabledChanged(bool value) => _settings.KazumiEnabled = value;
+
     // ── Achievement Bridge ──────────────────────────────────────────
     [ObservableProperty] private bool _achievementsEnabled;
     partial void OnAchievementsEnabledChanged(bool value) => _settings.AchievementsEnabled = value;
@@ -269,6 +273,7 @@ public partial class SettingsViewModel : ObservableObject
         RefreshSteam();
         _autoUpdateApps = settings.AutoUpdateApps; // init from saved value (default ON) without triggering Save
         _fastFetch = settings.FastFetch;
+        _kazumiEnabled = settings.KazumiEnabled;
         _achievementsEnabled = settings.AchievementsEnabled;
         _achievementAutoInstallProviders = settings.AchievementAutoInstallProviders;
         _achievementNotifications = settings.AchievementNotifications;
@@ -414,6 +419,7 @@ public partial class SettingsViewModel : ObservableObject
         // that only read the setting at construction). No-op if unchanged; a real change writes back the
         // same value, so no feedback loop.
         FastFetch = _settings.FastFetch;
+        KazumiEnabled = _settings.KazumiEnabled;
     }
 
     /// <summary>Re-fetch usage stats for the saved key. Silent no-op if no key is saved.</summary>

@@ -432,7 +432,7 @@
                 </StackPanel>
             </Border>
 
-            <!-- Install behavior (Auto Update Apps + FastFetch) -->
+            <!-- Install behavior (Auto Update Apps + FastFetch + Kazumi) -->
             <TextBlock Style="{StaticResource SectionHeader}" Text="{x:Static res:Strings.Settings_Section_Install}" />
             <Border Style="{StaticResource SettingsCard}">
                 <StackPanel>
@@ -484,6 +484,31 @@
                             Margin="12,0,0,0"
                             VerticalAlignment="Center"
                             IsChecked="{Binding FastFetch, Mode=TwoWay}" />
+                    </Grid>
+                    <Border Style="{StaticResource RowDivider}" />
+                    <!-- Kazumi catalog (same persisted setting as the Add screen's toggle) -->
+                    <Grid Margin="14,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                FontSize="13"
+                                FontWeight="Medium"
+                                Text="{x:Static res:Strings.Add_Kazumi}" />
+                            <TextBlock
+                                Margin="0,4,0,0"
+                                FontSize="12"
+                                Foreground="#6b7280"
+                                Text="{x:Static res:Strings.Add_Kazumi_Hint}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                        <ui:ToggleSwitch
+                            Grid.Column="1"
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding KazumiEnabled, Mode=TwoWay}" />
                     </Grid>
                 </StackPanel>
             </Border>

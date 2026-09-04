@@ -62,6 +62,55 @@ public partial class SourceRowViewModel : ObservableObject
     }
 }
 
+public partial class KazumiDownloadRowViewModel : ObservableObject
+{
+    private readonly DownloadViewModel _parent;
+    private CancellationTokenSource? _cancellation;
+
+    public string Host { get; }
+    public string Url { get; }
+    public bool IsTorrent { get; }
+    public string KindLabel => IsTorrent ? "TORRENT" : "LINK";
+    public string ActionLabel => IsTorrent
+        ? Resources.Strings.Add_Kazumi_Download
+        : Resources.Strings.Add_Kazumi_OpenLink;
+
+    [ObservableProperty] private bool _isDownloading;
+    [ObservableProperty] private double _progress;
+    [ObservableProperty] private string? _statusText;
+
+    public KazumiDownloadRowViewModel(DownloadViewModel parent, KazumiDownload download)
+    {
+        _parent = parent;
+        Host = string.IsNullOrWhiteSpace(download.Host) ? "Kazumi" : download.Host;
+        Url = download.Url;
+        IsTorrent = download.IsTorrent;
+    }
+
+    internal CancellationToken BeginDownload()
+    {
+        _cancellation?.Dispose();
+        _cancellation = new CancellationTokenSource();
+        IsDownloading = true;
+        Progress = 0;
+        StatusText = null;
+        return _cancellation.Token;
+    }
+
+    internal void FinishDownload()
+    {
+        IsDownloading = false;
+        _cancellation?.Dispose();
+        _cancellation = null;
+    }
+
+    [RelayCommand]
+    private Task DownloadAsync() => _parent.DownloadKazumiAsync(this);
+
+    [RelayCommand]
+    private void Cancel() => _cancellation?.Cancel();
+}
+
 /// <summary>One row in the overwrite-confirm diff (a depot/DLC the new lua adds or removes).</summary>
 public record DiffRow(string Title, string Meta, bool IsDlc, bool IsShared, string SteamDbUrl);
 
@@ -81,8 +130,11 @@ public partial class DownloadViewModel : ObservableObject
     private readonly SteamAppInfoCache _appInfo;
     private readonly SteamDepotInfo _depotInfo;
     private readonly HardwareAppIdService _hardware;
+    private readonly KazumiCatalogService _kazumiCatalog;
+    private readonly TorrentDownloadService _torrent;
     private CancellationTokenSource? _searchCts;
     private CancellationTokenSource? _detailsCts;
+    private CancellationTokenSource? _kazumiCts;
 
     // Per-confirm steamcmd lookup: depot/DLC id → its real depot info (name/size/os/lang).
     private IReadOnlyDictionary<long, ContentDepot> _depotsById = new Dictionary<long, ContentDepot>();
@@ -95,6 +147,7 @@ public partial class DownloadViewModel : ObservableObject
 
     public ObservableCollection<SteamSearchResult> SearchResults { get; } = [];
     public ObservableCollection<SourceRowViewModel> Sources { get; } = [];
+    public ObservableCollection<KazumiDownloadRowViewModel> KazumiDownloads { get; } = [];
     public ObservableCollection<DlcDepot> DlcDepots { get; } = [];
 
     // ── Featured strips (Steam top-sellers / new-releases), shown when the page is idle ──
@@ -137,6 +190,7 @@ public partial class DownloadViewModel : ObservableObject
     private bool _sourcesLoaded;
 
     public bool HasSources => SourcesLoaded && Sources.Count > 0;
+    public bool HasKazumiDownloads => KazumiEnabled && KazumiDownloads.Count > 0;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasDlcInfo))]
@@ -288,14 +342,40 @@ public partial class DownloadViewModel : ObservableObject
     [ObservableProperty] private bool _fastFetch;
     partial void OnFastFetchChanged(bool value) => _settings.FastFetch = value;
 
-    /// <summary>Re-sync the FastFetch toggle from the saved setting when the Add view appears. The Settings
-    /// page exposes the same toggle, and both VMs are singletons that otherwise only read it at startup.</summary>
-    public void SyncFastFetch() => FastFetch = _settings.FastFetch;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasKazumiDownloads))]
+    private bool _kazumiEnabled;
+
+    partial void OnKazumiEnabledChanged(bool value)
+    {
+        _settings.KazumiEnabled = value;
+        if (value && Details is not null)
+            _ = RefreshKazumiAsync(Details);
+        else if (!value)
+            ClearKazumiDownloads();
+    }
+
+    partial void OnDetailsChanged(GameDetails? value)
+    {
+        if (value is not null && KazumiEnabled)
+            _ = RefreshKazumiAsync(value);
+        else
+            ClearKazumiDownloads();
+    }
+
+    /// <summary>Re-sync the persisted toggles when the Add view appears. Settings and Add expose the same
+    /// options, and both view models are singletons that otherwise only read them at startup.</summary>
+    public void SyncDownloadOptions()
+    {
+        FastFetch = _settings.FastFetch;
+        KazumiEnabled = _settings.KazumiEnabled;
+    }
 
     public DownloadViewModel(LuaToolsApiClient api, HubcapService hubcap, SettingsService settings,
         AuthService auth, ToastService toast, LuaInstaller installer,
         SteamAppListCache appList, SteamAppInfoCache appInfo, SteamDepotInfo depotInfo,
-        HardwareAppIdService hardware, DropInstallViewModel drop)
+        HardwareAppIdService hardware, KazumiCatalogService kazumiCatalog,
+        TorrentDownloadService torrent, DropInstallViewModel drop)
     {
         _api = api;
         _hubcap = hubcap;
@@ -307,8 +387,11 @@ public partial class DownloadViewModel : ObservableObject
         _appInfo = appInfo;
         _depotInfo = depotInfo;
         _hardware = hardware;
+        _kazumiCatalog = kazumiCatalog;
+        _torrent = torrent;
         Drop = drop;
         _fastFetch = settings.FastFetch;
+        _kazumiEnabled = settings.KazumiEnabled;
     }
 
     /// <summary>
@@ -591,6 +674,43 @@ public partial class DownloadViewModel : ObservableObject
         }
     }
 
+    private async Task RefreshKazumiAsync(GameDetails details)
+    {
+        _kazumiCts?.Cancel();
+        _kazumiCts?.Dispose();
+        var cts = _kazumiCts = new CancellationTokenSource();
+
+        try
+        {
+            var game = await _kazumiCatalog.FindAsync(details.AppId, details.Name, cts.Token);
+            if (cts.IsCancellationRequested || Details?.AppId != details.AppId) return;
+
+            KazumiDownloads.Clear();
+            if (game is not null)
+            {
+                foreach (var download in game.Downloads.OrderByDescending(d => d.IsTorrent))
+                    KazumiDownloads.Add(new KazumiDownloadRowViewModel(this, download));
+            }
+            OnPropertyChanged(nameof(HasKazumiDownloads));
+        }
+        catch (OperationCanceledException) { }
+        catch
+        {
+            // Kazumi is optional. A missing/corrupt catalog must never block normal manifest sources.
+            KazumiDownloads.Clear();
+            OnPropertyChanged(nameof(HasKazumiDownloads));
+        }
+    }
+
+    private void ClearKazumiDownloads()
+    {
+        _kazumiCts?.Cancel();
+        _kazumiCts?.Dispose();
+        _kazumiCts = null;
+        KazumiDownloads.Clear();
+        OnPropertyChanged(nameof(HasKazumiDownloads));
+    }
+
     /// <summary>
     /// Refresh the standard "X/25" daily usage badge on every non-Hubcap source row (those count
     /// toward the lua.tools daily limit; Hubcap sources show their own X/800 instead). Signed-in only.
@@ -619,6 +739,61 @@ public partial class DownloadViewModel : ObservableObject
     }
 
     // ── Downloads ───────────────────────────────────────────────────
+
+    public async Task DownloadKazumiAsync(KazumiDownloadRowViewModel source)
+    {
+        Error = null;
+        if (!source.IsTorrent)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(source.Url) { UseShellExecute = true });
+            }
+            catch
+            {
+                Error = Resources.Strings.Add_Kazumi_Err_OpenLink;
+            }
+            return;
+        }
+
+        using var picker = new System.Windows.Forms.FolderBrowserDialog
+        {
+            Description = Resources.Strings.Add_Kazumi_SelectFolder,
+            UseDescriptionForTitle = true,
+            InitialDirectory = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads"),
+        };
+        if (picker.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+
+        var token = source.BeginDownload();
+        try
+        {
+            var progress = new Progress<TorrentDownloadProgress>(value =>
+            {
+                source.Progress = value.Percent;
+                source.StatusText = string.Format(
+                    Resources.Strings.Add_Kazumi_Progress,
+                    value.Percent,
+                    FormatBytes(value.DownloadRate),
+                    value.Peers);
+            });
+            await _torrent.DownloadMagnetAsync(source.Url, picker.SelectedPath, progress, token);
+            source.Progress = 100;
+            source.StatusText = Resources.Strings.Add_Kazumi_Complete;
+        }
+        catch (OperationCanceledException)
+        {
+            source.StatusText = Resources.Strings.Add_Kazumi_Cancelled;
+        }
+        catch
+        {
+            source.StatusText = Resources.Strings.Add_Kazumi_Err_Torrent;
+        }
+        finally
+        {
+            source.FinishDownload();
+        }
+    }
 
     /// <summary>Base-game manifest zip: download, then install (confirming first if a lua already exists).</summary>
     public async Task DownloadFromSourceAsync(SourceRowViewModel source)
@@ -939,12 +1114,26 @@ public partial class DownloadViewModel : ObservableObject
     private void ResetResults()
     {
         Sources.Clear();
+        ClearKazumiDownloads();
         SourcesLoaded = false;
         DlcInfo = null;
         DlcDepots.Clear();
         Error = null;
         LastDownload = null;
         _fastFetchSource = null;
+    }
+
+    private static string FormatBytes(long bytes)
+    {
+        string[] units = ["B", "KB", "MB", "GB"];
+        double value = Math.Max(0, bytes);
+        int unit = 0;
+        while (value >= 1024 && unit < units.Length - 1)
+        {
+            value /= 1024;
+            unit++;
+        }
+        return $"{value:0.#} {units[unit]}";
     }
 
     /// <summary>
