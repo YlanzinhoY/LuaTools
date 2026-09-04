@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text.RegularExpressions;
 using LuaToolsGui.Models;
 using MonoTorrent;
 using MonoTorrent.Client;
@@ -8,6 +9,10 @@ namespace LuaToolsGui.Services;
 /// <summary>Small in-process BitTorrent client used by Kazumi magnet entries.</summary>
 public sealed class TorrentDownloadService : IDisposable
 {
+    private static readonly Regex NumberedTrackerKey = new(
+        @"(?<prefix>[?&])tr\.\d+=",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
     private readonly object _engineGate = new();
     private ClientEngine? _engine;
 
@@ -24,7 +29,10 @@ public sealed class TorrentDownloadService : IDisposable
 
             var settings = new EngineSettingsBuilder
             {
-                AllowPortForwarding = true,
+                // UPnP/NAT-PMP discovery is awaited before MonoTorrent starts DHT. Some routers never
+                // answer, leaving a magnet at 0 peers indefinitely. Outbound peer connections work
+                // without a forwarded port, so the embedded client deliberately skips this step.
+                AllowPortForwarding = false,
                 AutoSaveLoadDhtCache = true,
                 AutoSaveLoadFastResume = true,
                 AutoSaveLoadMagnetLinkMetadata = true,
@@ -39,8 +47,19 @@ public sealed class TorrentDownloadService : IDisposable
         string destinationFolder,
         IProgress<TorrentDownloadProgress>? progress = null,
         CancellationToken ct = default)
+        // MonoTorrent performs some synchronous setup before its first asynchronous yield. Keep the
+        // entire operation off WPF's dispatcher so slow network/bootstrap work cannot freeze the window.
+        => await Task.Run(
+            () => DownloadMagnetCoreAsync(magnetUri, destinationFolder, progress, ct),
+            ct);
+
+    private async Task DownloadMagnetCoreAsync(
+        string magnetUri,
+        string destinationFolder,
+        IProgress<TorrentDownloadProgress>? progress,
+        CancellationToken ct)
     {
-        if (!MagnetLink.TryParse(magnetUri, out var magnet))
+        if (!MagnetLink.TryParse(NormalizeMagnetUri(magnetUri), out var magnet))
             throw new ArgumentException("Invalid magnet URI.", nameof(magnetUri));
 
         ClientEngine engine = GetEngine();
@@ -77,6 +96,14 @@ public sealed class TorrentDownloadService : IDisposable
             }
         }
     }
+
+    /// <summary>
+    /// qBittorrent accepts numbered tracker keys (<c>tr.1</c>, <c>tr.2</c>), which occur in the Kazumi
+    /// catalog. MonoTorrent follows the standard repeated <c>tr</c> key, so translate the extension
+    /// without decoding or rebuilding the rest of the magnet URI.
+    /// </summary>
+    internal static string NormalizeMagnetUri(string magnetUri) =>
+        NumberedTrackerKey.Replace(magnetUri, "${prefix}tr=");
 
     public void Dispose()
     {
