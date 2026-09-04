@@ -25,6 +25,7 @@ public static class Strings
     public static string Nav_Downloads => Get(nameof(Nav_Downloads));
     public static string Downloads_Subtitle => Get(nameof(Downloads_Subtitle));
     public static string Downloads_Empty => Get(nameof(Downloads_Empty));
+    public static string Downloads_ClearCompleted => Get(nameof(Downloads_ClearCompleted));
     public static string Nav_Manage => Get(nameof(Nav_Manage));
     public static string Nav_Builds => Get(nameof(Nav_Builds));
     public static string Nav_Mode => Get(nameof(Nav_Mode));

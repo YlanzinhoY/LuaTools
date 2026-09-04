@@ -65,6 +65,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>Unduhan</value></data>
   <data name="Downloads_Subtitle" xml:space="preserve"><value>Pantau unduhan torrent Kazumi tanpa meninggalkan LuaTools</value></data>
   <data name="Downloads_Empty" xml:space="preserve"><value>Tidak ada unduhan torrent dalam sesi ini</value></data>
+  <data name="Downloads_ClearCompleted" xml:space="preserve"><value>Hapus yang selesai</value></data>
   <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>Ada unduhan torrent yang sedang berlangsung. Menutup LuaTools akan menghentikannya dan mematikan libtorrent. Tetap tutup?</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>Kelola</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>Mode</value></data>

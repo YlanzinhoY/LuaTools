@@ -24,6 +24,8 @@ public partial class TorrentDownloadItemViewModel : ObservableObject, IDisposabl
     [NotifyCanExecuteChangedFor(nameof(CancelCommand))]
     private bool _isActive = true;
 
+    public bool IsCompleted { get; private set; }
+
     private bool CanCancel => IsActive;
 
     internal TorrentDownloadItemViewModel(string name, string source, string destinationFolder)
@@ -49,6 +51,7 @@ public partial class TorrentDownloadItemViewModel : ObservableObject, IDisposabl
     {
         Progress = 100;
         StatusText = Resources.Strings.Add_Kazumi_Complete;
+        IsCompleted = true;
         IsActive = false;
     }
 
@@ -119,6 +122,7 @@ public partial class TorrentDownloadsViewModel : ObservableObject, IDisposable
     public ObservableCollection<TorrentDownloadItemViewModel> Downloads { get; } = [];
     public bool HasDownloads => Downloads.Count > 0;
     public bool HasActiveDownloads => Downloads.Any(item => item.IsActive);
+    public bool HasCompletedDownloads => Downloads.Any(item => item.IsCompleted);
     public int ActiveDownloadCount => Downloads.Count(item => item.IsActive);
 
     public TorrentDownloadsViewModel(TorrentDownloadService torrent) => _torrent = torrent;
@@ -135,34 +139,55 @@ public partial class TorrentDownloadsViewModel : ObservableObject, IDisposable
         Downloads.Insert(0, item);
         NotifyCounts();
 
-        using var linked = CancellationTokenSource.CreateLinkedTokenSource(
-            cancellationToken,
-            item.CancellationToken);
-        var progress = new Progress<TorrentDownloadProgress>(value =>
-        {
-            item.Report(value);
-            observer?.Report(value);
-        });
-
+        bool removeAfterFailure = false;
         try
         {
-            await _torrent.DownloadMagnetAsync(magnetUri, destinationFolder, progress, linked.Token);
-            item.MarkCompleted();
-        }
-        catch (OperationCanceledException)
-        {
-            item.MarkCancelled();
-            throw;
-        }
-        catch
-        {
-            item.MarkFailed();
-            throw;
+            using var linked = CancellationTokenSource.CreateLinkedTokenSource(
+                cancellationToken,
+                item.CancellationToken);
+            var progress = new Progress<TorrentDownloadProgress>(value =>
+            {
+                item.Report(value);
+                observer?.Report(value);
+            });
+
+            try
+            {
+                await _torrent.DownloadMagnetAsync(magnetUri, destinationFolder, progress, linked.Token);
+                item.MarkCompleted();
+            }
+            catch (OperationCanceledException)
+            {
+                item.MarkCancelled();
+                throw;
+            }
+            catch
+            {
+                item.MarkFailed();
+                removeAfterFailure = true;
+                throw;
+            }
         }
         finally
         {
+            if (removeAfterFailure)
+            {
+                Downloads.Remove(item);
+                item.Dispose();
+            }
             NotifyCounts();
         }
+    }
+
+    [RelayCommand]
+    private void ClearCompleted()
+    {
+        foreach (TorrentDownloadItemViewModel item in Downloads.Where(item => item.IsCompleted).ToList())
+        {
+            Downloads.Remove(item);
+            item.Dispose();
+        }
+        NotifyCounts();
     }
 
     public void CancelAll()
@@ -175,6 +200,7 @@ public partial class TorrentDownloadsViewModel : ObservableObject, IDisposable
     {
         OnPropertyChanged(nameof(HasDownloads));
         OnPropertyChanged(nameof(HasActiveDownloads));
+        OnPropertyChanged(nameof(HasCompletedDownloads));
         OnPropertyChanged(nameof(ActiveDownloadCount));
     }
 

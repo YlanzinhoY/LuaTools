@@ -65,6 +65,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>下載</value></data>
   <data name="Downloads_Subtitle" xml:space="preserve"><value>無需離開 LuaTools 即可追蹤 Kazumi 種子下載</value></data>
   <data name="Downloads_Empty" xml:space="preserve"><value>本次工作階段中沒有種子下載</value></data>
+  <data name="Downloads_ClearCompleted" xml:space="preserve"><value>清除已完成</value></data>
   <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>目前有種子下載正在進行。關閉 LuaTools 將停止下載並關閉 libtorrent。仍要關閉嗎？</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>管理</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>模式</value></data>

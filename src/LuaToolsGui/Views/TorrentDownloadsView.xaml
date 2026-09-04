@@ -17,15 +17,32 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel>
-            <TextBlock FontSize="22" FontWeight="Bold" Text="{x:Static res:Strings.Nav_Downloads}" />
-            <TextBlock
-                Margin="0,2,0,0"
-                FontSize="13"
-                Foreground="#9ca3af"
-                Text="{x:Static res:Strings.Downloads_Subtitle}"
-                TextWrapping="Wrap" />
-        </StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <TextBlock FontSize="22" FontWeight="Bold" Text="{x:Static res:Strings.Nav_Downloads}" />
+                <TextBlock
+                    Margin="0,2,0,0"
+                    FontSize="13"
+                    Foreground="#9ca3af"
+                    Text="{x:Static res:Strings.Downloads_Subtitle}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+
+            <ui:Button
+                Grid.Column="1"
+                Margin="16,0,0,0"
+                VerticalAlignment="Center"
+                Appearance="Secondary"
+                Command="{Binding ClearCompletedCommand}"
+                Content="{x:Static res:Strings.Downloads_ClearCompleted}"
+                Icon="{ui:SymbolIcon Delete24}"
+                Visibility="{Binding HasCompletedDownloads, Converter={StaticResource BoolToVis}}" />
+        </Grid>
 
         <Grid Grid.Row="1" Margin="0,18,0,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto">

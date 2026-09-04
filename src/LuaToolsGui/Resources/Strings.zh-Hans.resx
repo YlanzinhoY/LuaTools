@@ -65,6 +65,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>下载</value></data>
   <data name="Downloads_Subtitle" xml:space="preserve"><value>无需离开 LuaTools 即可跟踪 Kazumi 种子下载</value></data>
   <data name="Downloads_Empty" xml:space="preserve"><value>本次会话中没有种子下载</value></data>
+  <data name="Downloads_ClearCompleted" xml:space="preserve"><value>清除已完成</value></data>
   <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>当前有种子下载正在进行。关闭 LuaTools 将停止下载并关闭 libtorrent。仍要关闭吗？</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>管理</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>模式</value></data>

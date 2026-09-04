@@ -65,6 +65,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>Λήψεις</value></data>
   <data name="Downloads_Subtitle" xml:space="preserve"><value>Παρακολουθήστε τις λήψεις torrent του Kazumi χωρίς να φύγετε από το LuaTools</value></data>
   <data name="Downloads_Empty" xml:space="preserve"><value>Δεν υπάρχουν λήψεις torrent σε αυτήν τη συνεδρία</value></data>
+  <data name="Downloads_ClearCompleted" xml:space="preserve"><value>Εκκαθάριση ολοκληρωμένων</value></data>
   <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>Υπάρχουν ενεργές λήψεις torrent. Το κλείσιμο του LuaTools θα τις σταματήσει και θα τερματίσει το libtorrent. Κλείσιμο ούτως ή άλλως;</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>Διαχείριση</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>Λειτουργία</value></data>

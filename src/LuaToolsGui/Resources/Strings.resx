@@ -65,6 +65,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>Downloads</value></data>
   <data name="Downloads_Subtitle" xml:space="preserve"><value>Track Kazumi torrent downloads without leaving LuaTools</value></data>
   <data name="Downloads_Empty" xml:space="preserve"><value>No torrent downloads in this session</value></data>
+  <data name="Downloads_ClearCompleted" xml:space="preserve"><value>Clear completed</value></data>
   <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>There are torrent downloads in progress. Closing LuaTools will stop them and shut down libtorrent. Close anyway?</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>Manage</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>Mode</value></data>

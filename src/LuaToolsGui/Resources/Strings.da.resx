@@ -65,6 +65,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>Downloads</value></data>
   <data name="Downloads_Subtitle" xml:space="preserve"><value>Følg Kazumi-torrentdownloads uden at forlade LuaTools</value></data>
   <data name="Downloads_Empty" xml:space="preserve"><value>Ingen torrentdownloads i denne session</value></data>
+  <data name="Downloads_ClearCompleted" xml:space="preserve"><value>Ryd færdige</value></data>
   <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>Der er aktive torrentdownloads. Hvis LuaTools lukkes, stoppes de, og libtorrent afsluttes. Vil du lukke alligevel?</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>Administrer</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>Tilstand</value></data>

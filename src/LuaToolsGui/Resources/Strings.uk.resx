@@ -65,6 +65,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>Завантаження</value></data>
   <data name="Downloads_Subtitle" xml:space="preserve"><value>Відстежуйте торрент-завантаження Kazumi, не виходячи з LuaTools</value></data>
   <data name="Downloads_Empty" xml:space="preserve"><value>У цьому сеансі немає торрент-завантажень</value></data>
+  <data name="Downloads_ClearCompleted" xml:space="preserve"><value>Очистити завершені</value></data>
   <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>Тривають торрент-завантаження. Закриття LuaTools зупинить їх і завершить роботу libtorrent. Усе одно закрити?</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>Керування</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>Режим</value></data>

@@ -65,6 +65,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>Téléchargements</value></data>
   <data name="Downloads_Subtitle" xml:space="preserve"><value>Suivez les téléchargements torrent Kazumi sans quitter LuaTools</value></data>
   <data name="Downloads_Empty" xml:space="preserve"><value>Aucun téléchargement torrent dans cette session</value></data>
+  <data name="Downloads_ClearCompleted" xml:space="preserve"><value>Effacer les terminés</value></data>
   <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>Des téléchargements torrent sont en cours. Fermer LuaTools les arrêtera et fermera libtorrent. Fermer quand même ?</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>Gérer</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>Mode</value></data>

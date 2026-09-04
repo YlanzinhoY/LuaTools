@@ -65,6 +65,7 @@
   <data name="Nav_Downloads" xml:space="preserve"><value>Tải xuống</value></data>
   <data name="Downloads_Subtitle" xml:space="preserve"><value>Theo dõi các bản tải torrent Kazumi mà không cần rời LuaTools</value></data>
   <data name="Downloads_Empty" xml:space="preserve"><value>Không có bản tải torrent nào trong phiên này</value></data>
+  <data name="Downloads_ClearCompleted" xml:space="preserve"><value>Xóa mục đã hoàn tất</value></data>
   <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>Có bản tải torrent đang chạy. Đóng LuaTools sẽ dừng chúng và tắt libtorrent. Vẫn đóng?</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>Quản lý</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>Chế độ</value></data>
