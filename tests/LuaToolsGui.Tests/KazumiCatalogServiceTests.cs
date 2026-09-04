@@ -112,6 +112,15 @@ public sealed class KazumiCatalogServiceTests : IDisposable
             Assert.True(MagnetLink.TryParse(download.Url, out _), $"Invalid magnet in catalog: {download.Url}"));
     }
 
+    [Fact]
+    public async Task BundledCatalogResolvesARealGameBySteamAppId()
+    {
+        var game = await new KazumiCatalogService().FindAsync(976310, "Title is deliberately different");
+
+        Assert.Equal("Mortal Kombat 11", game?.Name);
+        Assert.Contains(game!.Downloads, download => download.IsTorrent && download.Url.StartsWith("magnet:?"));
+    }
+
     public void Dispose()
     {
         try { Directory.Delete(_folder, recursive: true); } catch { }
