@@ -24,4 +24,15 @@ public sealed class TorrentDownloadServiceTests
 
         Assert.Equal(magnet, TorrentDownloadService.NormalizeMagnetUri(magnet));
     }
+
+    [Theory]
+    [InlineData("magnet:?xt=urn:btih:0123456789abcdef0123456789abcdef01234567", true)]
+    [InlineData("magnet:?xt=urn:btih:ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", true)]
+    [InlineData("https://example.com/file.torrent", false)]
+    [InlineData("magnet:?dn=missing-info-hash", false)]
+    [InlineData("magnet:?xt=urn:btih:too-short", false)]
+    public void IsValidMagnetUri_RequiresBtihInfoHash(string value, bool expected)
+    {
+        Assert.Equal(expected, TorrentDownloadService.IsValidMagnetUri(value));
+    }
 }

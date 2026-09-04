@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PlatformTarget>x64</PlatformTarget>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>LuaTools.TorrentHost</AssemblyName>
+    <RootNamespace>LuaTools.TorrentHost</RootNamespace>
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>false</PublishSingleFile>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <!-- The upstream package places its native DLLs under lib/, which makes MSBuild try to read them as
+       managed references. Select the mixed-mode assembly explicitly and copy its native dependencies. -->
+  <ItemGroup>
+    <PackageReference Include="LibtorrentDotNet" Version="1.1.0"
+                      GeneratePathProperty="true" ExcludeAssets="compile;runtime" />
+    <Reference Include="LibtorrentDotNet"
+               HintPath="$(PkgLibtorrentDotNet)\lib\net9.0\LibtorrentDotNet.dll"
+               Private="true" />
+    <None Include="$(PkgLibtorrentDotNet)\lib\net9.0\Ijwhost.dll"
+          Link="Ijwhost.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="$(PkgLibtorrentDotNet)\lib\net9.0\libcrypto-3-x64.dll"
+          Link="libcrypto-3-x64.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="$(PkgLibtorrentDotNet)\lib\net9.0\libssl-3-x64.dll"
+          Link="libssl-3-x64.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="$(PkgLibtorrentDotNet)\lib\net9.0\torrent-rasterbar.dll"
+          Link="torrent-rasterbar.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="$(PkgLibtorrentDotNet)\libtorrent\LICENSE.txt"
+          Link="THIRD-PARTY-LICENSES\libtorrent.txt"
+          CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

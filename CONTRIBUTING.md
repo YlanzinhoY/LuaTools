@@ -20,8 +20,9 @@ dotnet test
 ### Releases
 
 Official builds are packaged and signed by the maintainers, so the release tooling isn't part of
-this repo. Released builds are framework-dependent (~10 MB) and the setup auto-installs the .NET 8
-Desktop Runtime on a clean machine; the app then self-updates through Velopack.
+this repo. The WPF app is framework-dependent and the setup auto-installs the .NET 8 Desktop Runtime
+on a clean machine. The x64 libtorrent host targets .NET 10 and is published self-contained alongside
+the app, so users do not install another runtime; the app then self-updates through Velopack.
 
 To produce a local build for testing, `dotnet publish -c Release` is enough.
 
@@ -30,6 +31,7 @@ To produce a local build for testing, `dotnet publish -c Release` is enough.
 | Path | Contents |
 |---|---|
 | `src/LuaToolsGui/` | The application: `Views/` (XAML), `ViewModels/`, `Services/`, `Models/`, `Resources/` (localization) |
+| `src/TorrentHost/` | Isolated x64 libtorrent process used for built-in Kazumi magnet downloads |
 | `src/LuaToolsGui/AppConfig.cs` | All compiled-in endpoints, mirrors and public client values |
 | `tests/LuaToolsGui.Tests/` | xUnit tests |
 | `scripts/check-i18n.py` | Translation validator, run by CI on every RESX change |

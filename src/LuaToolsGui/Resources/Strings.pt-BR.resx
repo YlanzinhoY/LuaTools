@@ -444,7 +444,7 @@ Isso exclui os arquivos .lua de Steam\config\stplug-in. Reinicie o Steam depois 
   <data name="Add_Kazumi_OpenLink" xml:space="preserve"><value>Abrir link</value></data>
   <data name="Add_Kazumi_Cancel" xml:space="preserve"><value>Cancelar</value></data>
   <data name="Add_Kazumi_SelectFolder" xml:space="preserve"><value>Escolha onde os arquivos do torrent serão baixados</value></data>
-  <data name="Add_Kazumi_Progress" xml:space="preserve"><value>{3} · {0:F1}% · {1}/s · {2} peers · {4} nós DHT</value></data>
+  <data name="Add_Kazumi_Progress" xml:space="preserve"><value>{3} · {0:F1}% · {1}/s · {2} peers</value></data>
   <data name="Add_Kazumi_ExternalClient" xml:space="preserve"><value>Usar o cliente torrent padrão</value></data>
   <data name="Add_Kazumi_ExternalClient_Hint" xml:space="preserve"><value>Abrir magnets no aplicativo registrado ou no qBittorrent quando a associação do Windows estiver quebrada</value></data>
   <data name="Add_Kazumi_OpenedExternal" xml:space="preserve"><value>Magnet enviado ao {0}</value></data>

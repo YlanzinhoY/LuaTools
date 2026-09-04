@@ -467,7 +467,7 @@ This deletes the .lua files from Steam\config\stplug-in. Restart Steam afterward
   <data name="Add_Kazumi_OpenLink" xml:space="preserve"><value>Open link</value></data>
   <data name="Add_Kazumi_Cancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="Add_Kazumi_SelectFolder" xml:space="preserve"><value>Choose where the torrent files will be downloaded</value></data>
-  <data name="Add_Kazumi_Progress" xml:space="preserve"><value>{3} · {0:F1}% · {1}/s · {2} peers · {4} DHT nodes</value></data>
+  <data name="Add_Kazumi_Progress" xml:space="preserve"><value>{3} · {0:F1}% · {1}/s · {2} peers</value></data>
   <data name="Add_Kazumi_ExternalClient" xml:space="preserve"><value>Use the default torrent client</value></data>
   <data name="Add_Kazumi_ExternalClient_Hint" xml:space="preserve"><value>Open magnets in the registered app, or qBittorrent when the Windows association is broken</value></data>
   <data name="Add_Kazumi_OpenedExternal" xml:space="preserve"><value>Magnet sent to {0}</value></data>

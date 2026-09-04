@@ -1,116 +1,203 @@
+using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.IO;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using LuaToolsGui.Models;
-using MonoTorrent;
-using MonoTorrent.Client;
 
 namespace LuaToolsGui.Services;
 
-/// <summary>Small in-process BitTorrent client used by Kazumi magnet entries.</summary>
+/// <summary>
+/// Runs each Kazumi magnet in an isolated libtorrent host. Native failures and slow torrent setup stay
+/// outside the WPF process, so they cannot freeze or terminate LuaTools.
+/// </summary>
 public sealed class TorrentDownloadService : IDisposable
 {
     private static readonly Regex NumberedTrackerKey = new(
         @"(?<prefix>[?&])tr\.\d+=",
         RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+    private static readonly Regex BtihParameter = new(
+        @"(?:[?&])xt=urn:btih:(?:[a-f0-9]{40}|[a-z2-7]{32})(?:&|$)",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
-    private readonly object _engineGate = new();
-    private ClientEngine? _engine;
-
-    private ClientEngine GetEngine()
-    {
-        lock (_engineGate)
-        {
-            if (_engine is not null) return _engine;
-
-            string cache = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "LuaToolsGui", "torrent-cache");
-            Directory.CreateDirectory(cache);
-
-            var settings = new EngineSettingsBuilder
-            {
-                // UPnP/NAT-PMP discovery is awaited before MonoTorrent starts DHT. Some routers never
-                // answer, leaving a magnet at 0 peers indefinitely. Outbound peer connections work
-                // without a forwarded port, so the embedded client deliberately skips this step.
-                AllowPortForwarding = false,
-                AutoSaveLoadDhtCache = true,
-                AutoSaveLoadFastResume = true,
-                AutoSaveLoadMagnetLinkMetadata = true,
-                CacheDirectory = cache,
-            };
-            return _engine = new ClientEngine(settings.ToSettings());
-        }
-    }
+    private readonly ConcurrentDictionary<int, Process> _activeHosts = new();
+    private bool _disposed;
 
     public async Task DownloadMagnetAsync(
         string magnetUri,
         string destinationFolder,
         IProgress<TorrentDownloadProgress>? progress = null,
         CancellationToken ct = default)
-        // MonoTorrent performs some synchronous setup before its first asynchronous yield. Keep the
-        // entire operation off WPF's dispatcher so slow network/bootstrap work cannot freeze the window.
-        => await Task.Run(
-            () => DownloadMagnetCoreAsync(magnetUri, destinationFolder, progress, ct),
-            ct);
-
-    private async Task DownloadMagnetCoreAsync(
-        string magnetUri,
-        string destinationFolder,
-        IProgress<TorrentDownloadProgress>? progress,
-        CancellationToken ct)
     {
-        if (!MagnetLink.TryParse(NormalizeMagnetUri(magnetUri), out var magnet))
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        string normalizedMagnet = NormalizeMagnetUri(magnetUri);
+        if (!IsValidMagnetUri(normalizedMagnet))
             throw new ArgumentException("Invalid magnet URI.", nameof(magnetUri));
+        if (string.IsNullOrWhiteSpace(destinationFolder))
+            throw new ArgumentException("A destination folder is required.", nameof(destinationFolder));
+        ct.ThrowIfCancellationRequested();
 
-        ClientEngine engine = GetEngine();
+        string? executable = FindTorrentHostExecutable(AppContext.BaseDirectory);
+        if (executable is null)
+            throw new FileNotFoundException("The LuaTools torrent host was not found.");
+
         Directory.CreateDirectory(destinationFolder);
-        TorrentManager? manager = null;
+        using var process = new Process
+        {
+            StartInfo = new ProcessStartInfo(executable)
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+            },
+            EnableRaisingEvents = true,
+        };
+
+        if (!process.Start())
+            throw new IOException("The LuaTools torrent host could not be started.");
+
+        _activeHosts.TryAdd(process.Id, process);
+        using var cancellation = ct.Register(static state =>
+        {
+            try
+            {
+                var host = (Process)state!;
+                if (!host.HasExited) host.Kill(entireProcessTree: true);
+            }
+            catch
+            {
+                // The host may have exited between HasExited and Kill.
+            }
+        }, process);
+
         try
         {
-            manager = await engine.AddAsync(magnet, destinationFolder);
-            await manager.StartAsync();
+            string request = JsonSerializer.Serialize(
+                new TorrentHostRequest(normalizedMagnet, Path.GetFullPath(destinationFolder)),
+                JsonOptions);
+            await process.StandardInput.WriteLineAsync(request);
+            process.StandardInput.Close();
 
-            while (manager.Progress < 100 && manager.State != TorrentState.Error)
+            Task<string> stderrTask = process.StandardError.ReadToEndAsync();
+            string? hostError = null;
+            bool completed = false;
+            string? line;
+            while ((line = await process.StandardOutput.ReadLineAsync()) is not null)
             {
-                ct.ThrowIfCancellationRequested();
-                progress?.Report(new TorrentDownloadProgress(
-                    manager.Progress,
-                    manager.Monitor.DownloadRate,
-                    manager.Peers.Available + manager.Peers.Leechs + manager.Peers.Seeds,
-                    manager.State.ToString(),
-                    engine.Dht.NodeCount));
-                await Task.Delay(750, ct);
+                TorrentHostMessage? message;
+                try
+                {
+                    message = JsonSerializer.Deserialize<TorrentHostMessage>(line, JsonOptions);
+                }
+                catch (JsonException)
+                {
+                    continue;
+                }
+
+                switch (message?.Type)
+                {
+                    case "progress":
+                        progress?.Report(new TorrentDownloadProgress(
+                            Math.Clamp(message.Percent ?? 0d, 0d, 100d),
+                            Math.Max(0, message.DownloadRate ?? 0),
+                            Math.Max(0, message.Peers ?? 0),
+                            message.State ?? "Starting"));
+                        break;
+                    case "complete":
+                        completed = true;
+                        progress?.Report(new TorrentDownloadProgress(100, 0, 0, "Finished"));
+                        break;
+                    case "error":
+                        hostError = message.Message;
+                        break;
+                }
             }
 
-            if (manager.State == TorrentState.Error)
-                throw new IOException("The torrent client reported an error.");
+            await process.WaitForExitAsync();
+            string stderr = await stderrTask;
+            ct.ThrowIfCancellationRequested();
 
-            progress?.Report(new TorrentDownloadProgress(100, 0, manager.Peers.Available, "Complete", engine.Dht.NodeCount));
+            if (!string.IsNullOrWhiteSpace(hostError))
+                throw new IOException(hostError);
+            if (process.ExitCode != 0)
+                throw new IOException(string.IsNullOrWhiteSpace(stderr)
+                    ? "The LuaTools torrent host failed."
+                    : stderr.Trim());
+            if (!completed)
+                throw new IOException("The LuaTools torrent host exited before the download completed.");
+        }
+        catch when (ct.IsCancellationRequested)
+        {
+            throw new OperationCanceledException(ct);
         }
         finally
         {
-            if (manager is not null)
+            _activeHosts.TryRemove(process.Id, out _);
+            try
             {
-                try { await manager.StopAsync(TimeSpan.FromSeconds(2)); } catch { /* best effort */ }
-                try { await engine.RemoveAsync(manager); } catch { /* best effort */ }
+                if (!process.HasExited) process.Kill(entireProcessTree: true);
+            }
+            catch
+            {
+                // Best-effort cleanup during shutdown or an IPC failure.
             }
         }
     }
 
     /// <summary>
-    /// qBittorrent accepts numbered tracker keys (<c>tr.1</c>, <c>tr.2</c>), which occur in the Kazumi
-    /// catalog. MonoTorrent follows the standard repeated <c>tr</c> key, so translate the extension
-    /// without decoding or rebuilding the rest of the magnet URI.
+    /// Kazumi contains a few non-standard numbered tracker keys. Translate those into repeated standard
+    /// <c>tr</c> keys without decoding and rebuilding the rest of the magnet URI.
     /// </summary>
     internal static string NormalizeMagnetUri(string magnetUri) =>
         NumberedTrackerKey.Replace(magnetUri, "${prefix}tr=");
 
+    internal static bool IsValidMagnetUri(string? magnetUri) =>
+        !string.IsNullOrWhiteSpace(magnetUri)
+        && Uri.TryCreate(magnetUri, UriKind.Absolute, out Uri? uri)
+        && uri.Scheme.Equals("magnet", StringComparison.OrdinalIgnoreCase)
+        && BtihParameter.IsMatch(magnetUri);
+
+    internal static string? FindTorrentHostExecutable(string baseDirectory)
+    {
+        string? configured = Environment.GetEnvironmentVariable("LUATOOLS_TORRENT_HOST_PATH");
+        if (!string.IsNullOrWhiteSpace(configured) && File.Exists(configured))
+            return Path.GetFullPath(configured);
+
+        string[] candidates =
+        [
+            Path.Combine(baseDirectory, "TorrentHost", "LuaTools.TorrentHost.exe"),
+            Path.Combine(baseDirectory, "LuaTools.TorrentHost.exe"),
+        ];
+        return candidates.FirstOrDefault(File.Exists);
+    }
+
     public void Dispose()
     {
-        lock (_engineGate)
+        _disposed = true;
+        foreach (Process process in _activeHosts.Values)
         {
-            _engine?.Dispose();
-            _engine = null;
+            try
+            {
+                if (!process.HasExited) process.Kill(entireProcessTree: true);
+            }
+            catch
+            {
+                // Best-effort cleanup while the app is closing.
+            }
         }
+        _activeHosts.Clear();
     }
+
+    private sealed record TorrentHostRequest(string MagnetUri, string DestinationFolder);
+
+    private sealed record TorrentHostMessage(
+        string Type,
+        double? Percent,
+        long? DownloadRate,
+        int? Peers,
+        string? State,
+        string? Message);
 }

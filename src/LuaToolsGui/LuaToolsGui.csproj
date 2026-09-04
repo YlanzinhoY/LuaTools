@@ -20,6 +20,9 @@
     <BuildCanIRunIt Condition="'$(BuildCanIRunIt)' == ''">true</BuildCanIRunIt>
     <CanIRunItSource>$(MSBuildProjectDirectory)\..\CanIRunItBackend</CanIRunItSource>
     <CanIRunItBuildScript>$(MSBuildProjectDirectory)\..\..\scripts\build-can-i-run-it.ps1</CanIRunItBuildScript>
+    <BuildTorrentHost Condition="'$(BuildTorrentHost)' == ''">true</BuildTorrentHost>
+    <TorrentHostSource>$(MSBuildProjectDirectory)\..\TorrentHost</TorrentHostSource>
+    <TorrentHostBuildScript>$(MSBuildProjectDirectory)\..\..\scripts\build-torrent-host.ps1</TorrentHostBuildScript>
   </PropertyGroup>
 
   <!-- UseWindowsForms (for the tray NotifyIcon) injects WinForms into the implicit global usings, which
@@ -79,6 +82,20 @@
     <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(CanIRunItBuildScript)&quot; -ProjectDir &quot;$(CanIRunItSource)&quot; -OutputDir &quot;$(PublishDir)CanIRunIt&quot;" />
   </Target>
 
+  <!-- libtorrent is native and x64-only, so it runs out of process. Debug builds use the installed
+       .NET 10 runtime; publish output is self-contained so end users do not need another runtime. -->
+  <Target Name="CompileTorrentHost"
+          AfterTargets="Build"
+          Condition="'$(BuildTorrentHost)' == 'true' and '$(OS)' == 'Windows_NT' and Exists('$(TorrentHostSource)\LuaTools.TorrentHost.csproj')">
+    <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(TorrentHostBuildScript)&quot; -ProjectDir &quot;$(TorrentHostSource)&quot; -OutputDir &quot;$(TargetDir)TorrentHost&quot; -Configuration &quot;$(Configuration)&quot;" />
+  </Target>
+
+  <Target Name="PublishTorrentHost"
+          AfterTargets="Publish"
+          Condition="'$(BuildTorrentHost)' == 'true' and '$(OS)' == 'Windows_NT' and '$(PublishDir)' != '' and Exists('$(TorrentHostSource)\LuaTools.TorrentHost.csproj')">
+    <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(TorrentHostBuildScript)&quot; -ProjectDir &quot;$(TorrentHostSource)&quot; -OutputDir &quot;$(PublishDir)TorrentHost&quot; -Configuration &quot;$(Configuration)&quot; -SelfContained" />
+  </Target>
+
   <!-- Built-in metadata for game-specific local achievement viewers. It enriches the minimal R2
        schema with Steam metadata (for example icon URLs) and works without manual setup. -->
   <ItemGroup>
@@ -102,9 +119,6 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="Markdig.Wpf" Version="0.5.0.1" />
-    <!-- 3.9 widens the DHT bootstrap-router set. The 3.0.2 stable build could remain indefinitely in
-         Metadata/0-peers on a cold cache when its legacy bootstrap routers were unavailable. -->
-    <PackageReference Include="MonoTorrent" Version="3.9.0-alpha.unstable.rev0000" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.9" />
     <PackageReference Include="Velopack" Version="1.2.0" />

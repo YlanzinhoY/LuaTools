@@ -36,5 +36,4 @@ public readonly record struct TorrentDownloadProgress(
     double Percent,
     long DownloadRate,
     int Peers,
-    string State,
-    int DhtNodes);
+    string State);

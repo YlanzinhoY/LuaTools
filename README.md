@@ -58,9 +58,10 @@ with `go -C src/CanIRunItBackend test ./...`.
 ## Requirements
 
 - Windows 10/11
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (the released installer bundles a
-  check for the .NET 8 **Desktop Runtime** and installs it if missing; [building from source](https://github.com/madoiscool/LuaTools/blob/main/CONTRIBUTING.md#building-from-source--developing) needs
-  the full SDK
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) and
+  [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) for source builds (the released
+  installer checks for the .NET 8 **Desktop Runtime** used by the WPF app; the isolated libtorrent
+  host is bundled self-contained and needs no separate runtime)
 
 ## Installation
 You can find release builds on the [luatools website](https://lua.tools/app) or in the [releases](https://github.com/madoiscool/LuaTools/releases/latest) tab. 

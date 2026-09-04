@@ -56,7 +56,7 @@ public class AppSettings
     // When enabled, show matching entries from the bundled Kazumi catalog on the Add page.
     public bool? KazumiEnabled { get; set; }
 
-    // When true, hand magnet links to the Windows default torrent application instead of MonoTorrent.
+    // When true, hand magnet links to the Windows default torrent application instead of the built-in host.
     public bool? KazumiUseExternalTorrentClient { get; set; }
 
     // Achievement Bridge integration. Nullable fields preserve the intended default-ON behavior for

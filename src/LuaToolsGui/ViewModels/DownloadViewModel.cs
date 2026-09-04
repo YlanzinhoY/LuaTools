@@ -787,8 +787,7 @@ public partial class DownloadViewModel : ObservableObject
                     value.Percent,
                     FormatBytes(value.DownloadRate),
                     value.Peers,
-                    FormatTorrentState(value.State),
-                    value.DhtNodes);
+                    FormatTorrentState(value.State));
             });
             await _torrent.DownloadMagnetAsync(source.Url, picker.SelectedPath, progress, token);
             source.Progress = 100;
@@ -1151,10 +1150,11 @@ public partial class DownloadViewModel : ObservableObject
 
     private static string FormatTorrentState(string state) => state switch
     {
-        "Metadata" => Resources.Strings.Add_Kazumi_State_Metadata,
+        "Metadata" or "DownloadingMetadata" => Resources.Strings.Add_Kazumi_State_Metadata,
         "Starting" => Resources.Strings.Add_Kazumi_State_Starting,
-        "Hashing" or "HashingPaused" => Resources.Strings.Add_Kazumi_State_Checking,
+        "Hashing" or "HashingPaused" or "CheckingFiles" or "CheckingResumeData" => Resources.Strings.Add_Kazumi_State_Checking,
         "Downloading" => Resources.Strings.Add_Kazumi_State_Downloading,
+        "Finished" or "Seeding" => Resources.Strings.Add_Kazumi_Complete,
         _ => state,
     };
 

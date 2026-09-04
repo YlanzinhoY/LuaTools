@@ -2,7 +2,6 @@ using System.IO;
 using System.Text.Json;
 using LuaToolsGui.Models;
 using LuaToolsGui.Services;
-using MonoTorrent;
 using Xunit;
 
 namespace LuaToolsGui.Tests;
@@ -109,7 +108,7 @@ public sealed class KazumiCatalogServiceTests : IDisposable
 
         Assert.Equal(250, magnets.Count);
         Assert.All(magnets, download =>
-            Assert.True(MagnetLink.TryParse(download.Url, out _), $"Invalid magnet in catalog: {download.Url}"));
+            Assert.True(TorrentDownloadService.IsValidMagnetUri(download.Url), $"Invalid magnet in catalog: {download.Url}"));
     }
 
     [Fact]
