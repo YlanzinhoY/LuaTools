@@ -22,6 +22,9 @@ public static class Strings
     // ── Navigation ──
     public static string Nav_Home => Get(nameof(Nav_Home));
     public static string Nav_Add => Get(nameof(Nav_Add));
+    public static string Nav_Downloads => Get(nameof(Nav_Downloads));
+    public static string Downloads_Subtitle => Get(nameof(Downloads_Subtitle));
+    public static string Downloads_Empty => Get(nameof(Downloads_Empty));
     public static string Nav_Manage => Get(nameof(Nav_Manage));
     public static string Nav_Builds => Get(nameof(Nav_Builds));
     public static string Nav_Mode => Get(nameof(Nav_Mode));
@@ -34,6 +37,7 @@ public static class Strings
     public static string Nav_Footer_Guest => Get(nameof(Nav_Footer_Guest));
     public static string Nav_Footer_LoggedIn => Get(nameof(Nav_Footer_LoggedIn));
     public static string Main_RestartSteam_Ask => Get(nameof(Main_RestartSteam_Ask));
+    public static string Main_TorrentExit_Ask => Get(nameof(Main_TorrentExit_Ask));
 
     // ── Achievement Bridge logs ──
     public static string BridgeLogs_Title => Get(nameof(BridgeLogs_Title));

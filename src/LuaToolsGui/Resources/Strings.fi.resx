@@ -62,6 +62,10 @@
   <!-- fi -->
   <data name="Nav_Home" xml:space="preserve"><value>Etusivu</value></data>
   <data name="Nav_Add" xml:space="preserve"><value>Lisää</value></data>
+  <data name="Nav_Downloads" xml:space="preserve"><value>Lataukset</value></data>
+  <data name="Downloads_Subtitle" xml:space="preserve"><value>Seuraa Kazumi-torrent-latauksia poistumatta LuaToolsista</value></data>
+  <data name="Downloads_Empty" xml:space="preserve"><value>Ei torrent-latauksia tässä istunnossa</value></data>
+  <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>Torrent-latauksia on käynnissä. LuaToolsin sulkeminen pysäyttää ne ja sulkee libtorrentin. Suljetaanko silti?</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>Hallinta</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>Tila</value></data>
   <data name="Nav_Fixes" xml:space="preserve"><value>Korjaukset</value></data>

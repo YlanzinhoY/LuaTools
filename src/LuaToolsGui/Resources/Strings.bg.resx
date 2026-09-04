@@ -62,6 +62,10 @@
   <!-- bg -->
   <data name="Nav_Home" xml:space="preserve"><value>Начало</value></data>
   <data name="Nav_Add" xml:space="preserve"><value>Добавяне</value></data>
+  <data name="Nav_Downloads" xml:space="preserve"><value>Изтегляния</value></data>
+  <data name="Downloads_Subtitle" xml:space="preserve"><value>Следете торент изтеглянията от Kazumi, без да напускате LuaTools</value></data>
+  <data name="Downloads_Empty" xml:space="preserve"><value>Няма торент изтегляния в тази сесия</value></data>
+  <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>Има активни торент изтегляния. Затварянето на LuaTools ще ги спре и ще изключи libtorrent. Да се затвори ли въпреки това?</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>Управление</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>Режим</value></data>
   <data name="Nav_Fixes" xml:space="preserve"><value>Корекции</value></data>

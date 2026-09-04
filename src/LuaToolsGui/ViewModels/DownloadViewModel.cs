@@ -131,7 +131,7 @@ public partial class DownloadViewModel : ObservableObject
     private readonly SteamDepotInfo _depotInfo;
     private readonly HardwareAppIdService _hardware;
     private readonly KazumiCatalogService _kazumiCatalog;
-    private readonly TorrentDownloadService _torrent;
+    private readonly TorrentDownloadsViewModel _torrentDownloads;
     private readonly ExternalTorrentClientService _externalTorrent;
     private CancellationTokenSource? _searchCts;
     private CancellationTokenSource? _detailsCts;
@@ -376,7 +376,7 @@ public partial class DownloadViewModel : ObservableObject
         AuthService auth, ToastService toast, LuaInstaller installer,
         SteamAppListCache appList, SteamAppInfoCache appInfo, SteamDepotInfo depotInfo,
         HardwareAppIdService hardware, KazumiCatalogService kazumiCatalog,
-        TorrentDownloadService torrent, ExternalTorrentClientService externalTorrent,
+        TorrentDownloadsViewModel torrentDownloads, ExternalTorrentClientService externalTorrent,
         DropInstallViewModel drop)
     {
         _api = api;
@@ -390,7 +390,7 @@ public partial class DownloadViewModel : ObservableObject
         _depotInfo = depotInfo;
         _hardware = hardware;
         _kazumiCatalog = kazumiCatalog;
-        _torrent = torrent;
+        _torrentDownloads = torrentDownloads;
         _externalTorrent = externalTorrent;
         Drop = drop;
         _fastFetch = settings.FastFetch;
@@ -789,7 +789,13 @@ public partial class DownloadViewModel : ObservableObject
                     value.Peers,
                     FormatTorrentState(value.State));
             });
-            await _torrent.DownloadMagnetAsync(source.Url, picker.SelectedPath, progress, token);
+            await _torrentDownloads.DownloadAsync(
+                Details?.Name ?? source.Host,
+                source.Host,
+                source.Url,
+                picker.SelectedPath,
+                progress,
+                token);
             source.Progress = 100;
             source.StatusText = Resources.Strings.Add_Kazumi_Complete;
         }

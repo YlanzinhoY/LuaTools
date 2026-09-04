@@ -8,12 +8,19 @@ namespace LuaToolsGui;
 public partial class MainWindow : Wpf.Ui.Controls.FluentWindow
 {
     private readonly SettingsService _settings;
+    private readonly TorrentDownloadsViewModel _torrentDownloads;
     private System.Windows.Forms.NotifyIcon? _trayIcon;
     private bool _reallyExiting; // true once the user picks tray "Exit". Lets the close go through
+    private bool _torrentExitConfirmed;
 
-    public MainWindow(MainViewModel viewModel, IServiceProvider services, SettingsService settings)
+    public MainWindow(
+        MainViewModel viewModel,
+        IServiceProvider services,
+        SettingsService settings,
+        TorrentDownloadsViewModel torrentDownloads)
     {
         _settings = settings;
+        _torrentDownloads = torrentDownloads;
         InitializeComponent();
         DataContext = viewModel;
 
@@ -64,6 +71,28 @@ public partial class MainWindow : Wpf.Ui.Controls.FluentWindow
             if (_trayIcon is not null) _trayIcon.Visible = true;
             return;
         }
+
+        if (!_torrentExitConfirmed && _torrentDownloads.HasActiveDownloads)
+        {
+            if (!IsVisible) RestoreFromTray();
+            var result = MessageBox.Show(
+                this,
+                LuaToolsGui.Resources.Strings.Main_TorrentExit_Ask,
+                "LuaTools",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning,
+                MessageBoxResult.No);
+            if (result != MessageBoxResult.Yes)
+            {
+                e.Cancel = true;
+                _reallyExiting = false;
+                return;
+            }
+
+            _torrentExitConfirmed = true;
+            _torrentDownloads.CancelAll();
+        }
+
         _trayIcon?.Dispose();
 
         // ShutdownMode is OnExplicitShutdown (a silent/--minimized launch never shows a window, so
@@ -117,6 +146,9 @@ public partial class MainWindow : Wpf.Ui.Controls.FluentWindow
 
     /// <summary>Switch to the Add page (used by the Manage page's "Update" action).</summary>
     public void NavigateToAdd() => RootNavigation.Navigate(typeof(DownloadView));
+
+    /// <summary>Switch to the application-wide torrent download queue.</summary>
+    public void NavigateToDownloads() => RootNavigation.Navigate(typeof(TorrentDownloadsView));
 
     /// <summary>Switch to Manage (used by Home's "recently added" cards). Caller opens the detail.</summary>
     public void NavigateToManage() => RootNavigation.Navigate(typeof(ManageView));

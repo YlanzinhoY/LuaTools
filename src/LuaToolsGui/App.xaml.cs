@@ -62,6 +62,7 @@ public partial class App : Application
                 services.AddSingleton<HubcapService>();
                 services.AddSingleton<KazumiCatalogService>();
                 services.AddSingleton<TorrentDownloadService>();
+                services.AddSingleton<TorrentDownloadsViewModel>();
                 services.AddSingleton<ExternalTorrentClientService>();
                 services.AddSingleton<UpdateService>();
                 // Hook loader infrastructure
@@ -89,6 +90,7 @@ public partial class App : Application
                 // Pages resolved by NavigationView via the DI service provider.
                 services.AddSingleton<HomeView>();
                 services.AddSingleton<DownloadView>();
+                services.AddSingleton<TorrentDownloadsView>();
                 services.AddSingleton<ManageView>();
                 services.AddSingleton<BuildsView>();
                 services.AddSingleton<ModeView>();

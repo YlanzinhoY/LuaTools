@@ -62,6 +62,10 @@
   <!-- pt-BR -->
   <data name="Nav_Home" xml:space="preserve"><value>Início</value></data>
   <data name="Nav_Add" xml:space="preserve"><value>Adicionar</value></data>
+  <data name="Nav_Downloads" xml:space="preserve"><value>Downloads</value></data>
+  <data name="Downloads_Subtitle" xml:space="preserve"><value>Acompanhe os downloads torrent do Kazumi sem sair do LuaTools</value></data>
+  <data name="Downloads_Empty" xml:space="preserve"><value>Nenhum download torrent nesta sessão</value></data>
+  <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>Há downloads torrent em andamento. Fechar o LuaTools vai interrompê-los e encerrar o libtorrent. Deseja fechar mesmo assim?</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>Gerenciar</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>Modo</value></data>
   <data name="Nav_Fixes" xml:space="preserve"><value>Correções</value></data>

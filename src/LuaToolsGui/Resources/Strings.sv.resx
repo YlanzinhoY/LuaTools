@@ -62,6 +62,10 @@
   <!-- sv -->
   <data name="Nav_Home" xml:space="preserve"><value>Hem</value></data>
   <data name="Nav_Add" xml:space="preserve"><value>Lägg till</value></data>
+  <data name="Nav_Downloads" xml:space="preserve"><value>Nedladdningar</value></data>
+  <data name="Downloads_Subtitle" xml:space="preserve"><value>Följ Kazumi-torrentnedladdningar utan att lämna LuaTools</value></data>
+  <data name="Downloads_Empty" xml:space="preserve"><value>Inga torrentnedladdningar i den här sessionen</value></data>
+  <data name="Main_TorrentExit_Ask" xml:space="preserve"><value>Torrentnedladdningar pågår. Om du stänger LuaTools stoppas de och libtorrent avslutas. Vill du stänga ändå?</value></data>
   <data name="Nav_Manage" xml:space="preserve"><value>Hantera</value></data>
   <data name="Nav_Mode" xml:space="preserve"><value>Läge</value></data>
   <data name="Nav_Fixes" xml:space="preserve"><value>Fixar</value></data>
