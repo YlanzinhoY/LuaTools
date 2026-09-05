@@ -37,6 +37,10 @@ docs/
 # Maintainer-only release tooling
 build-release.ps1
 
+# Achievement Bridge is released and installed independently. Maintainers may
+# keep a neighboring checkout here, but LuaTools must never vendor or package it.
+/src/AchievementBridge/
+
 # Never commit
 *.lnk
 *.log
