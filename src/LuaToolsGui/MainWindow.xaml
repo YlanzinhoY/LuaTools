@@ -100,11 +100,6 @@
                 </ui:NavigationView.MenuItems>
 
                 <ui:NavigationView.FooterMenuItems>
-                    <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_BridgeLogs}" TargetPageType="{x:Type views:AchievementBridgeLogView}">
-                        <ui:NavigationViewItem.Icon>
-                            <ui:SymbolIcon Symbol="Games24" />
-                        </ui:NavigationViewItem.Icon>
-                    </ui:NavigationViewItem>
                     <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_RestartSteam}" Click="RestartSteam_Click">
                         <ui:NavigationViewItem.Icon>
                             <ui:SymbolIcon Symbol="ArrowClockwise24" />

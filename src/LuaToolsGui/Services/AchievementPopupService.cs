@@ -7,9 +7,7 @@ using LuaToolsGui.Views;
 namespace LuaToolsGui.Services;
 
 /// <summary>Shows image-rich unlock notifications above the game without activating LuaTools.</summary>
-public sealed class AchievementPopupService(
-    AchievementCatalogService achievements,
-    AchievementIconService icons)
+public sealed class AchievementPopupService(AchievementIconService icons)
 {
     private readonly SemaphoreSlim _queue = new(1, 1);
 
@@ -21,36 +19,6 @@ public sealed class AchievementPopupService(
             achievement.DisplayName,
             achievement.Description,
             icon));
-    }
-
-    internal async Task ShowBridgeEventAsync(AchievementBridgeEvent achievement)
-    {
-        long? appId = achievement.AppId;
-        if (appId is null && achievement.Provider.Equals("uplay_r2", StringComparison.OrdinalIgnoreCase) &&
-            achievement.ProductId == R2AchievementService.BlackFlagProductId)
-            appId = R2AchievementService.BlackFlagSteamAppId;
-        if (appId is null) return;
-
-        try
-        {
-            AchievementCatalog catalog = await achievements.LoadAsync(appId.Value);
-            Achievement? item = catalog.Achievements.FirstOrDefault(candidate =>
-                candidate.ApiName.Equals(achievement.Achievement, StringComparison.OrdinalIgnoreCase))
-                ?? catalog.Achievements.FirstOrDefault(candidate =>
-                    NumericSuffix(candidate.ApiName) == achievement.Achievement);
-            if (item is not null) await ShowAchievementAsync(item);
-        }
-        catch
-        {
-            // A notification is best-effort and must never terminate a provider reader.
-        }
-    }
-
-    private static string? NumericSuffix(string apiName)
-    {
-        int start = apiName.Length;
-        while (start > 0 && char.IsDigit(apiName[start - 1])) start--;
-        return start == apiName.Length ? null : apiName[start..];
     }
 
     private async Task ShowAsync(AchievementPopupContent content)
