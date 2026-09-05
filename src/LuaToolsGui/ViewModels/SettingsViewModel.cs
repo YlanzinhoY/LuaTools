@@ -80,20 +80,6 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnKazumiUseExternalTorrentClientChanged(bool value) =>
         _settings.KazumiUseExternalTorrentClient = value;
 
-    // ── Achievement Bridge ──────────────────────────────────────────
-    [ObservableProperty] private bool _achievementsEnabled;
-    partial void OnAchievementsEnabledChanged(bool value) => _settings.AchievementsEnabled = value;
-
-    [ObservableProperty] private bool _achievementAutoInstallProviders;
-    partial void OnAchievementAutoInstallProvidersChanged(bool value) => _settings.AchievementAutoInstallProviders = value;
-
-    [ObservableProperty] private bool _achievementNotifications;
-    partial void OnAchievementNotificationsChanged(bool value) => _settings.AchievementNotifications = value;
-
-    [ObservableProperty] private bool _experimentalSteamAchievementNotifications;
-    partial void OnExperimentalSteamAchievementNotificationsChanged(bool value) =>
-        _settings.ExperimentalSteamAchievementNotifications = value;
-
     /// <summary>Donate spare Steam decryption keys to the community pool. Persisted via SettingsService.</summary>
     [ObservableProperty] private bool _donateKeys;
 
@@ -280,10 +266,6 @@ public partial class SettingsViewModel : ObservableObject
         _fastFetch = settings.FastFetch;
         _kazumiEnabled = settings.KazumiEnabled;
         _kazumiUseExternalTorrentClient = settings.KazumiUseExternalTorrentClient;
-        _achievementsEnabled = settings.AchievementsEnabled;
-        _achievementAutoInstallProviders = settings.AchievementAutoInstallProviders;
-        _achievementNotifications = settings.AchievementNotifications;
-        _experimentalSteamAchievementNotifications = settings.ExperimentalSteamAchievementNotifications;
         _donateKeys = settings.DonateKeys;
         _startWithWindows = settings.StartWithWindows; // default OFF. Init without triggering the registry write
         _minimizeToTray = settings.MinimizeToTray;

@@ -59,13 +59,6 @@ public class AppSettings
     // When true, hand magnet links to the Windows default torrent application instead of the built-in host.
     public bool? KazumiUseExternalTorrentClient { get; set; }
 
-    // Achievement Bridge integration. Nullable fields preserve the intended default-ON behavior for
-    // users whose settings file predates the feature.
-    public bool? AchievementsEnabled { get; set; }
-    public bool? AchievementAutoInstallProviders { get; set; }
-    public bool? AchievementNotifications { get; set; }
-    public bool? ExperimentalSteamAchievementNotifications { get; set; }
-
     // OpenRouter model used by Can I Run It. The API key is deliberately not stored here; see
     // OpenRouterKeyStore, which protects it with Windows DPAPI.
     public string? OpenRouterModel { get; set; }
@@ -73,7 +66,6 @@ public class AppSettings
 
 public class SettingsService
 {
-    public event Action? AchievementSettingsChanged;
     private static readonly string Dir =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LuaToolsGui");
     private static readonly string FilePath = Path.Combine(Dir, "settings.json");
@@ -185,30 +177,6 @@ public class SettingsService
         set { _settings.KazumiUseExternalTorrentClient = value; Save(); }
     }
 
-    public bool AchievementsEnabled
-    {
-        get => _settings.AchievementsEnabled ?? true;
-        set { _settings.AchievementsEnabled = value; Save(); AchievementSettingsChanged?.Invoke(); }
-    }
-
-    public bool AchievementAutoInstallProviders
-    {
-        get => _settings.AchievementAutoInstallProviders ?? true;
-        set { _settings.AchievementAutoInstallProviders = value; Save(); AchievementSettingsChanged?.Invoke(); }
-    }
-
-    public bool AchievementNotifications
-    {
-        get => _settings.AchievementNotifications ?? true;
-        set { _settings.AchievementNotifications = value; Save(); AchievementSettingsChanged?.Invoke(); }
-    }
-
-    public bool ExperimentalSteamAchievementNotifications
-    {
-        get => _settings.ExperimentalSteamAchievementNotifications ?? false;
-        set { _settings.ExperimentalSteamAchievementNotifications = value; Save(); AchievementSettingsChanged?.Invoke(); }
-    }
-
     public const string DefaultOpenRouterModel = "inclusionai/ling-3.0-flash-fin:free";
 
     public string OpenRouterModel
@@ -284,10 +252,6 @@ public class SettingsService
             && _settings.FastFetch is null
             && _settings.KazumiEnabled is null
             && _settings.KazumiUseExternalTorrentClient is null
-            && _settings.AchievementsEnabled is null
-            && _settings.AchievementAutoInstallProviders is null
-            && _settings.AchievementNotifications is null
-            && _settings.ExperimentalSteamAchievementNotifications is null
             && _settings.OpenRouterModel is null;
         if (empty)
         {
