@@ -10,73 +10,9 @@ namespace LuaToolsGui.Services;
 /// <summary>Runs short-lived catalog and automatic local-sync operations against the independent Zig bridge.</summary>
 public sealed class AchievementBridgeClient(SteamService steam)
 {
-    public async Task SyncVerifiedRuneAchievementAsync(
-        long appId,
-        string apiName,
-        CancellationToken cancellationToken = default)
-    {
-        if (appId <= 0 || appId > uint.MaxValue) throw new ArgumentOutOfRangeException(nameof(appId));
-        if (string.IsNullOrWhiteSpace(apiName)) throw new ArgumentException("Achievement API name is required.", nameof(apiName));
-        string executable = AchievementBridgeService.FindExecutable()
-            ?? throw new FileNotFoundException("Achievement Bridge is not installed.");
-        using var process = new Process
-        {
-            StartInfo = new ProcessStartInfo
-            {
-                FileName = executable,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                StandardOutputEncoding = Encoding.UTF8,
-                StandardErrorEncoding = Encoding.UTF8,
-                WorkingDirectory = Path.GetDirectoryName(executable) ?? AppContext.BaseDirectory,
-            },
-        };
-        process.StartInfo.ArgumentList.Add("rune-steam-sync");
-        process.StartInfo.ArgumentList.Add("--appid");
-        process.StartInfo.ArgumentList.Add(appId.ToString(System.Globalization.CultureInfo.InvariantCulture));
-        process.StartInfo.ArgumentList.Add("--achievement");
-        process.StartInfo.ArgumentList.Add(apiName);
-        if (steam.EffectivePath is { } steamRoot)
-        {
-            process.StartInfo.ArgumentList.Add("--steam-root");
-            process.StartInfo.ArgumentList.Add(steamRoot);
-        }
-
-        if (!process.Start()) throw new InvalidOperationException("Achievement Bridge did not start.");
-        Task<string> stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
-        Task<string> stderrTask = process.StandardError.ReadToEndAsync(cancellationToken);
-        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        timeout.CancelAfter(TimeSpan.FromSeconds(15));
-        try
-        {
-            await process.WaitForExitAsync(timeout.Token);
-        }
-        catch
-        {
-            try { if (!process.HasExited) process.Kill(entireProcessTree: true); } catch { }
-            throw;
-        }
-
-        string stdout = await stdoutTask;
-        string stderr = await stderrTask;
-        if (process.ExitCode != 0)
-            throw new InvalidOperationException(string.IsNullOrWhiteSpace(stderr)
-                ? $"Achievement Bridge exited with code {process.ExitCode}."
-                : stderr.Trim());
-        using JsonDocument result = JsonDocument.Parse(stdout);
-        if (!result.RootElement.TryGetProperty("verified_provider", out JsonElement provider) ||
-            provider.GetString() != "rune" ||
-            !result.RootElement.TryGetProperty("server_acknowledged", out JsonElement acknowledged) ||
-            !acknowledged.GetBoolean())
-            throw new InvalidDataException("Achievement Bridge did not confirm the verified RUNE sync.");
-    }
-
     public async Task<AchievementCatalog> LoadSteamCatalogAsync(long appId, CancellationToken cancellationToken = default)
     {
-        string executable = AchievementBridgeService.FindExecutable()
+        string executable = AchievementBridgeLocator.FindExecutable()
             ?? throw new FileNotFoundException("Achievement Bridge is not installed.");
         using var process = new Process
         {
@@ -136,7 +72,7 @@ public sealed class AchievementBridgeClient(SteamService steam)
         if (appId <= 0 || appId > uint.MaxValue) throw new ArgumentOutOfRangeException(nameof(appId));
         if (string.IsNullOrWhiteSpace(apiName)) throw new ArgumentException("Achievement API name is required.", nameof(apiName));
         long timestamp = Math.Clamp(unlockTime, 1, uint.MaxValue);
-        string executable = AchievementBridgeService.FindExecutable()
+        string executable = AchievementBridgeLocator.FindExecutable()
             ?? throw new FileNotFoundException("Achievement Bridge is not installed.");
         using var process = new Process
         {
